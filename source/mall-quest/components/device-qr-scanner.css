@@ -1,0 +1,13 @@
+:root .device-qr-scanner { display: grid; gap: 14px; width: 100%; min-width: 0; padding: 20px; box-sizing: border-box; border: 1px solid var(--line); border-radius: 20px; background: var(--surface); color: var(--text); }
+:root .device-qr-scanner-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-width: 0; }
+:root .device-qr-scanner h3 { display: flex; align-items: center; gap: 8px; margin: 0; min-width: 0; font-size: 17px; line-height: 1.6; }
+:root .device-qr-scanner p, :root .device-qr-scanner small { margin: 0; line-height: 1.75; overflow-wrap: anywhere; }
+:root .device-qr-scanner small { color: var(--muted); }
+:root .device-qr-scanner-view { display: grid; place-items: center; width: 100%; min-width: 0; min-height: 180px; overflow: hidden; border: 1px solid var(--line); border-radius: 16px; background: var(--surface-alt, var(--surface)); }
+:root .device-qr-scanner-view video { display: block; width: 100%; max-height: 320px; object-fit: contain; }
+:root .device-qr-scanner-view video[hidden] { display: none; }
+:root .device-qr-scanner-view span { padding: 16px; color: var(--muted); text-align: center; }
+:root .device-qr-scanner-actions { display: flex; flex-wrap: wrap; gap: 10px; min-width: 0; }
+:root .device-qr-scanner-actions > button, :root .device-qr-scanner-actions > label { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 46px; max-width: 100%; min-width: 0; padding: 10px 14px; white-space: normal; text-align: center; line-height: 1.5; }
+:root .device-qr-scanner-actions input[type=file] { position: absolute; width: 1px; height: 1px; opacity: 0; }
+@media (max-width: 480px) { :root .device-qr-scanner-actions > button, :root .device-qr-scanner-actions > label { flex: 1 1 100%; } }

@@ -1,0 +1,320 @@
+/* Client pages only. Business records, controls and workspace styles stay in their existing components. */
+:root .client-shell[data-client-theme] {
+  --client-soft: #edf3e8;
+  --client-soft-ink: #315b43;
+  --client-deep: #183b2b;
+  --client-on-deep: #f8fcf5;
+  --client-on-deep-muted: #c3d6c9;
+  --client-card-shadow: 0 10px 28px #29372e0b;
+  --client-accent-line: #d0dec8;
+}
+:root .client-shell[data-client-theme][data-client-theme="dark"] {
+  --client-soft: #23382d;
+  --client-soft-ink: #b9d9ad;
+  --client-deep: #214832;
+  --client-on-deep: #f0f6eb;
+  --client-on-deep-muted: #c3d6c9;
+  --client-card-shadow: 0 10px 28px #0000001c;
+  --client-accent-line: #405e49;
+}
+
+/* Wallet: use two readable cards on phones; allow long conditions and real codes to wrap. */
+:root .client-shell[data-client-theme] .coupon-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  align-items: stretch;
+  margin-top: 20px;
+}
+:root .client-shell[data-client-theme] .coupon-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border-radius: 21px;
+  border-color: var(--line);
+  background: var(--surface);
+  box-shadow: var(--client-card-shadow);
+  transition: transform .2s, box-shadow .2s;
+}
+:root .client-shell[data-client-theme] .coupon-card .store-art { aspect-ratio: 1.35; min-height: 88px; }
+:root .client-shell[data-client-theme] .coupon-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 7px;
+  padding: 14px 12px;
+  min-width: 0;
+}
+:root .client-shell[data-client-theme] .coupon-body h2 {
+  color: var(--text);
+  font-size: 1rem;
+  line-height: 1.45;
+  margin: 4px 0 0;
+  overflow-wrap: anywhere;
+}
+:root .client-shell[data-client-theme] .coupon-body p { color: var(--muted); margin: 0; font-size: .85rem; }
+:root .client-shell[data-client-theme] .coupon-body small { color: var(--muted); font-size: .75rem; line-height: 1.65; overflow-wrap: anywhere; }
+:root .client-shell[data-client-theme] .coupon-body > .pill { align-self: flex-start; font-size: .7rem; white-space: normal; line-height: 1.6; }
+:root .client-shell[data-client-theme] .coupon-code {
+  background: var(--client-soft);
+  border-color: var(--client-accent-line);
+  border-radius: 11px;
+  gap: 6px;
+  margin: 8px 0;
+  padding: 8px;
+  min-width: 0;
+}
+:root .client-shell[data-client-theme] .coupon-code code { color: var(--client-soft-ink); font-size: .8rem; overflow-wrap: anywhere; min-width: 0; }
+:root .client-shell[data-client-theme] .coupon-code .icon-button { flex: 0 0 34px; width: 34px; height: 38px; padding: 6px; }
+:root .client-shell[data-client-theme] .coupon-body > .outline-button { margin-top: auto; padding: 10px 6px; font-size: .75rem; border-radius: 12px; white-space: normal; }
+:root .client-shell[data-client-theme] .coupon-card.used,
+:root .client-shell[data-client-theme] .coupon-card.wallet-expired { opacity: 1; }
+:root .client-shell[data-client-theme] .coupon-card.used .store-art,
+:root .client-shell[data-client-theme] .coupon-card.wallet-expired .store-art { filter: grayscale(.65); opacity: .7; }
+:root .client-shell[data-client-theme] .coupon-card.used .coupon-body > .pill,
+:root .client-shell[data-client-theme] .coupon-card.wallet-expired .coupon-body > .pill { background: var(--bg); border-color: var(--line); color: var(--muted); }
+
+/* Profile: gentle avatar, actual three-way counters, grouped shortcuts. */
+:root .client-shell[data-client-theme] .profile-layout { grid-template-columns: 1fr; gap: 18px; }
+:root .client-shell[data-client-theme] .profile-card {
+  border-radius: 25px;
+  padding: 28px 18px 22px;
+  box-shadow: var(--client-card-shadow);
+}
+:root .client-shell[data-client-theme] .profile-card .profile-avatar {
+  width: 88px;
+  height: 88px;
+  border-radius: 29px;
+  border: 1px solid var(--client-accent-line);
+  background: linear-gradient(145deg, #daeacb, #9fc293);
+  color: #234732;
+  box-shadow: 0 12px 25px #375a4118;
+  margin-bottom: 18px;
+}
+:root .client-shell[data-client-theme] .profile-card h2 { margin: 15px 0 0; font-size: 1.5rem; }
+:root .client-shell[data-client-theme] .profile-card > p { margin: 9px 0 16px; font-size: .85rem; line-height: 1.7; }
+:root .client-shell[data-client-theme] .profile-account { width: 100%; justify-content: center; margin: 0 0 18px; gap: 10px; font-size: .8rem; }
+:root .client-shell[data-client-theme] .profile-card .role-toggle { max-width: 100%; width: 260px; border-radius: 14px; }
+:root .client-shell[data-client-theme] .profile-stat-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  padding: 22px 0;
+  margin: 22px 0 15px;
+  border-top: 0;
+  border-bottom: 0;
+}
+:root .client-shell[data-client-theme] .profile-stat-row > div { gap: 5px; padding: 0 5px; min-width: 0; border-right: 1px solid var(--line); }
+:root .client-shell[data-client-theme] .profile-stat-row > div:last-child { border-right: 0; }
+:root .client-shell[data-client-theme] .profile-stat-row strong { color: var(--text); font-size: 1.4rem; overflow-wrap: anywhere; }
+:root .client-shell[data-client-theme] .profile-stat-row span { color: var(--muted); font-size: .75rem; }
+:root .client-shell[data-client-theme] .profile-card > small { color: var(--muted); line-height: 1.7; font-size: .75rem; }
+:root .client-shell[data-client-theme] :is(.milestones, .profile-tools, .weekly-ranking, .my-feedback) {
+  padding: 22px 18px;
+  border-radius: 22px;
+  box-shadow: var(--client-card-shadow);
+  margin-bottom: 0;
+}
+:root .client-shell[data-client-theme] :is(.milestones, .profile-tools, .weekly-ranking, .my-feedback) > h2 { font-size: 1.05rem; }
+:root .client-shell[data-client-theme] .profile-shortcuts { grid-template-columns: 1fr; gap: 0; }
+:root .client-shell[data-client-theme] .profile-shortcuts > button {
+  padding: 16px 0;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+  background: transparent;
+}
+:root .client-shell[data-client-theme] .profile-shortcuts > button:last-child { border-bottom: 0; }
+:root .client-shell[data-client-theme] .profile-shortcuts .journey-icon {
+  width: 41px;
+  height: 41px;
+  border-radius: 13px;
+  background: var(--client-soft);
+  color: var(--client-soft-ink);
+  border-color: var(--client-accent-line);
+}
+:root .client-shell[data-client-theme] .profile-shortcuts strong { color: var(--text); font-size: .9rem; }
+:root .client-shell[data-client-theme] .profile-shortcuts small { color: var(--muted); font-size: .75rem; }
+:root .client-shell[data-client-theme] .profile-workspace-title { margin-top: 20px; padding-top: 20px; }
+:root .client-shell[data-client-theme] .weekly-ranking .section-heading { margin-bottom: 8px; }
+:root .client-shell[data-client-theme] .weekly-ranking li { padding: 14px 0; gap: 12px; }
+:root .client-shell[data-client-theme] .weekly-ranking li.is-me { background: var(--client-soft); border-radius: 12px; padding-inline: 10px; }
+:root .client-shell[data-client-theme] .weekly-ranking .ranking-position { color: var(--client-soft-ink); }
+:root .client-shell[data-client-theme] .my-feedback article { gap: 12px; }
+:root .client-shell[data-client-theme] .my-feedback article > div { min-width: 0; }
+:root .client-shell[data-client-theme] .my-feedback article .danger-button { flex-shrink: 0; }
+
+/* Creator and placement history. No action is hidden, including deletion and photo removal. */
+:root .client-shell[data-client-theme] .creator-layout { grid-template-columns: 1fr; gap: 18px; }
+:root .client-shell[data-client-theme] .creator-form.wizard-form { border-radius: 24px; padding: 22px 18px; box-shadow: var(--client-card-shadow); }
+:root .client-shell[data-client-theme] .wizard-progress { gap: 8px; padding-bottom: 20px; }
+:root .client-shell[data-client-theme] .wizard-progress > div { gap: 6px; color: var(--muted); }
+:root .client-shell[data-client-theme] .wizard-progress b { font-size: .72rem; }
+:root .client-shell[data-client-theme] .wizard-progress > div > span { width: 28px; height: 28px; background: var(--bg); color: var(--muted); border-color: var(--line); }
+:root .client-shell[data-client-theme] .wizard-progress > div.active { color: var(--client-soft-ink); }
+:root .client-shell[data-client-theme] .wizard-progress > div.active > span { background: var(--client-deep); color: var(--client-on-deep); border-color: var(--client-deep); }
+:root .client-shell[data-client-theme] .wizard-form .form-section-label { align-items: flex-start; gap: 9px; }
+:root .client-shell[data-client-theme] .wizard-form .form-section-label > span { background: var(--client-soft); color: var(--client-soft-ink); border-color: var(--client-accent-line); border-radius: 8px; flex-shrink: 0; }
+:root .client-shell[data-client-theme] .wizard-form .form-section-label h2 { color: var(--text); font-size: 1.05rem; line-height: 1.55; }
+:root .client-shell[data-client-theme] .wizard-step .store-options { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 20px; }
+:root .client-shell[data-client-theme] .wizard-form .store-options > button { background: var(--surface); border-radius: 17px; border-color: var(--line); }
+:root .client-shell[data-client-theme] .wizard-form .store-options > button.selected { border-color: var(--client-soft-ink); background: var(--client-soft); box-shadow: inset 0 0 0 1px var(--client-soft-ink); }
+:root .client-shell[data-client-theme] .wizard-form .store-options > button .radio-check { background: var(--surface); border-color: var(--client-accent-line); color: var(--client-soft-ink); }
+:root .client-shell[data-client-theme] .wizard-form .field-label { color: var(--text); font-size: .85rem; }
+:root .client-shell[data-client-theme] .wizard-form :is(input:not([type="range"]), select, textarea) { border-radius: 14px; padding: 13px; background: var(--surface); color: var(--text); border-color: var(--line); }
+:root .client-shell[data-client-theme] .wizard-form :is(input, select, textarea):focus-visible { outline: 2px solid var(--client-soft-ink); outline-offset: 2px; }
+:root .client-shell[data-client-theme] .wizard-form input[type="range"] { accent-color: var(--client-soft-ink); }
+:root .client-shell[data-client-theme] .clue-form-heading { color: var(--muted); gap: 12px; line-height: 1.7; flex-wrap: wrap; }
+:root .client-shell[data-client-theme] .wizard-form .clue-input { display: grid; grid-template-columns: 32px minmax(0, 1fr); gap: 9px; }
+:root .client-shell[data-client-theme] .wizard-form .clue-input > span { color: var(--client-soft-ink); border-color: var(--client-accent-line); background: var(--client-soft); border-radius: 10px; }
+:root .client-shell[data-client-theme] .creator-photo { padding: 12px; background: var(--client-soft); border: 1px solid var(--client-accent-line); border-radius: 14px; gap: 10px; }
+:root .client-shell[data-client-theme] .wizard-form .clue-input > .creator-photo { grid-column: 2; min-width: 0; }
+:root .client-shell[data-client-theme] .creator-photo small { color: var(--client-soft-ink); font-size: .75rem; }
+:root .client-shell[data-client-theme] .creator-photo .field-label { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: .75rem; }
+:root .client-shell[data-client-theme] .creator-photo input[type="file"] { max-width: 100%; min-width: 0; font-size: .75rem; padding: 9px; }
+:root .client-shell[data-client-theme] .creator-photo img { border-radius: 12px; }
+:root .client-shell[data-client-theme] .creator-options { gap: 18px; }
+:root .client-shell[data-client-theme] .creator-options .choice-row .outline-button[aria-pressed="true"] { color: var(--client-soft-ink); border-color: var(--client-soft-ink); background: var(--client-soft); }
+:root .client-shell[data-client-theme] .wizard-form .creator-reward { color: var(--client-soft-ink); background: var(--client-soft); border-color: var(--client-accent-line); border-radius: 17px; padding: 17px; gap: 12px; }
+:root .client-shell[data-client-theme] .wizard-form .creator-reward strong { color: var(--client-soft-ink); font-size: 1.05rem; }
+:root .client-shell[data-client-theme] .wizard-form .wizard-review { color: var(--text); background: var(--bg); border-radius: 17px; padding: 17px; }
+:root .client-shell[data-client-theme] .wizard-review ol { color: var(--muted); line-height: 1.7; }
+:root .client-shell[data-client-theme] .wizard-review > div { color: var(--client-soft-ink); line-height: 1.7; }
+:root .client-shell[data-client-theme] .wizard-actions { gap: 8px; padding-top: 20px; }
+:root .client-shell[data-client-theme] .wizard-actions > button { min-width: 0; padding: 12px 14px; border-radius: 14px; font-size: .8rem; }
+:root .client-shell[data-client-theme] .wizard-safety { color: var(--muted); font-size: .75rem; line-height: 1.7; }
+:root .client-shell[data-client-theme] .creator-tips { display: block; border-radius: 22px; padding: 22px 18px; background: var(--client-soft); border-color: var(--client-accent-line); }
+:root .client-shell[data-client-theme] .creator-tips h2 { color: var(--text); font-size: 1.15rem; }
+:root .client-shell[data-client-theme] .creator-tips h3 { color: var(--client-soft-ink); }
+:root .client-shell[data-client-theme] .creator-tips p,
+:root .client-shell[data-client-theme] .creator-tips .tips-footer { color: var(--muted); line-height: 1.8; }
+:root .client-shell[data-client-theme] .creator-tips > svg,
+:root .client-shell[data-client-theme] .creator-tips > div > span { color: var(--client-soft-ink); }
+:root .client-shell[data-client-theme] .explorer-progress { background: var(--client-deep); border-color: var(--client-deep); border-radius: 24px; color: var(--client-on-deep); padding: 22px 18px; gap: 14px; }
+:root .client-shell[data-client-theme] .explorer-progress h2 { font-size: 1.1rem; color: var(--client-on-deep); line-height: 1.55; }
+:root .client-shell[data-client-theme] .explorer-progress p,
+:root .client-shell[data-client-theme] .explorer-quota small,
+:root .client-shell[data-client-theme] .explorer-quota strong > span { color: var(--client-on-deep-muted); }
+:root .client-shell[data-client-theme] .explorer-progress .journey-icon { color: #d1e5b4; background: #ffffff12; border-color: #ffffff26; border-radius: 16px; }
+:root .client-shell[data-client-theme] .explorer-progress .pill.gold { background: #ffffff12; color: #e0efcf; border-color: #ffffff26; }
+:root .client-shell[data-client-theme] .explorer-quota strong { color: #d1e5b4; }
+:root .client-shell[data-client-theme] .explorer-quota { flex-shrink: 0; }
+:root .client-shell[data-client-theme] .stat-grid.three { gap: 10px; margin-bottom: 22px; }
+:root .client-shell[data-client-theme] .stat-grid.three .stat-card { background: var(--surface); border-radius: 17px; border-color: var(--line); box-shadow: var(--client-card-shadow); padding: 16px 12px; }
+:root .client-shell[data-client-theme] .stat-grid.three .stat-card strong { color: var(--text); }
+:root .client-shell[data-client-theme] .stat-grid.three .stat-card span { color: var(--muted); }
+:root .client-shell[data-client-theme] .placements-list { gap: 12px; }
+:root .client-shell[data-client-theme] .placement-row { border-radius: 20px; padding: 20px 17px; gap: 16px; box-shadow: var(--client-card-shadow); }
+:root .client-shell[data-client-theme] .placement-row h2 { font-size: 1rem; line-height: 1.5; overflow-wrap: anywhere; }
+:root .client-shell[data-client-theme] .placement-row p,
+:root .client-shell[data-client-theme] .placement-count span { color: var(--muted); }
+:root .client-shell[data-client-theme] .placement-row .review-note { color: var(--client-soft-ink); background: var(--client-soft); padding: 9px 11px; border-radius: 11px; line-height: 1.6; }
+:root .client-shell[data-client-theme] .placement-count strong { color: var(--client-soft-ink); }
+:root .client-shell[data-client-theme] .placement-row .outline-button { font-size: .8rem; border-radius: 12px; }
+:root .client-shell[data-client-theme] .placement-row .danger-button { padding: 9px 6px; }
+:root .client-shell[data-client-theme] .activity-log { border-radius: 22px; padding: 22px 18px; }
+:root .client-shell[data-client-theme] .activity-log .log-icon { background: var(--client-soft); color: var(--client-soft-ink); border-color: var(--client-accent-line); }
+
+/* Journeys and earned badges keep their server-driven counters and progress. */
+:root .client-shell[data-client-theme] .journey-page { display: grid; gap: 18px; }
+:root .client-shell[data-client-theme] .journey-page :is(.footprint-summary, .achievement-summary) { padding: 22px 18px; border-radius: 24px; gap: 14px; margin-bottom: 0; box-shadow: var(--client-card-shadow); }
+:root .client-shell[data-client-theme] .journey-page .footprint-summary { background: var(--client-soft); border-color: var(--client-accent-line); }
+:root .client-shell[data-client-theme] .journey-page .footprint-summary h2 { color: var(--text); font-size: 1.05rem; line-height: 1.5; }
+:root .client-shell[data-client-theme] .journey-page .footprint-summary .journey-icon { color: var(--client-soft-ink); border-color: var(--client-accent-line); background: var(--surface); border-radius: 15px; }
+:root .client-shell[data-client-theme] .journey-page .footprint-summary > .pill { margin-left: 0; flex-shrink: 0; }
+:root .client-shell[data-client-theme] .journey-page .achievement-summary { color: var(--client-on-deep); background: var(--client-deep); border-color: var(--client-deep); }
+:root .client-shell[data-client-theme] .achievement-summary h2 { color: var(--client-on-deep); font-size: 1.05rem; line-height: 1.5; }
+:root .client-shell[data-client-theme] .achievement-summary p { color: var(--client-on-deep-muted); }
+:root .client-shell[data-client-theme] .achievement-summary > strong { color: #d1e5b4; font-size: 1.75rem; }
+:root .client-shell[data-client-theme] .achievement-summary .journey-icon { background: #ffffff13; color: #d1e5b4; border-color: #ffffff26; border-radius: 15px; }
+:root .client-shell[data-client-theme] .achievement-summary progress { accent-color: #cce4a9; }
+:root .client-shell[data-client-theme] :is(.achievement-section, .footprint-day) { margin: 8px 0; }
+:root .client-shell[data-client-theme] :is(.achievement-section, .footprint-day) > h2 { font-size: 1rem; margin-bottom: 14px; gap: 10px; }
+:root .client-shell[data-client-theme] :is(.achievement-section, .footprint-day) > h2 small { color: var(--muted); font-size: .75rem; }
+:root .client-shell[data-client-theme] .achievement-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 11px; }
+:root .client-shell[data-client-theme] .achievement-tile { position: relative; flex-direction: column; text-align: center; align-items: center; padding: 20px 12px; border-radius: 20px; gap: 12px; min-height: 225px; box-shadow: var(--client-card-shadow); }
+:root .client-shell[data-client-theme] .achievement-tile > div { width: 100%; }
+:root .client-shell[data-client-theme] .achievement-tile h3 { color: var(--text); font-size: .9rem; line-height: 1.5; }
+:root .client-shell[data-client-theme] .achievement-tile p { margin: 6px 0 12px; font-size: .75rem; line-height: 1.65; }
+:root .client-shell[data-client-theme] .achievement-tile .journey-icon { width: 57px; height: 57px; border-radius: 19px; background: var(--bg); color: var(--muted); border-color: var(--line); }
+:root .client-shell[data-client-theme] .achievement-tile.done { border-color: var(--client-accent-line); }
+:root .client-shell[data-client-theme] .achievement-tile.done .journey-icon { color: #f8fcf5; background: linear-gradient(145deg, #91b37c, #467052); border-color: transparent; box-shadow: 0 8px 18px #46705220; }
+:root .client-shell[data-client-theme] .achievement-tile.done > svg { position: absolute; top: 12px; right: 12px; color: var(--client-soft-ink); }
+:root .client-shell[data-client-theme] .achievement-tile .achievement-reward { color: var(--client-soft-ink); font-size: .75rem; }
+:root .client-shell[data-client-theme] .achievement-progress { gap: 7px; }
+:root .client-shell[data-client-theme] .achievement-progress small { font-size: .7rem; color: var(--muted); }
+:root .client-shell[data-client-theme] .achievement-progress progress { height: 6px; accent-color: var(--client-soft-ink); }
+:root .client-shell[data-client-theme] .footprint-timeline { gap: 11px; border-left-color: var(--client-accent-line); margin-left: 5px; padding-left: 17px; }
+:root .client-shell[data-client-theme] .footprint-row { display: flex; flex-wrap: wrap; gap: 11px; padding: 18px 14px; border-radius: 19px; box-shadow: var(--client-card-shadow); }
+:root .client-shell[data-client-theme] .footprint-row .timeline-dot { left: -23px; border-color: var(--client-soft-ink); }
+:root .client-shell[data-client-theme] .footprint-row > .journey-icon { width: 39px; height: 39px; flex: 0 0 39px; border-radius: 12px; background: var(--client-soft); color: var(--client-soft-ink); border-color: var(--client-accent-line); }
+:root .client-shell[data-client-theme] .footprint-row > div { flex: 1 1 130px; }
+:root .client-shell[data-client-theme] .footprint-row h3 { font-size: .95rem; }
+:root .client-shell[data-client-theme] .footprint-row p { font-size: .75rem; line-height: 1.7; }
+:root .client-shell[data-client-theme] .footprint-row small { font-size: .75rem; color: var(--client-soft-ink); }
+:root .client-shell[data-client-theme] .footprint-row > time { font-size: .75rem; margin-left: auto; align-self: flex-start; }
+
+/* Help and local preferences use simple grouped rows rather than decorative fake data. */
+:root .client-shell[data-client-theme] :is(.help-center, .experience-settings) { border-radius: 24px; padding: 22px 18px; box-shadow: var(--client-card-shadow); background: var(--surface); color: var(--text); }
+:root .client-shell[data-client-theme] .help-center h2,
+:root .client-shell[data-client-theme] .experience-settings h2 { font-size: 1.2rem; line-height: 1.5; }
+:root .client-shell[data-client-theme] .help-center-top { gap: 15px; align-items: flex-start; }
+:root .client-shell[data-client-theme] .help-center-top .outline-button { border-radius: 13px; font-size: .8rem; }
+:root .client-shell[data-client-theme] .help-center .faq-search { max-width: 100%; border-radius: 14px; background: var(--bg); }
+:root .client-shell[data-client-theme] .faq-list { display: grid; gap: 9px; margin-top: 18px; }
+:root .client-shell[data-client-theme] .faq-list details { padding: 15px; border: 1px solid var(--line); border-radius: 15px; background: var(--surface); }
+:root .client-shell[data-client-theme] .faq-list details[open] { background: var(--client-soft); border-color: var(--client-accent-line); }
+:root .client-shell[data-client-theme] .faq-list summary { font-size: .85rem; line-height: 1.7; gap: 13px; }
+:root .client-shell[data-client-theme] .faq-list summary > span { color: var(--client-soft-ink); font-size: 1.1rem; }
+:root .client-shell[data-client-theme] .faq-list p { color: var(--muted); font-size: .8rem; line-height: 1.9; }
+:root .client-shell[data-client-theme] .experience-settings .preference-row { background: transparent; gap: 16px; padding: 20px 0; margin-top: 0; }
+:root .client-shell[data-client-theme] .experience-settings > .preference-row:first-of-type { margin-top: 24px; }
+:root .client-shell[data-client-theme] .preference-row > div:first-child { flex: 1; min-width: 0; }
+:root .client-shell[data-client-theme] .preference-row h3 { font-size: .9rem; color: var(--text); }
+:root .client-shell[data-client-theme] .preference-row p { font-size: .8rem; margin-top: 6px; line-height: 1.75; }
+:root .client-shell[data-client-theme] .experience-settings .preference-switch { background: var(--line); border-color: var(--line); width: 58px; height: 32px; min-height: 32px; padding: 4px; }
+:root .client-shell[data-client-theme] .experience-settings .preference-switch span { background: var(--surface); }
+:root .client-shell[data-client-theme] .experience-settings .preference-switch.on { background: #527b5b; border-color: #527b5b; }
+:root .client-shell[data-client-theme] .experience-settings .preference-switch.on span { background: #fff; }
+:root .client-shell[data-client-theme] .preference-theme { flex-shrink: 0; }
+:root .client-shell[data-client-theme] .preference-theme .outline-button { border-radius: 12px; padding: 10px 11px; font-size: .8rem; }
+:root .client-shell[data-client-theme] .preference-theme button[aria-pressed="true"] { color: var(--client-on-deep); background: var(--client-deep); border-color: var(--client-deep); }
+
+@media (hover: hover) {
+  :root .client-shell[data-client-theme] .coupon-card:hover { transform: translateY(-3px); box-shadow: 0 16px 30px #29372e16; }
+}
+@media (min-width: 680px) {
+  :root .client-shell[data-client-theme] .coupon-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  :root .client-shell[data-client-theme] .coupon-body { padding: 19px; }
+  :root .client-shell[data-client-theme] .coupon-body h2 { font-size: 1.05rem; }
+  :root .client-shell[data-client-theme] .profile-layout { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
+  :root .client-shell[data-client-theme] .profile-card { padding: 34px 24px; }
+  :root .client-shell[data-client-theme] .profile-layout .weekly-ranking { grid-column: 1 / -1; }
+  :root .client-shell[data-client-theme] .achievement-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  :root .client-shell[data-client-theme] .wizard-step .store-options { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  :root .client-shell[data-client-theme] .creator-form.wizard-form { padding: 28px; }
+  :root .client-shell[data-client-theme] .wizard-progress b { font-size: .85rem; }
+  :root .client-shell[data-client-theme] .help-center,
+  :root .client-shell[data-client-theme] .experience-settings { padding: 28px; }
+}
+@media (min-width: 1050px) {
+  :root .client-shell[data-client-theme] .creator-layout { grid-template-columns: minmax(0, 1fr) 260px; gap: 20px; }
+  :root .client-shell[data-client-theme] .creator-tips { position: sticky; top: 22px; }
+}
+@media (max-width: 420px) {
+  :root .client-shell[data-client-theme] .explorer-progress { flex-wrap: wrap; }
+  :root .client-shell[data-client-theme] .explorer-progress > .journey-icon { display: grid; width: 42px; height: 42px; }
+  :root .client-shell[data-client-theme] .explorer-quota { flex-direction: row; flex-wrap: wrap; align-items: center; width: 100%; gap: 8px; text-align: left; padding-top: 12px; border-top: 1px solid #ffffff26; }
+  :root .client-shell[data-client-theme] .explorer-quota strong { font-size: 1.4rem; }
+  :root .client-shell[data-client-theme] .placement-row { gap: 12px; }
+  :root .client-shell[data-client-theme] .placement-row > div:first-child { min-width: 0; flex-basis: calc(100% - 80px); }
+  :root .client-shell[data-client-theme] .placement-row > .outline-button { flex: 1 1 auto; }
+  :root .client-shell[data-client-theme] .placement-count { min-width: 65px; }
+  :root .client-shell[data-client-theme] .achievement-summary > .journey-icon,
+  :root .client-shell[data-client-theme] .footprint-summary > .journey-icon { width: 42px; height: 42px; flex-shrink: 0; }
+  :root .client-shell[data-client-theme] .achievement-summary > strong { font-size: 1.4rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  :root .client-shell[data-client-theme] .coupon-card { transition: none; }
+  :root .client-shell[data-client-theme] .coupon-card:hover { transform: none; }
+}

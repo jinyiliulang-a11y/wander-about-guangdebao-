@@ -1,0 +1,138 @@
+/* The map keeps one document-flow slot while its own bounds animate. Geometry
+   is driven by one cancellable animation, rather than a transform followed by
+   a second layout jump when fullscreen styles are removed. */
+:root .client-shell[data-client-theme].reference-client .reference-home .reference-map-slot {
+  min-width: 0;
+  position: relative;
+}
+
+:root .client-shell[data-client-theme].reference-client .reference-home .reference-map-slot .map-card.map-morph {
+  animation: none !important;
+  transform: none !important;
+}
+
+/* The compact map and its statistics form one card, with no cut-out corners
+   along their shared edge. The fullscreen window keeps its own square edge. */
+:root .client-shell[data-client-theme].reference-client .reference-home .reference-map-slot .map-card.map-morph:not(.map-fullscreen) {
+  border-radius: 28px 28px 0 0;
+}
+
+:root .client-shell[data-client-theme].reference-client .reference-home .reference-map-slot .map-card.map-morph.map-fullscreen {
+  will-change: top, left, width, height;
+}
+
+:root .client-shell[data-client-theme].reference-client .reference-home .map-artwork {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  overflow: hidden;
+  transform: none;
+  transform-origin: 0 0;
+  background: inherit;
+}
+
+/* The whole drawing is one image plane. Only its containing window and this
+   transform animate; the compact roads, water and point coordinates stay put. */
+:root .client-shell[data-client-theme].reference-client .reference-home .map-fullscreen .map-artwork {
+  will-change: transform;
+}
+
+:root .client-shell[data-client-theme].reference-client .reference-home .map-fullscreen-title p {
+  color: #183b2b;
+}
+
+:root .client-shell[data-client-theme].reference-client .reference-home .map-fullscreen :is(.map-controls, .map-fullscreen-title, .map-close) {
+  will-change: opacity, transform;
+}
+
+:root .client-shell[data-client-theme].reference-client .reference-home .map-controls .map-zoom-button {
+  transition: transform 160ms ease, background-color 160ms ease, box-shadow 160ms ease;
+}
+
+:root .client-shell[data-client-theme].reference-client .reference-home .map-controls .map-zoom-button:focus-visible {
+  outline: 2px solid var(--client-soft-ink, #315b43);
+  outline-offset: 3px;
+}
+
+@media (hover: hover) {
+  :root .client-shell[data-client-theme].reference-client .reference-home .map-controls .map-zoom-button:hover {
+    transform: translateY(-1px);
+    background: #254f39;
+    box-shadow: 0 9px 20px #162d1f35;
+  }
+}
+
+:root .client-shell[data-client-theme].reference-client .reference-home .map-controls .map-zoom-button:active {
+  transform: translateY(1px);
+  background: #183b2b;
+  box-shadow: 0 3px 10px #162d1f26;
+}
+
+:root[data-quest-reduce-motion="true"] .client-shell[data-client-theme].reference-client .reference-home .map-controls .map-zoom-button {
+  transition: none;
+  transform: none;
+}
+
+:root[data-quest-reduce-motion="true"] .client-shell[data-client-theme].reference-client .reference-home .map-fullscreen :is(.map-controls, .map-fullscreen-title, .map-close) {
+  will-change: auto;
+}
+
+:root .client-shell[data-client-theme].reference-client .reference-home .header-actions > button {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
+  flex: 0 0 40px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  padding: 0;
+}
+
+:root .client-shell[data-client-theme].reference-client .reference-home .map-profile-button > span {
+  font-size: 18px;
+  line-height: 1;
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+}
+
+:root .client-shell[data-client-theme].reference-client .reference-home .map-page-title {
+  color: var(--text);
+  font-size: 17px;
+  line-height: 1.4;
+  letter-spacing: .01em;
+  margin: 9px 0 0;
+  font-weight: 600;
+}
+
+:root .client-shell[data-client-theme].reference-client .reference-home .floor-treasures-section {
+  scroll-margin-block-start: 24px;
+}
+
+:root .client-shell[data-client-theme].reference-client .reference-home .floor-treasures-section:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 8px;
+  border-radius: 20px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root .client-shell[data-client-theme].reference-client .reference-home .reference-map-slot .map-card.map-morph.map-fullscreen {
+    will-change: auto;
+  }
+  :root .client-shell[data-client-theme].reference-client .reference-home .map-fullscreen .map-artwork {
+    will-change: auto;
+  }
+  :root .client-shell[data-client-theme].reference-client .reference-home .map-fullscreen :is(.map-controls, .map-fullscreen-title, .map-close) {
+    will-change: auto;
+  }
+  :root .client-shell[data-client-theme].reference-client .reference-home .map-controls .map-zoom-button,
+  :root .client-shell[data-client-theme].reference-client .reference-home .map-controls .map-zoom-button:hover,
+  :root .client-shell[data-client-theme].reference-client .reference-home .map-controls .map-zoom-button:active {
+    transition: none;
+    transform: none;
+  }
+}

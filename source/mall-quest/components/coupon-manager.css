@@ -1,0 +1,7 @@
+.wb-coupon-summary { display: flex; flex-wrap: wrap; gap: 12px 20px; margin: 0 0 18px; min-width: 0; color: var(--muted); }
+.wb-coupon-summary strong { color: var(--text); font-variant-numeric: tabular-nums; }
+.wb-panel > .wb-coupon-list-trigger { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; margin-bottom: 12px; min-height: 46px; }
+.quest-drawer .wb-card-grid { grid-template-columns: minmax(0, 1fr); }
+.wb-coupon-pagination { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 10px; align-items: center; min-width: 0; }
+.wb-coupon-pagination > span { text-align: center; overflow-wrap: anywhere; font-size: 13px; line-height: 1.7; color: var(--muted); }
+.wb-coupon-pagination > button { min-height: 44px; padding: 10px 12px; }

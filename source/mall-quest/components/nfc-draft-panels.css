@@ -1,0 +1,25 @@
+:root .nfc-draft-detail, :root .player-claim-drafts-list, :root .merchant-claim-panel { display: grid; gap: 16px; min-width: 0; width: 100%; box-sizing: border-box; color: var(--text); }
+:root .nfc-draft-detail h3, :root .merchant-claim-panel h2, :root .merchant-claim-panel h3 { margin: 0; min-width: 0; font-size: 18px; line-height: 1.6; letter-spacing: normal; text-align: left; }
+:root .nfc-draft-detail p, :root .merchant-claim-panel p, :root .player-claim-drafts-list p { margin: 0; line-height: 1.75; overflow-wrap: anywhere; }
+:root .nfc-draft-detail dl { display: grid; gap: 10px; margin: 0; }
+:root .nfc-draft-detail dl > div { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; min-width: 0; }
+:root .nfc-draft-detail dt { color: var(--muted); }
+:root .nfc-draft-detail dd { margin: 0; overflow-wrap: anywhere; }
+:root .nfc-draft-notice, :root .nfc-draft-delete { display: grid; gap: 10px; min-width: 0; padding: 16px; border: 1px solid var(--line); border-radius: 16px; background: var(--surface-alt, var(--surface)); }
+:root .nfc-draft-actions { display: flex; flex-wrap: wrap; gap: 10px; min-width: 0; }
+:root .nfc-draft-actions > button, :root .nfc-draft-actions > label { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 46px; min-width: 0; max-width: 100%; padding: 10px 14px; white-space: normal; overflow-wrap: anywhere; line-height: 1.6; text-align: center; }
+:root .nfc-draft-actions > button > svg { flex: 0 0 auto; }
+:root .player-claim-drafts-trigger { display: flex; align-items: center; justify-content: space-between; gap: 14px; width: 100%; min-width: 0; margin: 16px 0; padding: 18px 20px; box-sizing: border-box; border: 1px solid var(--line); border-radius: 20px; background: var(--surface); color: var(--text); text-align: left; }
+:root .player-claim-drafts-trigger > span { flex: 1; min-width: 0; display: grid; gap: 5px; }
+:root .player-claim-drafts-trigger small { color: var(--muted); line-height: 1.6; }
+:root .player-claim-drafts-list > button, :root .merchant-claim-choice { display: grid; gap: 6px; width: 100%; min-width: 0; padding: 16px; box-sizing: border-box; border: 1px solid var(--line); border-radius: 16px; background: var(--surface); color: var(--text); text-align: left; }
+:root .player-claim-drafts-list > button strong, :root .merchant-claim-choice strong { overflow-wrap: anywhere; line-height: 1.65; }
+:root .player-claim-drafts-list > button small, :root .merchant-claim-choice small { display: block; color: var(--muted); overflow-wrap: anywhere; line-height: 1.65; }
+:root .merchant-claim-choice[aria-pressed=true] { border-color: var(--green, #305c45); box-shadow: 0 0 0 2px color-mix(in srgb, var(--green, #305c45) 25%, transparent); }
+:root .nfc-draft-pagination { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 12px; min-width: 0; padding-top: 8px; }
+:root .nfc-draft-pagination button { min-height: 44px; }
+:root .merchant-claim-panel.surface { padding: 22px; margin-bottom: 24px; border: 1px solid var(--line); border-radius: 24px; background: var(--surface); }
+:root .merchant-claim-panel .field-label { display: grid; gap: 10px; min-width: 0; line-height: 1.6; }
+:root .merchant-claim-panel input, :root .merchant-claim-panel textarea { box-sizing: border-box; width: 100%; min-width: 0; max-width: 100%; padding: 12px 14px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface-alt, var(--surface)); color: var(--text); font: inherit; line-height: 1.6; }
+:root .merchant-claim-manual { display: grid; gap: 14px; min-width: 0; }
+@media (max-width: 480px) { :root .nfc-draft-actions > button { flex: 1 1 100%; } :root .nfc-draft-detail dl > div { flex-direction: column; gap: 4px; } }

@@ -1,0 +1,118 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1790874722705,
+      "tag": "0000_workable_khan",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1790881125337,
+      "tag": "0001_nice_johnny_storm",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1790889625854,
+      "tag": "0002_flawless_big_bertha",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1790914921754,
+      "tag": "0003_business_features",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1790917192642,
+      "tag": "0004_management_fixes",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1790942950270,
+      "tag": "0005_creator_drafts",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1790985600000,
+      "tag": "0006_store_geofences",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "6",
+      "when": 1790985600001,
+      "tag": "0007_store_activities",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "6",
+      "when": 1790985600002,
+      "tag": "0008_accounts",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "6",
+      "when": 1790985600003,
+      "tag": "0009_nfc_claims",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "6",
+      "when": 1790985600004,
+      "tag": "0010_recording_coupons",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "6",
+      "when": 1790985600005,
+      "tag": "0011_email_accounts",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "6",
+      "when": 1790985600006,
+      "tag": "0012_store_image",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "6",
+      "when": 1790985600007,
+      "tag": "0013_email_usernames",
+      "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "6",
+      "when": 1790985600008,
+      "tag": "0014_nfc_claim_drafts",
+      "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "6",
+      "when": 1790985600009,
+      "tag": "0015_merchant_profile_drafts",
+      "breakpoints": true
+    }
+  ]
+}

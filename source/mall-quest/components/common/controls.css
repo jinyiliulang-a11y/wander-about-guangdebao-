@@ -1,0 +1,126 @@
+/* Shared control contract. Existing dedicated creator/help/workspace/card layouts
+   keep their own rules; new pages opt in with the ui-* classes below.
+   This file loads after the reference reset, before page-specific adapters. */
+:root :is(.client-shell[data-client-theme].reference-client, .workspace-shell.reference-workspace, .reference-workspace-login) {
+  --ui-control-min-height: 44px;
+  --ui-control-padding-block: 11px;
+  --ui-control-padding-inline: 17px;
+  --ui-control-gap: 9px;
+  --ui-control-radius: 14px;
+  --ui-control-font: .875rem;
+  --ui-field-min-height: 48px;
+  --ui-field-padding-block: 13px;
+  --ui-field-padding-inline: 15px;
+  --ui-field-font: 14px;
+  --ui-search-gap: 10px;
+  --ui-focus-width: 2px;
+  --ui-focus-ink: var(--client-soft-ink, var(--green, #315b43));
+  --ui-primary-bg: var(--client-deep, var(--wb-accent, #183b2b));
+  --ui-primary-ink: var(--client-on-deep, var(--wb-accent-text, #fff));
+  --ui-secondary-bg: var(--surface, #fff);
+  --ui-control-ink: var(--text, #17211b);
+  --ui-control-line: var(--line, #e2e7df);
+  --ui-muted-ink: var(--muted, #5e6c63);
+  --ui-danger-ink: var(--wb-danger, #ab4345);
+  --ui-dialog-inset: clamp(20px, 3vw, 28px);
+  --ui-dialog-radius: 24px;
+  --ui-dialog-heading-gap: 12px;
+  --ui-dialog-heading-margin: 18px;
+  --ui-dialog-heading-padding: 16px;
+  --ui-dialog-paragraph-gap: 12px;
+  --ui-dialog-action-margin: 24px;
+  --ui-dialog-action-gap: 12px;
+  --ui-empty-block-inset: clamp(24px, 4vw, 36px);
+  --ui-empty-inline-inset: 24px;
+  --ui-empty-gap: 14px;
+  --ui-back-size: 42px;
+}
+:root .client-shell[data-client-theme="dark"].reference-client { --ui-danger-ink: #ffb6b3; }
+
+/* Opt-in controls have one visible surface and a keyboard-only focus indicator.
+   Text/icon labels can wrap; checkbox/radio/range/file controls are excluded. */
+:root :is(.client-shell[data-client-theme].reference-client, .workspace-shell.reference-workspace, .reference-workspace-login) .ui-button {
+  display: inline-flex; align-items: center; justify-content: center;
+  box-sizing: border-box; min-width: 0; max-width: 100%; min-height: var(--ui-control-min-height);
+  gap: var(--ui-control-gap); padding: var(--ui-control-padding-block) var(--ui-control-padding-inline);
+  border: 1px solid var(--ui-control-line); border-radius: var(--ui-control-radius);
+  background: var(--ui-secondary-bg); color: var(--ui-control-ink);
+  font: inherit; font-size: var(--ui-control-font); font-weight: 600; line-height: 1.5;
+  white-space: normal; overflow-wrap: anywhere; cursor: pointer; box-shadow: none;
+}
+:root :is(.client-shell[data-client-theme].reference-client, .workspace-shell.reference-workspace, .reference-workspace-login) .ui-button > svg { flex: none; }
+:root :is(.client-shell[data-client-theme].reference-client, .workspace-shell.reference-workspace, .reference-workspace-login) .ui-button-primary { background: var(--ui-primary-bg); border-color: var(--ui-primary-bg); color: var(--ui-primary-ink); }
+:root :is(.client-shell[data-client-theme].reference-client, .workspace-shell.reference-workspace, .reference-workspace-login) .ui-button-danger { color: var(--ui-danger-ink); }
+:root :is(.client-shell[data-client-theme].reference-client, .workspace-shell.reference-workspace, .reference-workspace-login) .ui-button:disabled { cursor: not-allowed; opacity: .6; }
+:root :is(.client-shell[data-client-theme].reference-client, .workspace-shell.reference-workspace, .reference-workspace-login) :is(.ui-button, .ui-input, .ui-dialog-close):focus-visible { outline: var(--ui-focus-width) solid var(--ui-focus-ink); outline-offset: 2px; }
+:root :is(.client-shell[data-client-theme].reference-client, .workspace-shell.reference-workspace, .reference-workspace-login) :is(input, select, textarea).ui-input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]) {
+  display: block; box-sizing: border-box; width: 100%; min-width: 0; max-width: 100%; min-height: var(--ui-field-min-height);
+  margin: 0; padding: var(--ui-field-padding-block) var(--ui-field-padding-inline);
+  border: 1px solid var(--ui-control-line); border-radius: var(--ui-control-radius);
+  background: var(--ui-secondary-bg); color: var(--ui-control-ink); font: inherit; font-size: var(--ui-field-font); line-height: 1.5; box-shadow: none;
+}
+:root :is(.client-shell[data-client-theme].reference-client, .workspace-shell.reference-workspace, .reference-workspace-login) textarea.ui-input { resize: vertical; overflow-wrap: anywhere; }
+:root :is(.client-shell[data-client-theme].reference-client, .workspace-shell.reference-workspace, .reference-workspace-login) .ui-input::placeholder { color: var(--ui-muted-ink); opacity: 1; }
+:root :is(.client-shell[data-client-theme].reference-client, .workspace-shell.reference-workspace, .reference-workspace-login) .ui-search {
+  display: flex; align-items: center; box-sizing: border-box; width: 100%; min-width: 0; max-width: 100%; min-height: var(--ui-field-min-height);
+  margin: 0; padding: 12px 14px; gap: var(--ui-search-gap); border: 1px solid var(--ui-control-line); border-radius: var(--ui-control-radius);
+  background: var(--ui-secondary-bg); color: var(--ui-muted-ink); box-shadow: none;
+}
+:root :is(.client-shell[data-client-theme].reference-client, .workspace-shell.reference-workspace, .reference-workspace-login) .ui-search > :is(svg, span) { flex: none; }
+:root :is(.client-shell[data-client-theme].reference-client, .workspace-shell.reference-workspace, .reference-workspace-login) .ui-search > input.ui-input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]) {
+  flex: 1 1 0; width: 100%; min-width: 0; height: auto; min-height: 24px; margin: 0; padding: 0;
+  border: 0; border-radius: 0; background: transparent; color: var(--ui-control-ink); box-shadow: none; outline: none;
+}
+:root :is(.client-shell[data-client-theme].reference-client, .workspace-shell.reference-workspace, .reference-workspace-login) .ui-search:has(> input:focus-visible) { outline: var(--ui-focus-width) solid var(--ui-focus-ink); outline-offset: -1px; }
+
+/* Opt-in dialog styling is geometry only: the existing Modal still owns focus,
+   history, ESC, scroll locking and backdrop behavior. Never style dedicated
+   reward articles, map stages, share sheets or demo-point boards as ui-dialog. */
+:root :is(.client-shell[data-client-theme].reference-client, .workspace-shell.reference-workspace, .reference-workspace-login) .ui-dialog:not(.enlarged-coupon,.treasure-detail,.map-fullscreen,.share-sheet,.demo-point-modal) {
+  box-sizing: border-box; min-width: 0; max-width: 100%; margin: 0; padding: var(--ui-dialog-inset);
+  border: 1px solid var(--ui-control-line); border-radius: var(--ui-dialog-radius); background: var(--ui-secondary-bg); color: var(--ui-control-ink);
+}
+:root :is(.client-shell[data-client-theme].reference-client, .workspace-shell.reference-workspace, .reference-workspace-login) .ui-dialog > .ui-dialog-head { display: grid; grid-template-columns: minmax(0,1fr) var(--ui-control-min-height); align-items: center; min-width: 0; gap: var(--ui-dialog-heading-gap); margin: 0 0 var(--ui-dialog-heading-margin); padding: 0 0 var(--ui-dialog-heading-padding); border-bottom: 1px solid var(--ui-control-line); }
+:root :is(.client-shell[data-client-theme].reference-client, .workspace-shell.reference-workspace, .reference-workspace-login) .ui-dialog-head > h2 { min-width: 0; margin: 0; font-size: 20px; line-height: 1.5; color: var(--ui-control-ink); overflow-wrap: anywhere; }
+:root :is(.client-shell[data-client-theme].reference-client, .workspace-shell.reference-workspace, .reference-workspace-login) .ui-dialog-close { display: grid; place-items: center; width: var(--ui-control-min-height); height: var(--ui-control-min-height); min-width: var(--ui-control-min-height); min-height: var(--ui-control-min-height); padding: 0; border: 1px solid var(--ui-control-line); border-radius: 50%; background: var(--ui-secondary-bg); color: var(--ui-control-ink); cursor: pointer; }
+:root :is(.client-shell[data-client-theme].reference-client, .workspace-shell.reference-workspace, .reference-workspace-login) .ui-dialog > p { min-width: 0; margin: var(--ui-dialog-paragraph-gap) 0 0; font-size: 14px; line-height: 1.85; overflow-wrap: anywhere; }
+:root :is(.client-shell[data-client-theme].reference-client, .workspace-shell.reference-workspace, .reference-workspace-login) .ui-dialog > .ui-dialog-actions { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; min-width: 0; margin: var(--ui-dialog-action-margin) 0 0; padding: 0; gap: var(--ui-dialog-action-gap); }
+@media (max-width: 600px) {
+  :root :is(.client-shell[data-client-theme].reference-client, .workspace-shell.reference-workspace, .reference-workspace-login) { --ui-field-font: 16px; }
+}
+
+/* Legacy bridges: copied from the verified adapter with the same selectors and
+   values. Dedicated primary-button/card/form rules retain precedence. */
+:root .client-shell[data-client-theme].reference-client :where(.gold-button,.outline-button):not(:where(.primary-button)) {display:inline-flex;align-items:center;justify-content:center;gap:var(--ui-control-gap);min-height:var(--ui-control-min-height);min-width:0;max-width:100%;padding:var(--ui-control-padding-block) var(--ui-control-padding-inline);font-size:var(--ui-control-font);font-weight:600;line-height:1.5;white-space:normal;overflow-wrap:anywhere;}
+:root .client-shell[data-client-theme].reference-client :where(.gold-button,.outline-button):not(:where(.primary-button)) > svg {flex:none;}
+:root .client-shell[data-client-theme].reference-client .gold-button:not(:where(.primary-button)) {background:var(--client-deep,#183b2b);color:var(--client-on-deep,#fff);border:1px solid var(--client-deep,#183b2b);box-shadow:none;}
+:root .client-shell[data-client-theme].reference-client .gold-button:not(:where(.primary-button)):hover:not(:disabled) {background:#214d39;color:var(--client-on-deep,#fff);border-color:#214d39;}
+:root .client-shell[data-client-theme].reference-client :where(.outline-button) {background:var(--surface);color:var(--text);border:1px solid var(--line);}
+:root .client-shell[data-client-theme].reference-client :where(.text-button) {display:inline-flex;align-items:center;gap:6px;min-width:0;max-width:100%;padding:8px 0;line-height:1.5;white-space:normal;overflow-wrap:anywhere;}
+:root .client-shell[data-client-theme].reference-client :where(.text-button) > svg {flex:none;}
+:root .client-shell[data-client-theme].reference-client .text-button.danger-button {color:var(--ui-danger-ink);}
+:root .client-shell[data-client-theme].reference-client :where(.gold-button,.outline-button,.text-button):not(:where(.primary-button)):focus-visible {outline:var(--ui-focus-width) solid var(--ui-focus-ink);outline-offset:2px;}
+
+:root .client-shell[data-client-theme].reference-client .modal-backdrop > :where(section.modal:not(.demo-point-modal,.share-sheet)) {min-width:0;padding:var(--ui-dialog-inset);border:1px solid var(--line);border-radius:var(--ui-dialog-radius);background:var(--surface);color:var(--text);}
+:root .client-shell[data-client-theme].reference-client .modal-backdrop > :where(section.modal:not(.demo-point-modal,.share-sheet)) > :where(.modal-head) {display:grid;grid-template-columns:minmax(0,1fr) var(--ui-control-min-height);align-items:center;gap:var(--ui-dialog-heading-gap);min-width:0;margin:0 0 var(--ui-dialog-heading-margin);padding:0 0 var(--ui-dialog-heading-padding);border-bottom:1px solid var(--line);}
+:root .client-shell[data-client-theme].reference-client .modal-backdrop > :where(section.modal:not(.demo-point-modal,.share-sheet)) > :where(.modal-head) > :where(h2) {min-width:0;margin:0;color:var(--text);font-size:20px;line-height:1.5;overflow-wrap:anywhere;}
+:root .client-shell[data-client-theme].reference-client .modal-backdrop > :where(section.modal:not(.demo-point-modal,.share-sheet)) > :where(.modal-head) > :where(.modal-close) {position:static;display:grid;place-items:center;align-self:start;width:var(--ui-control-min-height);min-width:var(--ui-control-min-height);height:var(--ui-control-min-height);min-height:var(--ui-control-min-height);margin:0;padding:0;border:1px solid var(--line);border-radius:50%;background:var(--client-soft,var(--bg));color:var(--text);}
+:root .client-shell[data-client-theme].reference-client .modal-backdrop > :where(section.modal:not(.demo-point-modal,.share-sheet)) > :where(p) {min-width:0;margin:var(--ui-dialog-paragraph-gap) 0 0;color:var(--text);font-size:14px;line-height:1.85;overflow-wrap:anywhere;}
+:root .client-shell[data-client-theme].reference-client .modal-backdrop > :where(section.modal:not(.demo-point-modal,.share-sheet)) > :where(.modal-head + p) {margin-top:0;}
+:root .client-shell[data-client-theme].reference-client .modal-backdrop > :where(section.modal:not(.demo-point-modal,.share-sheet)) > :where(p.muted) {color:var(--muted);}
+:root .client-shell[data-client-theme].reference-client .modal-backdrop > :where(section.modal:not(.demo-point-modal,.share-sheet)) > :where(.modal-actions) {display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:var(--ui-dialog-action-gap);min-width:0;margin:var(--ui-dialog-action-margin) 0 0;padding:0;}
+:root .client-shell[data-client-theme].reference-client .modal-backdrop > :where(section.modal:not(.demo-point-modal,.share-sheet)) > :where(.modal-actions) > :where(button) {min-width:0;max-width:100%;min-height:var(--ui-control-min-height);margin:0;padding:var(--ui-control-padding-block) var(--ui-control-padding-inline);gap:8px;line-height:1.5;white-space:normal;overflow-wrap:anywhere;}
+:root .client-shell[data-client-theme].reference-client .empty-state {min-width:0;padding:var(--ui-empty-block-inset) var(--ui-empty-inline-inset);gap:var(--ui-empty-gap);}
+:root .client-shell[data-client-theme].reference-client .empty-state .gold-button {max-width:100%;padding:12px 20px;line-height:1.5;white-space:normal;}
+
+/* Login labels need their own text-to-field gap; the role-picker label keeps
+   its separate entry layout. The demo code notice uses the existing theme. */
+:root .client-shell[data-client-theme].reference-client.auth-shell .player-login-card .field-label {
+  display: grid; min-width: 0; margin: 0; gap: 8px; line-height: 1.6;
+}
+:root .client-shell[data-client-theme].reference-client.auth-shell .player-login-card .notice {
+  display: flex; align-items: center; flex-wrap: wrap; min-width: 0;
+  gap: 8px; padding: 14px 16px; border: 1px solid var(--line);
+  line-height: 1.7; overflow-wrap: anywhere;
+}
+:root .client-shell[data-client-theme].reference-client.auth-shell .player-login-card .notice > svg { flex: none; }

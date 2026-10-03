@@ -1,0 +1,63 @@
+/* Preserve the LevelCenter reference classes; all fills come from real data. */
+:root .client-shell[data-client-theme].reference-client .reference-level-center { width: 100%; min-width: 0; margin-bottom: 24px; }
+:root .client-shell[data-client-theme].reference-client .reference-level-center .level-header h1 { margin: 0; color: var(--text, #17211b); font-size: 25px; line-height: 1.25; letter-spacing: -.035em; }
+:root .client-shell[data-client-theme].reference-client .reference-level-center .level-header .back-button { display: grid; place-items: center; width: 42px; height: 42px; color: var(--text, #425147); background: var(--surface, #fff); border: 1px solid var(--line, #dfe4dc); border-radius: 50%; }
+:root .client-shell[data-client-theme].reference-client .reference-level-center .journey-heading { gap: 15px; }
+:root .client-shell[data-client-theme].reference-client .reference-level-center .journey-heading h3 { color: #fff; }
+:root .client-shell[data-client-theme].reference-client .reference-level-center .journey-heading small { color: #9eb2a5; }
+:root .client-shell[data-client-theme].reference-client .reference-level-center .journey-heading > span { max-width: 65%; text-align: right; line-height: 1.6; }
+:root .client-shell[data-client-theme].reference-client .reference-level-center .level-node b { color: #adc4b4; }
+:root .client-shell[data-client-theme].reference-client .reference-level-center .level-node.passed b { color: #bdd2c1; }
+:root .client-shell[data-client-theme].reference-client .reference-level-center .level-node.current b { color: #fff; }
+:root .client-shell[data-client-theme].reference-client .reference-level-center .level-node.future b { color: #adc4b4; }
+:root .client-shell[data-client-theme].reference-client .reference-level-center .level-track-scroll { touch-action: pan-x pan-y; }
+:root .client-shell[data-client-theme].reference-client .reference-level-center .level-track-scroll:focus-visible { outline: 2px solid #cce4a9; outline-offset: -3px; }
+:root .client-shell[data-client-theme].reference-client .reference-level-center .track-swipe-hint { flex-wrap: wrap; gap: 6px; padding: 0 18px; font-size: 10px; }
+:root .client-shell[data-client-theme].reference-client .reference-level-center .level-keyboard-hint { width: 100%; color: #a3b8aa; text-align: center; font-size: 9px; }
+:root .client-shell[data-client-theme].reference-client .reference-level-center .level-progress-copy { gap: 12px; font-size: 11px; }
+:root .client-shell[data-client-theme].reference-client .reference-level-center .level-progress-copy > span { min-width: 0; line-height: 1.65; }
+:root .client-shell[data-client-theme].reference-client .reference-level-center .level-progress-copy b { flex: none; }
+:root .client-shell[data-client-theme].reference-client .reference-level-center .level-progress { margin: 8px 22px 0; }
+:root .client-shell[data-client-theme].reference-client .reference-level-center .data-section .section-heading { display: flex; flex-direction: row; justify-content: space-between; align-items: flex-start; gap: 12px; min-width: 0; margin-bottom: 13px; text-align: left; }
+:root .client-shell[data-client-theme].reference-client .reference-level-center .data-section .section-heading > div { flex: 1; min-width: 0; text-align: left; }
+:root .client-shell[data-client-theme].reference-client .reference-level-center .data-section .section-heading .eyebrow { margin: 0 0 8px; color: var(--muted, #718077); text-align: left; font-size: 11px; }
+:root .client-shell[data-client-theme].reference-client .reference-level-center .data-section .section-heading h3 { margin: 0; color: var(--text, #17211b); text-align: left; font-size: 18px; }
+:root .client-shell[data-client-theme].reference-client .reference-level-center .data-section .data-period { flex: none; align-self: flex-end; }
+:root .client-shell[data-client-theme].reference-client .reference-level-center .data-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+:root .client-shell[data-client-theme].reference-client .reference-level-center .data-grid article { min-width: 0; color: var(--text, #17211b); background: var(--surface, #fff); border-color: var(--line, #e6eae4); }
+:root .client-shell[data-client-theme].reference-client .reference-level-center .data-grid strong { max-width: 100%; font-size: clamp(17px, 4.7vw, 22px); white-space: normal; line-height: 1.3; overflow-wrap: anywhere; }
+:root .client-shell[data-client-theme].reference-client .reference-level-center .data-grid > article > small { color: var(--muted, #69766e); font-size: 11px; }
+:root .client-shell[data-client-theme].reference-client .reference-level-center .data-target { color: var(--muted, #8e9891); white-space: nowrap; font-size: 10px; }
+:root .client-shell[data-client-theme].reference-client .reference-level-center .data-note { margin-top: 7px; color: var(--muted, #69766e); font-size: 10px; line-height: 1.6; }
+:root .client-shell[data-client-theme].reference-client .reference-level-center .data-water[data-empty="true"]::before,
+:root .client-shell[data-client-theme].reference-client .reference-level-center .data-water[data-empty="true"]::after,
+:root .client-shell[data-client-theme].reference-client .reference-level-center .data-water[data-empty="true"] i { display: none; }
+:root .client-shell[data-client-theme].reference-client .reference-level-center .activity-card { color: var(--text, #17211b); background: var(--surface, #fff); border-color: var(--line, #e6eae4); }
+:root .client-shell[data-client-theme].reference-client .reference-level-center .activity-heading { gap: 15px; }
+:root .client-shell[data-client-theme].reference-client .reference-level-center .activity-heading strong { flex: none; color: var(--green, #315b43); font-size: 17px; }
+:root .client-shell[data-client-theme].reference-client .reference-level-center .activity-chart { gap: 9px; height: 155px; padding-top: 17px; border-color: var(--line, #e6eae4); }
+:root .client-shell[data-client-theme].reference-client .reference-level-center .activity-chart > div { display: grid; grid-template-rows: minmax(0, 1fr) 16px; align-items: end; justify-items: center; gap: 7px; height: 100%; min-width: 0; }
+:root .client-shell[data-client-theme].reference-client .reference-level-center .activity-chart span { position: relative; align-self: end; min-height: 0; }
+:root .client-shell[data-client-theme].reference-client .reference-level-center .activity-chart span::before { content: attr(data-count); position: absolute; left: 50%; bottom: calc(100% + 3px); transform: translateX(-50%); color: var(--muted, #69766e); font-size: 9px; }
+:root .client-shell[data-client-theme].reference-client .reference-level-center .activity-chart span[data-empty="true"] { height: 0; background: transparent; }
+:root .client-shell[data-client-theme].reference-client .reference-level-center .activity-chart small { margin: 0; color: var(--muted, #8d9790); font-size: 10px; }
+:root .client-shell[data-client-theme].reference-client .reference-level-center .level-data-note { margin: 12px 0 0; color: var(--muted, #78857c); font-size: 10px; line-height: 1.75; }
+:root .client-shell[data-client-theme="dark"].reference-client .reference-level-center .data-water { opacity: .16; }
+:root .client-shell[data-client-theme="dark"].reference-client .reference-level-center .data-period { color: #c0ddb1; background: #263d31; }
+/* Preserve the curved rail, while text around it uses the available width. */
+:root .client-shell[data-client-theme].reference-client .reference-level-center :is(.level-header,.journey-heading,.level-progress-copy,.activity-heading) {min-width:0;}
+:root .client-shell[data-client-theme].reference-client .reference-level-center .level-header h1 {min-width:0;overflow-wrap:anywhere;}
+:root .client-shell[data-client-theme].reference-client .reference-level-center .journey-heading {flex-wrap:wrap;}
+:root .client-shell[data-client-theme].reference-client .reference-level-center .journey-heading>span {min-width:0;max-width:100%;overflow-wrap:anywhere;}
+:root .client-shell[data-client-theme].reference-client .reference-level-center .level-progress-copy {flex-wrap:wrap;}
+:root .client-shell[data-client-theme].reference-client .reference-level-center .level-progress-copy b {overflow-wrap:anywhere;max-width:100%;}
+:root .client-shell[data-client-theme].reference-client .reference-level-center :is(.data-grid>article>small,.data-note,.level-data-note,.activity-heading strong,.activity-heading h3) {overflow-wrap:anywhere;max-width:100%;}
+:root .client-shell[data-client-theme].reference-client .reference-level-center .data-target {white-space:normal;overflow-wrap:anywhere;}
+:root .client-shell[data-client-theme].reference-client .reference-level-center .activity-heading {flex-wrap:wrap;}
+@media (prefers-reduced-motion: reduce) {
+  :root .client-shell[data-client-theme].reference-client .reference-level-center .level-track-scroll { scroll-behavior: auto; }
+  :root .client-shell[data-client-theme].reference-client .reference-level-center .data-water,
+  :root .client-shell[data-client-theme].reference-client .reference-level-center .data-water::before,
+  :root .client-shell[data-client-theme].reference-client .reference-level-center .data-water::after,
+  :root .client-shell[data-client-theme].reference-client .reference-level-center .data-water i { animation: none; }
+}

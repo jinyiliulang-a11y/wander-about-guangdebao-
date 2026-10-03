@@ -1,0 +1,19 @@
+/* Keep the floor strip and compact expand button in one stable layout during
+   the map morph. The icon is hidden by opacity, so closing never inserts a new
+   flex child and displaces the floor strip before its animation can begin. */
+:root .client-shell[data-client-theme].reference-client .reference-home .map-card.map-fullscreen .map-controls .map-zoom-button {
+  display: grid;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* The hidden 40px icon plus 8px gap stays in the flex layout. Offset their half
+   width to keep the visible floor strip centered in fullscreen, as before. */
+:root .client-shell[data-client-theme].reference-client .reference-home .map-card.map-fullscreen .map-controls {
+  transform: translateX(calc(-50% + 24px));
+  bottom: calc(108px + var(--quest-safe-bottom, 0px));
+}
+
+:root .client-shell[data-client-theme].reference-client .reference-home .map-card.map-collapsing .map-controls {
+  pointer-events: none;
+}

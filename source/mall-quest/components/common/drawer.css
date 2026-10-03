@@ -1,0 +1,53 @@
+/* A native top-layer panel keeps underlying pages inert, including their fixed navigation. */
+dialog.quest-drawer {
+  box-sizing: border-box; position: fixed; inset: auto 0 0; display: none;
+  width: 100%; max-width: 100%; height: 86dvh; max-height: 86dvh; min-height: 0;
+  margin: 0; padding: 0; overflow: hidden; border: 1px solid var(--line, #dce5da);
+  border-bottom: 0; border-radius: 28px 28px 0 0;
+  background: var(--surface, #fff); color: var(--text, #17372a);
+  box-shadow: 0 -16px 56px rgba(12, 27, 19, .16); font: inherit;
+}
+dialog.quest-drawer[open] { display: flex; flex-direction: column; }
+dialog.quest-drawer::backdrop {
+  background: rgba(10, 24, 17, .46); backdrop-filter: blur(4px);
+  animation: quest-drawer-backdrop-in 300ms ease-out both;
+}
+dialog.quest-drawer[data-phase="closing"]::backdrop { animation: quest-drawer-backdrop-out 240ms ease-in both; }
+dialog.quest-drawer .quest-drawer-head {
+  display: grid; grid-template-columns: minmax(0, 1fr) 44px; flex: none;
+  align-items: center; gap: 16px; min-width: 0; padding: 20px 20px 16px;
+  border-bottom: 1px solid var(--line, #dce5da); background: var(--surface, #fff);
+}
+dialog.quest-drawer .quest-drawer-head h2 {
+  min-width: 0; margin: 0; padding: 0; color: var(--text, #17372a);
+  font-size: 21px; line-height: 1.5; font-weight: 700; overflow-wrap: anywhere;
+}
+dialog.quest-drawer .quest-drawer-close {
+  display: grid; place-items: center; box-sizing: border-box; flex: none;
+  width: 44px; min-width: 44px; height: 44px; min-height: 44px; margin: 0; padding: 0;
+  border: 1px solid var(--line, #dce5da); border-radius: 50%;
+  background: var(--client-soft, var(--bg, #eef3e9)); color: var(--text, #17372a); cursor: pointer;
+}
+dialog.quest-drawer .quest-drawer-close:focus-visible { outline: 2px solid var(--client-soft-ink, #315b43); outline-offset: 2px; }
+dialog.quest-drawer .quest-drawer-close:disabled { cursor: default; }
+dialog.quest-drawer .quest-drawer-body {
+  box-sizing: border-box; flex: 1 1 auto; min-height: 0; min-width: 0;
+  padding: 20px 20px calc(24px + env(safe-area-inset-bottom, 0px)); overflow: auto;
+  overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: var(--client-soft-ink, #91a790) transparent;
+}
+dialog.quest-drawer .quest-drawer-body::-webkit-scrollbar { width: 6px; height: 6px; }
+dialog.quest-drawer .quest-drawer-body::-webkit-scrollbar-thumb { border-radius: 999px; background: var(--client-soft-ink, #91a790); }
+dialog.quest-drawer[data-phase="closing"] .quest-drawer-body { pointer-events: none; }
+@media (min-width: 768px) {
+  dialog.quest-drawer {
+    inset: 0 0 0 auto; width: 440px; max-width: min(440px, 100vw); height: 100dvh; max-height: 100dvh;
+    border-top: 0; border-right: 0; border-radius: 24px 0 0 24px;
+    box-shadow: -16px 0 56px rgba(12, 27, 19, .16);
+  }
+  dialog.quest-drawer .quest-drawer-head { padding: 24px 24px 20px; }
+  dialog.quest-drawer .quest-drawer-body { padding: 24px 24px calc(28px + env(safe-area-inset-bottom, 0px)); }
+}
+@keyframes quest-drawer-backdrop-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes quest-drawer-backdrop-out { from { opacity: var(--drawer-backdrop-start, 1); } to { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { dialog.quest-drawer::backdrop { animation: none; } }
+html[data-quest-reduce-motion="true"] dialog.quest-drawer::backdrop { animation: none; }

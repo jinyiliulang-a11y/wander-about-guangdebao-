@@ -1,0 +1,469 @@
+/* Keep HelpCenter spacing independent from the reference client's element reset. */
+:root .client-shell[data-client-theme].reference-client .help-center {
+  display: grid;
+  gap: 20px;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  margin: 0;
+  padding: clamp(20px, 3vw, 28px);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: var(--surface);
+  color: var(--text);
+}
+
+:root .client-shell[data-client-theme].reference-client .help-center .help-center-top {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 18px;
+  min-width: 0;
+}
+
+:root .client-shell[data-client-theme].reference-client .help-center .help-center-top > div {
+  display: grid;
+  justify-items: start;
+  gap: 10px;
+  min-width: 0;
+}
+
+:root .client-shell[data-client-theme].reference-client .help-center .help-center-top .pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+  padding: 6px 10px;
+  border: 1px solid var(--client-accent-line);
+  border-radius: 99px;
+  background: var(--client-soft);
+  color: var(--client-soft-ink);
+  line-height: 1.6;
+}
+
+:root .client-shell[data-client-theme].reference-client .help-center .help-center-top h2 {
+  margin: 0;
+  color: var(--text);
+  font-size: 1.2rem;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+:root .client-shell[data-client-theme].reference-client .help-center .help-center-top p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+
+:root .client-shell[data-client-theme].reference-client .help-center .help-center-top .outline-button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  justify-self: start;
+  width: fit-content;
+  max-width: 100%;
+  min-height: 44px;
+  padding: 11px 14px;
+  border: 1px solid var(--client-accent-line);
+  border-radius: 13px;
+  background: var(--client-soft);
+  color: var(--client-soft-ink);
+  font-size: .8rem;
+  line-height: 1.6;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+:root .client-shell[data-client-theme].reference-client .help-center .help-center-top :is(.pill, .outline-button) > svg {
+  flex: none;
+}
+
+:root .client-shell[data-client-theme].reference-client .help-center .faq-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  min-height: 48px;
+  margin: 0;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--bg);
+  color: var(--muted);
+  box-shadow: none;
+}
+
+:root .client-shell[data-client-theme].reference-client .help-center .faq-search > svg {
+  flex: none;
+}
+
+:root .client-shell[data-client-theme].reference-client .help-center .faq-search > input:not([type="checkbox"]):not([type="radio"]):not([type="file"]) {
+  display: block;
+  flex: 1 1 0;
+  width: 100%;
+  min-width: 0;
+  height: auto;
+  min-height: 24px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--text);
+  box-shadow: none;
+  outline: none;
+  line-height: 1.5;
+}
+
+:root .client-shell[data-client-theme].reference-client .help-center .faq-search > input::placeholder {
+  color: var(--muted);
+  opacity: 1;
+}
+
+:root .client-shell[data-client-theme].reference-client .help-center .faq-search:has(input:focus-visible) {
+  outline: 2px solid var(--client-soft-ink);
+  outline-offset: -1px;
+}
+
+:root .client-shell[data-client-theme].reference-client .help-center .faq-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+:root .client-shell[data-client-theme].reference-client .help-center .faq-filters > button {
+  min-width: 0;
+  min-height: 40px;
+  padding: 9px 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--bg);
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+:root .client-shell[data-client-theme].reference-client .help-center .faq-filters > button.active {
+  border-color: var(--client-deep);
+  background: var(--client-deep);
+  color: var(--client-on-deep);
+}
+
+:root .client-shell[data-client-theme].reference-client .help-center .faq-list {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+  margin: 0;
+}
+
+:root .client-shell[data-client-theme].reference-client .help-center .faq-list > details {
+  min-width: 0;
+  margin: 0;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  background: var(--surface);
+}
+
+:root .client-shell[data-client-theme].reference-client .help-center .faq-list > details[open] {
+  border-color: var(--client-accent-line);
+  background: var(--client-soft);
+}
+
+:root .client-shell[data-client-theme].reference-client .help-center .faq-list summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 20px;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  color: var(--text);
+  font-size: .85rem;
+  font-weight: 500;
+  line-height: 1.7;
+  list-style: none;
+  overflow-wrap: anywhere;
+}
+
+:root .client-shell[data-client-theme].reference-client .help-center .faq-list summary > span {
+  display: inline-grid;
+  place-items: center;
+  width: 20px;
+  color: var(--client-soft-ink);
+}
+
+:root .client-shell[data-client-theme].reference-client .help-center .faq-list p {
+  min-width: 0;
+  max-width: none;
+  margin: 12px 0 0;
+  padding: 0;
+  color: var(--muted);
+  font-size: .8rem;
+  line-height: 1.9;
+  overflow-wrap: anywhere;
+}
+
+:root .client-shell[data-client-theme].reference-client .help-center > .empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  min-height: 0;
+  padding: 28px 16px;
+  border: 1px dashed var(--client-accent-line);
+  border-radius: 16px;
+  background: var(--bg);
+  text-align: center;
+}
+
+:root .client-shell[data-client-theme].reference-client .help-center > .empty-state :is(h2, p) {
+  max-width: 100%;
+  margin: 0;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+
+:root .client-shell[data-client-theme].reference-client .help-center > .empty-state > .text-button {
+  min-height: 40px;
+  max-width: 100%;
+  padding: 8px 12px;
+  border-radius: 10px;
+  color: var(--client-soft-ink);
+}
+
+:root .client-shell[data-client-theme].reference-client .help-center :is(button, summary):focus-visible {
+  outline: 2px solid var(--client-soft-ink);
+  outline-offset: 3px;
+}
+
+/* The same playable point-board is shared by client and workspace shells.
+   Keep its card colors tied to the active shell instead of the legacy navy. */
+:root :is(.client-shell[data-client-theme].reference-client, .workspace-shell.reference-workspace) .demo-point-modal.modal {
+  min-width: 0;
+  padding: clamp(16px, 3vw, 28px);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: var(--surface);
+  color: var(--text);
+  overflow-y: auto;
+}
+
+:root :is(.client-shell[data-client-theme].reference-client, .workspace-shell.reference-workspace) .demo-point-modal .modal-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 40px;
+  align-items: start;
+  gap: 12px;
+  margin: 0 0 18px;
+  padding: 0 0 16px;
+  border-bottom: 1px solid var(--line);
+}
+
+:root :is(.client-shell[data-client-theme].reference-client, .workspace-shell.reference-workspace) .demo-point-modal .modal-head h2 {
+  min-width: 0;
+  margin: 0;
+  color: var(--text);
+  font-size: 20px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+:root :is(.client-shell[data-client-theme].reference-client, .workspace-shell.reference-workspace) .demo-point-modal .modal-close {
+  width: 40px;
+  min-width: 40px;
+  height: 40px;
+  min-height: 40px;
+  margin: 0;
+  padding: 0;
+}
+
+:root :is(.client-shell[data-client-theme].reference-client, .workspace-shell.reference-workspace) .demo-point-modal .help-intro {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr);
+  align-items: start;
+  gap: 12px;
+  margin: 0 0 22px;
+  padding: 16px;
+  border: 1px solid var(--client-accent-line, var(--line));
+  border-radius: 16px;
+  background: var(--client-soft, var(--wb-soft, var(--bg)));
+  color: var(--text);
+}
+
+:root :is(.client-shell[data-client-theme].reference-client, .workspace-shell.reference-workspace) .demo-point-modal .help-intro p {
+  min-width: 0;
+  margin: 0;
+  color: var(--text);
+  font-size: .9rem;
+  line-height: 1.9;
+  overflow-wrap: anywhere;
+}
+
+:root :is(.client-shell[data-client-theme].reference-client, .workspace-shell.reference-workspace) .demo-point-modal > h3 {
+  margin: 0 0 10px;
+  color: var(--text);
+  font-size: 1rem;
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+}
+
+:root :is(.client-shell[data-client-theme].reference-client, .workspace-shell.reference-workspace) .demo-point-modal > .muted {
+  min-width: 0;
+  margin: 0 0 18px;
+  color: var(--muted);
+  font-size: .875rem;
+  line-height: 1.9;
+  overflow-wrap: anywhere;
+}
+
+:root :is(.client-shell[data-client-theme].reference-client, .workspace-shell.reference-workspace) .demo-point-modal .demo-points {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  min-width: 0;
+  margin: 0;
+}
+
+:root :is(.client-shell[data-client-theme].reference-client, .workspace-shell.reference-workspace) .demo-point-modal .demo-point {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 6px;
+  min-width: 0;
+  margin: 0;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--bg);
+  color: var(--text);
+}
+
+:root :is(.client-shell[data-client-theme].reference-client, .workspace-shell.reference-workspace) .demo-point-modal .demo-point > .store-art {
+  width: 100%;
+  margin: 0 0 6px;
+  border-radius: 12px;
+}
+
+:root :is(.client-shell[data-client-theme].reference-client, .workspace-shell.reference-workspace) .demo-point-modal .demo-point > h4 {
+  margin: 0;
+  color: var(--text);
+  font-size: .95rem;
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+}
+
+:root :is(.client-shell[data-client-theme].reference-client, .workspace-shell.reference-workspace) .demo-point-modal .demo-point > :is(span, small) {
+  max-width: 100%;
+  margin: 0;
+  color: var(--muted);
+  font-size: .8rem;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+
+:root :is(.client-shell[data-client-theme].reference-client, .workspace-shell.reference-workspace) .demo-point-modal .help-rules {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  margin: 24px 0 0;
+  padding: 20px 0 0;
+  border-top: 1px solid var(--line);
+}
+
+:root :is(.client-shell[data-client-theme].reference-client, .workspace-shell.reference-workspace) .demo-point-modal .help-rules h3 {
+  margin: 0;
+  color: var(--text);
+  font-size: 1rem;
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+}
+
+:root :is(.client-shell[data-client-theme].reference-client, .workspace-shell.reference-workspace) .demo-point-modal .help-rules p {
+  margin: 0;
+  color: var(--muted);
+  font-size: .875rem;
+  line-height: 1.9;
+  overflow-wrap: anywhere;
+}
+
+:root :is(.client-shell[data-client-theme].reference-client, .workspace-shell.reference-workspace) .demo-point-modal .help-rules > button {
+  justify-self: start;
+  max-width: 100%;
+  min-height: 44px;
+  margin: 4px 0 0;
+  padding: 12px 18px;
+  line-height: 1.6;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 700px) {
+  :root :is(.client-shell[data-client-theme].reference-client, .workspace-shell.reference-workspace) .demo-point-modal .demo-points {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+  :root :is(.client-shell[data-client-theme].reference-client, .workspace-shell.reference-workspace) .demo-point-modal .demo-point {
+    display: grid;
+    grid-template-columns: 96px minmax(0, 1fr);
+    align-items: center;
+    column-gap: 12px;
+    row-gap: 3px;
+    padding: 12px;
+  }
+  :root :is(.client-shell[data-client-theme].reference-client, .workspace-shell.reference-workspace) .demo-point-modal .demo-point > .store-art {
+    grid-column: 1;
+    grid-row: 1 / 5;
+    align-self: stretch;
+    height: 100%;
+    min-height: 96px;
+    aspect-ratio: auto;
+    margin: 0;
+  }
+  :root :is(.client-shell[data-client-theme].reference-client, .workspace-shell.reference-workspace) .demo-point-modal .demo-point > :is(h4, span, small) {
+    grid-column: 2;
+    min-width: 0;
+  }
+}
+
+@media (max-width: 380px) {
+  :root :is(.client-shell[data-client-theme].reference-client, .workspace-shell.reference-workspace) .demo-point-modal .modal-head h2 {
+    font-size: 18px;
+  }
+  :root :is(.client-shell[data-client-theme].reference-client, .workspace-shell.reference-workspace) .demo-point-modal .demo-point {
+    grid-template-columns: 72px minmax(0, 1fr);
+    column-gap: 10px;
+    padding: 10px;
+  }
+  :root :is(.client-shell[data-client-theme].reference-client, .workspace-shell.reference-workspace) .demo-point-modal .demo-point > .store-art {
+    min-height: 80px;
+  }
+}
+
+@media (max-width: 600px) {
+  :root .client-shell[data-client-theme].reference-client .help-center .help-center-top {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+  :root .client-shell[data-client-theme].reference-client .help-center .faq-search > input {
+    font-size: 16px;
+  }
+  :root .client-shell[data-client-theme].reference-client .help-center .faq-filters {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 6px;
+  }
+  :root .client-shell[data-client-theme].reference-client .help-center .faq-filters > button {
+    padding: 9px 3px;
+  }
+}

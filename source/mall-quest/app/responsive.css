@@ -1,0 +1,123 @@
+/* Shared viewport edges. Page grids and intentional horizontal scrollers stay
+   in their own component styles; content is never scaled down to fit a phone. */
+:root {
+  --quest-safe-top: env(safe-area-inset-top, 0px);
+  --quest-safe-right: env(safe-area-inset-right, 0px);
+  --quest-safe-bottom: env(safe-area-inset-bottom, 0px);
+  --quest-safe-left: env(safe-area-inset-left, 0px);
+  --quest-overlay-gap: 24px;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+:root .client-shell[data-client-theme].reference-client.app-shell {
+  min-height: 100dvh;
+  padding-top: var(--quest-safe-top);
+  padding-right: var(--quest-safe-right);
+  padding-bottom: calc(130px + var(--quest-safe-bottom));
+  padding-left: var(--quest-safe-left);
+}
+
+:root .client-shell[data-client-theme].reference-client.app-shell:is(.child-screen, .without-mobile-nav) {
+  padding-bottom: calc(45px + var(--quest-safe-bottom));
+}
+
+:root .client-shell[data-client-theme].reference-client.auth-shell {
+  min-height: 100dvh;
+  padding-top: calc(clamp(32px, 7vh, 66px) + var(--quest-safe-top));
+  padding-right: calc(20px + var(--quest-safe-right));
+  padding-bottom: calc(32px + var(--quest-safe-bottom));
+  padding-left: calc(20px + var(--quest-safe-left));
+}
+
+:root .client-shell[data-client-theme].reference-client .mobile-nav.glass-tabbar {
+  width: min(calc(100% - 34px - var(--quest-safe-left) - var(--quest-safe-right)), 430px);
+  left: calc(50% + (var(--quest-safe-left) - var(--quest-safe-right)) / 2);
+  bottom: calc(18px + var(--quest-safe-bottom));
+}
+
+:root .client-shell[data-client-theme].reference-client :is(.app-header, .reference-page-bar) {
+  top: var(--quest-safe-top);
+}
+
+:root .client-shell[data-client-theme].reference-client :is(.modal-backdrop, .reference-card-modal, .nfc-overlay),
+:root .workspace-shell.reference-workspace .modal-backdrop {
+  padding-top: max(var(--quest-overlay-gap), var(--quest-safe-top));
+  padding-right: max(var(--quest-overlay-gap), var(--quest-safe-right));
+  padding-bottom: max(var(--quest-overlay-gap), var(--quest-safe-bottom));
+  padding-left: max(var(--quest-overlay-gap), var(--quest-safe-left));
+}
+
+:root .client-shell[data-client-theme].reference-client :is(.modal, .treasure-detail.modal, .enlarged-coupon.modal),
+:root .workspace-shell.reference-workspace .modal {
+  min-width: 0;
+  min-height: 0;
+  max-width: 100%;
+  max-height: calc(100dvh - max(var(--quest-overlay-gap), var(--quest-safe-top)) - max(var(--quest-overlay-gap), var(--quest-safe-bottom)));
+  overscroll-behavior: contain;
+}
+
+:root .client-shell[data-client-theme].reference-client .nfc-scanner {
+  max-width: 100%;
+  max-height: calc(100dvh - max(var(--quest-overlay-gap), var(--quest-safe-top)) - max(var(--quest-overlay-gap), var(--quest-safe-bottom)));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+:root .client-shell[data-client-theme].reference-client .map-fullscreen-title {
+  top: calc(24px + var(--quest-safe-top));
+  left: calc(24px + var(--quest-safe-left));
+  max-width: calc(100% - 96px - var(--quest-safe-left) - var(--quest-safe-right));
+}
+
+/* The map has overflowing decorative roads. Unlike hidden, clip also prevents
+   focus from scrolling that canvas and shifting its fixed corner controls. */
+:root .client-shell[data-client-theme].reference-client .reference-home .map-card.map-fullscreen {
+  overflow: clip;
+}
+
+:root .client-shell[data-client-theme].reference-client .map-close {
+  top: calc(24px + var(--quest-safe-top));
+  right: calc(24px + var(--quest-safe-right));
+}
+
+:root .client-shell[data-client-theme].reference-client .map-controls {
+  right: calc(16px + var(--quest-safe-right));
+  bottom: calc(16px + var(--quest-safe-bottom));
+}
+
+.scanner-device select {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.coin-checkin > div { width: 100%; min-width: 0; }
+.coin-checkin strong { display: flex; align-items: center; gap: 8px; }
+.coin-checkin p { margin: 8px 0; overflow-wrap: anywhere; }
+.coin-checkin small { display: block; margin: 8px 0; }
+.coin-checkin button { margin-top: 12px; }
+
+@media (max-width: 980px) {
+  :root { --quest-overlay-gap: 12px; }
+
+  /* 16px prevents mobile Safari's focus zoom, which can displace fixed bars. */
+  :root .client-shell[data-client-theme].reference-client :is(input:not([type="checkbox"]):not([type="radio"]):not([type="file"]), textarea, select) {
+    font-size: 16px;
+  }
+
+  :root .client-shell[data-client-theme].reference-client .toast {
+    left: calc(50% + (var(--quest-safe-left) - var(--quest-safe-right)) / 2);
+    bottom: calc(110px + var(--quest-safe-bottom));
+    max-width: calc(100% - 24px - var(--quest-safe-left) - var(--quest-safe-right));
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  :root .client-shell[data-client-theme].reference-client.without-mobile-nav .toast {
+    bottom: calc(20px + var(--quest-safe-bottom));
+  }
+}

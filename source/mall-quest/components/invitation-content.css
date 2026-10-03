@@ -1,0 +1,70 @@
+/* The dialog shell is shared; only invitation content is adapted here. */
+:root .client-shell[data-client-theme].reference-client .invitation-content {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+}
+:root .client-shell[data-client-theme].reference-client .invitation-content .invite-emblem {
+  display: grid;
+  place-items: center;
+  width: 68px;
+  height: 68px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: var(--client-soft, var(--bg));
+  color: var(--text);
+}
+:root .client-shell[data-client-theme].reference-client .invitation-content h3 {
+  margin: 0;
+  color: var(--text);
+  font-size: 20px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+:root .client-shell[data-client-theme].reference-client .invitation-content p {
+  margin: 0;
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+:root .client-shell[data-client-theme].reference-client .invitation-content .field-label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  margin: 0;
+  color: var(--text);
+  font-size: 13px;
+}
+:root .client-shell[data-client-theme].reference-client .invitation-content textarea {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.8;
+  resize: vertical;
+  overflow-wrap: anywhere;
+}
+:root .client-shell[data-client-theme].reference-client .invitation-content .invitation-local-note {
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--client-soft, var(--bg));
+  color: var(--text);
+  font-size: 12px;
+  line-height: 1.8;
+}
+:root .client-shell[data-client-theme].reference-client .invitation-content > button {
+  width: 100%;
+  min-width: 0;
+}
+:root .client-shell[data-client-theme].reference-client .invitation-content :is(button, textarea):focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 3px;
+}

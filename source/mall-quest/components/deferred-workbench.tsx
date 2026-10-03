@@ -1,0 +1,13 @@
+"use client";
+import { deferred } from "./deferred-component";
+import type { ComponentProps } from "react";
+import type * as Pages from "./workbench-pages";
+export type { WorkbenchData } from "./workbench-pages";
+const load = () => import("./workbench-pages");
+export const WorkbenchDashboard = deferred<ComponentProps<typeof Pages.WorkbenchDashboard>>(async () => ({ default: (await load()).WorkbenchDashboard }));
+export const CouponTemplateManager = deferred<ComponentProps<typeof Pages.CouponTemplateManager>>(async () => ({ default: (await load()).CouponTemplateManager }));
+export const DeviceTaskManager = deferred<ComponentProps<typeof Pages.DeviceTaskManager>>(async () => ({ default: (await load()).DeviceTaskManager }));
+export const MerchantProfileEditor = deferred<ComponentProps<typeof Pages.MerchantProfileEditor>>(async () => ({ default: (await load()).MerchantProfileEditor }));
+export const OperationsUsers = deferred<ComponentProps<typeof Pages.OperationsUsers>>(async () => ({ default: (await load()).OperationsUsers }));
+export const OperationsMerchants = deferred<ComponentProps<typeof Pages.OperationsMerchants>>(async () => ({ default: (await load()).OperationsMerchants }));
+export const OperationsSettings = deferred<ComponentProps<typeof Pages.OperationsSettings>>(async () => ({ default: (await load()).OperationsSettings }));

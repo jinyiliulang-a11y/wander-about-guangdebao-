@@ -1,0 +1,111 @@
+/* The profile's feedback cards share the client's cream and forest palette. */
+:root .client-shell[data-client-theme].reference-client .my-feedback {
+  display: grid;
+  gap: 16px;
+  width: 100%;
+  min-width: 0;
+  margin: 24px 0 0;
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: var(--surface);
+  color: var(--text);
+}
+
+:root .client-shell[data-client-theme].reference-client .my-feedback > h2 {
+  min-width: 0;
+  margin: 0;
+  color: var(--text);
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+:root .client-shell[data-client-theme].reference-client .my-feedback > article {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  min-width: 0;
+  max-width: 100%;
+  margin: 0;
+  padding: 16px;
+  border: 1px solid var(--client-accent-line, var(--line));
+  border-radius: 16px;
+  background: var(--client-soft, var(--bg));
+  color: var(--text);
+}
+
+:root .client-shell[data-client-theme].reference-client .my-feedback > article > div {
+  flex: 1 1 220px;
+  min-width: 0;
+  max-width: 100%;
+}
+
+:root .client-shell[data-client-theme].reference-client .my-feedback > article strong {
+  display: block;
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+}
+
+:root .client-shell[data-client-theme].reference-client .my-feedback > article p {
+  margin: 8px 0 0;
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.75;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+:root .client-shell[data-client-theme].reference-client .my-feedback > article > .text-button.danger-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: flex-start;
+  flex: 0 0 auto;
+  gap: 6px;
+  min-width: 0;
+  max-width: 100%;
+  min-height: 44px;
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  background: var(--surface);
+  color: #ab4345;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.5;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+:root .client-shell[data-client-theme="dark"].reference-client .my-feedback > article > .text-button.danger-button {
+  color: #ffb6b3;
+}
+
+:root .client-shell[data-client-theme].reference-client .my-feedback > article > .text-button.danger-button > svg {
+  flex: none;
+}
+
+:root .client-shell[data-client-theme].reference-client .my-feedback > article > .text-button.danger-button:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+@media (hover: hover) {
+  :root .client-shell[data-client-theme].reference-client .my-feedback > article > .text-button.danger-button:hover:not(:disabled) {
+    background: var(--client-soft, var(--bg));
+  }
+}
+
+@media (max-width: 600px) {
+  :root .client-shell[data-client-theme].reference-client .my-feedback {
+    padding: 20px;
+  }
+}

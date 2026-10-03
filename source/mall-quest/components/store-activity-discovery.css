@@ -1,0 +1,31 @@
+:root .client-shell[data-client-theme].reference-client :is(.store-activity-discovery,.store-activity-public) { display: grid; gap: 20px; min-width: 0; }
+:root .client-shell[data-client-theme].reference-client .store-activity-public { padding-top: 2px; }
+:root .client-shell[data-client-theme].reference-client .store-activity-public-heading { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 14px; }
+:root .client-shell[data-client-theme].reference-client .store-activity-public-heading > div { flex: 1 1 200px; min-width: 0; display: grid; gap: 8px; }
+:root .client-shell[data-client-theme].reference-client .store-activity-public h3 { display: flex; align-items: center; gap: 8px; }
+:root .client-shell[data-client-theme].reference-client .store-activity-public :is(h3,h4,p) { margin: 0; overflow-wrap: anywhere; }
+:root .client-shell[data-client-theme].reference-client .store-activity-public-list { display: grid; gap: 14px; }
+:root .client-shell[data-client-theme].reference-client .store-activity-public-card { display: grid; gap: 12px; padding: 20px; min-width: 0; border: 1px solid var(--line); border-radius: 18px; background: var(--surface); color: var(--text); scroll-margin-top: 28px; transition: background-color 180ms ease,border-color 180ms ease,box-shadow 180ms ease; }
+:root .client-shell[data-client-theme].reference-client .store-activity-public-card.is-selected { border-color: var(--client-soft-ink); background: var(--client-soft); box-shadow: 0 0 0 2px color-mix(in srgb,var(--client-soft-ink) 20%,transparent); }
+:root .client-shell[data-client-theme].reference-client .store-activity-public-card:focus-visible { outline: 2px solid var(--client-soft-ink); outline-offset: 3px; }
+:root .client-shell[data-client-theme].reference-client .store-activity-card-top { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; font-size: 12px; }
+:root .client-shell[data-client-theme].reference-client .store-activity-public h4 { font-size: 18px; line-height: 1.6; font-weight: 650; }
+:root .client-shell[data-client-theme].reference-client .store-activity-description { white-space: pre-wrap; }
+:root .client-shell[data-client-theme].reference-client :is(.store-activity-time,.store-activity-location) { display: flex; align-items: flex-start; gap: 8px; font-size: 12px; color: var(--muted); }
+:root .client-shell[data-client-theme].reference-client :is(.store-activity-time,.store-activity-location) > svg { flex: none; margin-top: 4px; }
+:root .client-shell[data-client-theme].reference-client .store-activity-public-empty { display: grid; gap: 8px; justify-items: start; padding: 20px; border: 1px dashed var(--line); border-radius: 18px; background: var(--client-soft,var(--bg)); }
+:root .client-shell[data-client-theme].reference-client .store-activity-pagination { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; font-size: 13px; }
+:root .client-shell[data-client-theme].reference-client .store-activity-pagination button { min-height: 44px; }
+:root .client-shell[data-client-theme].reference-client .store-activity-public-note { font-size: 12px; }
+:root .client-shell[data-client-theme].reference-client .geofence-activity-marker { display: grid; justify-items: center; gap: 2px; min-height: 44px; max-width: 190px; padding: 9px 13px; border: 2px solid #f4f8ed; border-radius: 14px; background: #183b2b; color: #f4f8ed; font: 600 12px/1.5 sans-serif; box-shadow: 0 4px 12px #10291833; cursor: pointer; white-space: normal; text-align: center; overflow-wrap: anywhere; }
+:root .client-shell[data-client-theme].reference-client .geofence-activity-marker:focus-visible { outline: 2px solid #adcd9c; outline-offset: 3px; }
+@media (max-width:480px) { :root .client-shell[data-client-theme].reference-client .store-activity-public-card { padding: 16px; } }
+@media (prefers-reduced-motion:reduce) { :root .client-shell[data-client-theme].reference-client .store-activity-public-card { transition: none; } }
+:root[data-quest-reduce-motion="true"] .client-shell[data-client-theme].reference-client .store-activity-public-card { transition: none; }
+:root .client-shell[data-client-theme].reference-client .store-activity-public.store-activity-drawer-body { border:0; padding:0; }
+:root .client-shell[data-client-theme].reference-client .store-activity-launch { display:flex; align-items:center; gap:16px; width:100%; padding:16px; min-height:76px; border:1px solid var(--line); border-radius:14px; background:var(--client-soft,var(--bg)); color:var(--text); text-align:left; }
+:root .client-shell[data-client-theme].reference-client .store-activity-launch > span { display:grid; gap:6px; min-width:0; flex:1; overflow-wrap:anywhere; }
+:root .client-shell[data-client-theme].reference-client .store-activity-launch small { display:block; color:var(--muted); line-height:1.6; }
+:root .client-shell[data-client-theme].reference-client .store-activity-launch > svg { flex:none; }
+:root .client-shell[data-client-theme].reference-client .store-treasure-section { display:grid; gap:14px; min-width:0; }
+:root .client-shell[data-client-theme].reference-client .store-treasure-open { display:flex; align-items:center; justify-content:center; gap:8px; width:100%; min-height:44px; padding:12px 16px; white-space:normal; }

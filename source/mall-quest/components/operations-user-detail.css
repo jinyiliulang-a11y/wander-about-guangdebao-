@@ -1,0 +1,229 @@
+/* The operations user dialog inherits the workspace palette. All selectors
+   stay inside its own overlay; no client or other workspace page is reset. */
+:root .workspace-shell.reference-workspace .ops-user-backdrop {
+  --ops-safe-top: var(--quest-safe-top, env(safe-area-inset-top, 0px));
+  --ops-safe-right: var(--quest-safe-right, env(safe-area-inset-right, 0px));
+  --ops-safe-bottom: var(--quest-safe-bottom, env(safe-area-inset-bottom, 0px));
+  --ops-safe-left: var(--quest-safe-left, env(safe-area-inset-left, 0px));
+  --ops-overlay-gap: 24px;
+  position: fixed;
+  inset: 0;
+  z-index: 240;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: max(var(--ops-overlay-gap), var(--ops-safe-top)) max(var(--ops-overlay-gap), var(--ops-safe-right)) max(var(--ops-overlay-gap), var(--ops-safe-bottom)) max(var(--ops-overlay-gap), var(--ops-safe-left));
+  background: #10241b91;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  isolation: isolate;
+  animation: ops-user-backdrop-in 280ms var(--wb-ease) both;
+}
+:root .workspace-shell.reference-workspace .ops-user-dialog {
+  width: min(880px, 100%);
+  height: min(760px, calc(100dvh - max(var(--ops-overlay-gap), var(--ops-safe-top)) - max(var(--ops-overlay-gap), var(--ops-safe-bottom))));
+  max-width: 100%;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: 28px;
+  box-shadow: 0 30px 90px #07170e38;
+  outline: none;
+  animation: ops-user-dialog-in 280ms var(--wb-ease) both;
+}
+:root .workspace-shell.reference-workspace .ops-user-backdrop[data-phase="closing"] { animation: ops-user-backdrop-out 180ms ease-in both; }
+:root .workspace-shell.reference-workspace .ops-user-backdrop[data-phase="closing"] .ops-user-dialog { pointer-events: none; animation: ops-user-dialog-out 180ms ease-in both; }
+:root .workspace-shell.reference-workspace :is(.ops-user-header, .ops-user-footer) {
+  flex: none;
+  min-width: 0;
+  padding: 20px 24px;
+  background: var(--surface);
+}
+:root .workspace-shell.reference-workspace .ops-user-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  border-bottom: 1px solid var(--line);
+  border-radius: 28px 28px 0 0;
+}
+:root .workspace-shell.reference-workspace .ops-user-header > div { min-width: 0; flex: 1; }
+:root .workspace-shell.reference-workspace .ops-user-header :is(h2, h3) { font-size: clamp(18px, 2.5vw, 23px); line-height: 1.4; margin: 0; }
+:root .workspace-shell.reference-workspace .ops-user-header :is(p, small) { color: var(--muted); font-size: 11px; line-height: 1.7; margin: 4px 0 0; }
+:root .workspace-shell.reference-workspace .ops-user-header p { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+:root .workspace-shell.reference-workspace .ops-user-header > button { flex: none; display: inline-grid; place-items: center; min-width: 40px; min-height: 40px; border-radius: 50%; }
+:root .workspace-shell.reference-workspace .ops-user-body {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  padding: 24px;
+  overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line) transparent;
+  scroll-padding: 18px 0;
+}
+:root .workspace-shell.reference-workspace .ops-user-body > :first-child { margin-top: 0; }
+:root .workspace-shell.reference-workspace .ops-user-body > :last-child { margin-bottom: 0; }
+:root .workspace-shell.reference-workspace .ops-user-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  border-top: 1px solid var(--line);
+  border-radius: 0 0 28px 28px;
+}
+:root .workspace-shell.reference-workspace .ops-user-footer :is(p, small) { flex: 1 1 200px; color: var(--muted); font-size: 11px; line-height: 1.7; margin: 0; }
+:root .workspace-shell.reference-workspace .ops-user-footer > button { flex: none; }
+:root .workspace-shell.reference-workspace .ops-user-dialog :is(h2, h3, h4, p, strong, small, code, label, dt, dd) { min-width: 0; max-width: 100%; overflow-wrap: anywhere; }
+:root .workspace-shell.reference-workspace .ops-user-dialog :is(button, input, textarea, select) { max-width: 100%; min-width: 0; }
+:root .workspace-shell.reference-workspace .ops-user-dialog :is(button) { white-space: normal; }
+:root .workspace-shell.reference-workspace .ops-user-dialog :is(button svg, .ops-user-record-head > svg) { flex: none; }
+
+/* A spinning coin and three quiet breathing lines communicate real loading. */
+:root .workspace-shell.reference-workspace .ops-user-loader { min-height: 240px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; text-align: center; padding: 24px 10px; perspective: 600px; }
+:root .workspace-shell.reference-workspace .ops-user-loader-coin { position: relative; width: 54px; height: 54px; display: grid; place-items: center; flex: none; color: var(--wb-amber); background: var(--wb-amber-soft); border: 2px solid currentColor; border-radius: 50%; transform-style: preserve-3d; animation: ops-user-coin-spin 1800ms var(--wb-ease) infinite; }
+:root .workspace-shell.reference-workspace .ops-user-loader-coin::before { content: ""; position: absolute; inset: 6px; border: 1px solid currentColor; border-radius: inherit; opacity: .4; }
+:root .workspace-shell.reference-workspace .ops-user-loader-coin > svg { width: 25px; height: 25px; }
+:root .workspace-shell.reference-workspace .ops-user-loader-lines { display: grid; gap: 8px; width: min(210px, 75%); }
+:root .workspace-shell.reference-workspace .ops-user-loader-lines > i { display: block; height: 7px; background: var(--line); border-radius: 99px; animation: ops-user-line-breathe 1500ms ease-in-out infinite; }
+:root .workspace-shell.reference-workspace .ops-user-loader-lines > i:nth-child(2) { width: 84%; justify-self: center; animation-delay: 140ms; }
+:root .workspace-shell.reference-workspace .ops-user-loader-lines > i:nth-child(3) { width: 60%; justify-self: center; animation-delay: 280ms; }
+:root .workspace-shell.reference-workspace .ops-user-loader :is(p, small) { color: var(--muted); font-size: 12px; line-height: 1.7; margin: 0; }
+:root .workspace-shell.reference-workspace .ops-user-skeleton { display: grid; gap: 10px; padding: 18px; background: var(--surface); border: 1px solid var(--line); border-radius: 18px; }
+:root .workspace-shell.reference-workspace .ops-user-skeleton > :is(i, span) { display: block; width: 100%; height: 10px; border-radius: 99px; background: var(--line); animation: ops-user-line-breathe 1500ms ease-in-out infinite; }
+:root .workspace-shell.reference-workspace .ops-user-skeleton > :is(i, span):nth-child(2) { width: 72%; animation-delay: 140ms; }
+
+:root .workspace-shell.reference-workspace .ops-user-identity { display: flex; align-items: flex-start; gap: 14px; min-width: 0; padding: 20px; margin-bottom: 18px; background: var(--surface); border: 1px solid var(--line); border-radius: 21px; }
+:root .workspace-shell.reference-workspace .ops-user-avatar { flex: none; display: grid; place-items: center; width: 56px; height: 56px; color: var(--green); background: var(--wb-soft); border: 1px solid var(--line); border-radius: 18px; font-size: 22px; font-weight: 700; }
+:root .workspace-shell.reference-workspace .ops-user-meta { display: grid; flex: 1; min-width: 0; gap: 5px; }
+:root .workspace-shell.reference-workspace .ops-user-meta :is(h3, strong) { margin: 0; font-size: 17px; line-height: 1.5; }
+:root .workspace-shell.reference-workspace .ops-user-meta :is(p, small, code) { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.75; }
+:root .workspace-shell.reference-workspace :is(.ops-user-status, .ops-user-record-status) { display: inline-flex; align-items: center; justify-content: center; align-self: flex-start; width: fit-content; max-width: 100%; padding: 4px 9px; flex: none; gap: 5px; border: 1px solid var(--line); border-radius: 99px; color: var(--green); background: var(--wb-soft); font-size: 10px; line-height: 1.6; overflow-wrap: anywhere; }
+:root .workspace-shell.reference-workspace :is(.ops-user-status, .ops-user-record-status):is([data-state="banned"], [data-state="rejected"], [data-state="expired"], .is-danger) { color: var(--wb-danger); background: var(--wb-danger-bg); }
+:root .workspace-shell.reference-workspace :is(.ops-user-status, .ops-user-record-status):is([data-state="pending"], [data-state="unused"]) { color: var(--wb-amber); background: var(--wb-amber-soft); }
+
+/* The optional wb-data-water child uses the existing genuine-ratio contract. */
+:root .workspace-shell.reference-workspace .ops-user-metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 20px; }
+:root .workspace-shell.reference-workspace .ops-user-metric { position: relative; isolation: isolate; min-width: 0; display: grid; align-content: start; gap: 8px; padding: 18px; border: 1px solid var(--line); border-radius: 19px; background: var(--surface); overflow: hidden; animation: ops-user-card-in 280ms var(--wb-ease) both; animation-delay: calc(var(--ops-index, 0) * 55ms); }
+:root .workspace-shell.reference-workspace .ops-user-metric:nth-child(2) { --ops-index: 1; }
+:root .workspace-shell.reference-workspace .ops-user-metric:nth-child(3) { --ops-index: 2; }
+:root .workspace-shell.reference-workspace .ops-user-metric:nth-child(4) { --ops-index: 3; }
+:root .workspace-shell.reference-workspace .ops-user-metric > :not(.wb-data-water):not(.ops-user-water) { position: relative; z-index: 1; }
+:root .workspace-shell.reference-workspace .ops-user-metric > :is(strong, b) { color: var(--text); font-size: clamp(22px, 2.5vw, 29px); line-height: 1.3; letter-spacing: -.04em; }
+:root .workspace-shell.reference-workspace .ops-user-metric > :is(span, small):not(.wb-data-water):not(.ops-user-water) { color: var(--muted); font-size: 11px; line-height: 1.7; }
+:root .workspace-shell.reference-workspace .ops-user-metric > .ops-user-water { position: absolute; z-index: 0; inset: auto -2px -2px; height: var(--water-level, 0%); background: var(--green); opacity: .1; pointer-events: none; transition: height 700ms var(--wb-ease); }
+:root .workspace-shell.reference-workspace .ops-user-water::before { content: ""; position: absolute; left: -25%; top: -6px; width: 150%; height: 16px; border-radius: 45%; background: var(--green); animation: ops-user-water-drift 3600ms ease-in-out infinite alternate; }
+:root .workspace-shell.reference-workspace .ops-user-water:is([data-empty="true"], [data-known="false"]) { display: none; }
+:root .workspace-shell.reference-workspace .ops-user-metric .wb-data-water { animation-duration: 1200ms; }
+
+:root .workspace-shell.reference-workspace .ops-user-tabs { position: sticky; top: 0; z-index: 2; display: flex; gap: 4px; min-width: 0; max-width: 100%; padding: 5px; margin-bottom: 18px; background: var(--wb-field); border: 1px solid var(--line); border-radius: 15px; overflow-x: auto; scrollbar-width: thin; scrollbar-color: var(--line) transparent; overscroll-behavior-x: contain; }
+:root .workspace-shell.reference-workspace .ops-user-tab { flex: 0 0 auto; min-height: 39px; padding: 9px 13px; color: var(--muted); border: 0; border-radius: 10px; background: transparent; font-size: 12px; line-height: 1.5; transition: color 180ms var(--wb-ease), background 180ms var(--wb-ease); }
+:root .workspace-shell.reference-workspace .ops-user-tab[aria-selected="true"] { color: var(--green); background: var(--wb-soft); font-weight: 700; box-shadow: 0 2px 7px #183b2b09; }
+:root .workspace-shell.reference-workspace .ops-user-tab:hover:not(:disabled) { color: var(--green); background: var(--wb-soft); }
+:root .workspace-shell.reference-workspace .ops-user-tab > span { margin-left: 6px; font-size: 10px; font-variant-numeric: tabular-nums; }
+:root .workspace-shell.reference-workspace .ops-user-panel { min-width: 0; display: grid; gap: 15px; animation: ops-user-panel-in 240ms var(--wb-ease) both; }
+:root .workspace-shell.reference-workspace .ops-user-list { min-width: 0; display: grid; gap: 12px; }
+:root .workspace-shell.reference-workspace .ops-user-record { min-width: 0; padding: 17px; color: var(--text); background: var(--surface); border: 1px solid var(--line); border-radius: 18px; }
+:root .workspace-shell.reference-workspace .ops-user-record-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; min-width: 0; }
+:root .workspace-shell.reference-workspace .ops-user-record-head > div { flex: 1; min-width: 0; }
+:root .workspace-shell.reference-workspace .ops-user-record-head :is(h3, h4, strong, b) { display: block; margin: 0; font-size: 13px; line-height: 1.65; overflow-wrap: anywhere; }
+:root .workspace-shell.reference-workspace .ops-user-record :is(p, small, code) { margin: 7px 0 0; font-size: 11px; line-height: 1.8; color: var(--muted); }
+:root .workspace-shell.reference-workspace .ops-user-record > :is(strong, b)[data-positive="true"] { color: var(--green); }
+:root .workspace-shell.reference-workspace .ops-user-record > :is(strong, b)[data-positive="false"] { color: var(--wb-danger); }
+:root .workspace-shell.reference-workspace .ops-user-pagination { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; min-width: 0; margin-top: 3px; }
+:root .workspace-shell.reference-workspace .ops-user-pagination :is(p, span, small) { color: var(--muted); font-size: 11px; margin: 0; }
+:root .workspace-shell.reference-workspace .ops-user-pagination > div { display: flex; gap: 7px; flex-wrap: wrap; }
+:root .workspace-shell.reference-workspace .ops-user-pagination button { min-height: 37px; padding: 8px 12px; font-size: 11px; }
+:root .workspace-shell.reference-workspace .ops-user-kv { min-width: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 20px; margin: 0; padding: 0; }
+:root .workspace-shell.reference-workspace .ops-user-kv > div { min-width: 0; display: grid; grid-template-columns: 82px minmax(0, 1fr); align-items: start; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+:root .workspace-shell.reference-workspace .ops-user-kv dt { color: var(--muted); font-size: 11px; line-height: 1.75; }
+:root .workspace-shell.reference-workspace .ops-user-kv dd { color: var(--text); font-size: 12px; line-height: 1.75; margin: 0; }
+
+:root .workspace-shell.reference-workspace .ops-user-management { display: grid; min-width: 0; gap: 16px; padding: 19px; color: var(--text); background: var(--surface); border: 1px solid var(--line); border-radius: 20px; }
+:root .workspace-shell.reference-workspace .ops-user-management :is(h3, h4) { font-size: 14px; line-height: 1.6; margin: 0; }
+:root .workspace-shell.reference-workspace .ops-user-management :is(p, small) { color: var(--muted); font-size: 11px; line-height: 1.8; margin: 0; }
+:root .workspace-shell.reference-workspace .ops-user-management :is(label, fieldset) { min-width: 0; }
+:root .workspace-shell.reference-workspace .ops-user-management label { display: grid; gap: 7px; font-size: 12px; }
+:root .workspace-shell.reference-workspace .ops-user-management :is(input:not([type="checkbox"]):not([type="radio"]), select, textarea) { width: 100%; min-width: 0; }
+:root .workspace-shell.reference-workspace .ops-user-management-actions { display: flex; gap: 9px; flex-wrap: wrap; }
+:root .workspace-shell.reference-workspace .ops-user-confirmation { min-width: 0; padding: 16px; background: var(--wb-danger-bg); border: 1px solid var(--line); border-radius: 16px; }
+:root .workspace-shell.reference-workspace .ops-user-confirmation > :is(p, strong) { color: var(--text); font-size: 12px; line-height: 1.8; margin: 0 0 12px; }
+:root .workspace-shell.reference-workspace .ops-user-confirm-actions { display: flex; flex-wrap: wrap; gap: 9px; }
+:root .workspace-shell.reference-workspace :is(.ops-user-retry, .ops-user-empty) { min-width: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; text-align: center; padding: 35px 18px; border: 1px dashed var(--line); border-radius: 20px; background: var(--surface); }
+:root .workspace-shell.reference-workspace :is(.ops-user-retry, .ops-user-empty) > svg { width: 38px; height: 38px; color: var(--green); }
+:root .workspace-shell.reference-workspace .ops-user-retry > svg { color: var(--wb-danger); }
+:root .workspace-shell.reference-workspace :is(.ops-user-retry, .ops-user-empty) :is(h3, p, small) { margin: 0; font-size: 12px; line-height: 1.8; color: var(--muted); }
+
+@keyframes ops-user-backdrop-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes ops-user-backdrop-out { from { opacity: 1; } to { opacity: 0; } }
+@keyframes ops-user-dialog-in { from { opacity: 0; transform: translateY(14px) scale(.985); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes ops-user-dialog-out { from { opacity: 1; transform: translateY(0) scale(1); } to { opacity: 0; transform: translateY(10px) scale(.99); } }
+@keyframes ops-user-card-in { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes ops-user-panel-in { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes ops-user-coin-spin { 0%, 18% { transform: rotateY(0); } 72%, 100% { transform: rotateY(360deg); } }
+@keyframes ops-user-line-breathe { 0%, 100% { opacity: .35; } 50% { opacity: .85; } }
+@keyframes ops-user-water-drift { from { transform: translateX(-3%) rotate(-2deg); } to { transform: translateX(3%) rotate(2deg); } }
+
+@media (max-width: 600px) {
+  :root .workspace-shell.reference-workspace .ops-user-backdrop { --ops-overlay-gap: 0px; align-items: flex-end; padding: 0; }
+  :root .workspace-shell.reference-workspace .ops-user-dialog { width: 100%; height: min(820px, calc(100dvh - var(--ops-safe-top) - 8px)); max-height: calc(100dvh - var(--ops-safe-top) - 8px); border-radius: 26px 26px 0 0; border-bottom: 0; animation-name: ops-user-sheet-in; }
+  :root .workspace-shell.reference-workspace .ops-user-backdrop[data-phase="closing"] .ops-user-dialog { animation-name: ops-user-sheet-out; }
+  :root .workspace-shell.reference-workspace .ops-user-header { padding: 17px calc(17px + var(--ops-safe-right)) 17px calc(17px + var(--ops-safe-left)); border-radius: 26px 26px 0 0; gap: 10px; }
+  :root .workspace-shell.reference-workspace .ops-user-body { padding: 17px calc(17px + var(--ops-safe-right)) 20px calc(17px + var(--ops-safe-left)); }
+  :root .workspace-shell.reference-workspace .ops-user-footer { padding: 13px calc(17px + var(--ops-safe-right)) calc(13px + var(--ops-safe-bottom)) calc(17px + var(--ops-safe-left)); border-radius: 0; gap: 8px; }
+  :root .workspace-shell.reference-workspace .ops-user-footer :is(p, small) { flex-basis: 150px; font-size: 10px; }
+  :root .workspace-shell.reference-workspace .ops-user-identity { display: grid; grid-template-columns: 46px minmax(0, 1fr); padding: 16px; gap: 11px; }
+  :root .workspace-shell.reference-workspace .ops-user-avatar { width: 46px; height: 46px; border-radius: 15px; }
+  :root .workspace-shell.reference-workspace .ops-user-identity > .ops-user-status { grid-column: 2; margin-left: 0; }
+  :root .workspace-shell.reference-workspace .ops-user-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  :root .workspace-shell.reference-workspace .ops-user-metric { padding: 15px; border-radius: 17px; }
+  :root .workspace-shell.reference-workspace .ops-user-metric > :is(strong, b) { font-size: 24px; }
+  :root .workspace-shell.reference-workspace .ops-user-tabs { gap: 3px; margin-bottom: 16px; }
+  :root .workspace-shell.reference-workspace .ops-user-tab { padding: 9px 11px; font-size: 11px; }
+  :root .workspace-shell.reference-workspace .ops-user-kv { grid-template-columns: minmax(0, 1fr); }
+  :root .workspace-shell.reference-workspace .ops-user-record { padding: 15px; }
+  :root .workspace-shell.reference-workspace .ops-user-record-head { gap: 9px; flex-wrap: wrap; }
+  :root .workspace-shell.reference-workspace .ops-user-record-head > div { flex-basis: 130px; }
+  :root .workspace-shell.reference-workspace .ops-user-management { padding: 16px; }
+  :root .workspace-shell.reference-workspace .ops-user-dialog :is(input:not([type="checkbox"]):not([type="radio"]):not([type="file"]), select, textarea) { font-size: 16px; }
+}
+@media (max-height: 480px) {
+  :root .workspace-shell.reference-workspace .ops-user-backdrop { --ops-overlay-gap: 8px; }
+  :root .workspace-shell.reference-workspace .ops-user-header { padding-top: 10px; padding-bottom: 10px; }
+  :root .workspace-shell.reference-workspace .ops-user-header :is(p, small) { margin-top: 2px; font-size: 10px; }
+  :root .workspace-shell.reference-workspace .ops-user-footer { padding-top: 9px; padding-bottom: max(9px, var(--ops-safe-bottom)); }
+  :root .workspace-shell.reference-workspace .ops-user-body { padding-top: 14px; padding-bottom: 14px; }
+  :root .workspace-shell.reference-workspace .ops-user-loader { min-height: 160px; gap: 11px; padding-top: 12px; padding-bottom: 12px; }
+}
+@media (max-width: 359px) {
+  :root .workspace-shell.reference-workspace .ops-user-header { padding-left: calc(12px + var(--ops-safe-left)); padding-right: calc(12px + var(--ops-safe-right)); }
+  :root .workspace-shell.reference-workspace .ops-user-body { padding-left: calc(12px + var(--ops-safe-left)); padding-right: calc(12px + var(--ops-safe-right)); }
+  :root .workspace-shell.reference-workspace .ops-user-footer { padding-left: calc(12px + var(--ops-safe-left)); padding-right: calc(12px + var(--ops-safe-right)); }
+  :root .workspace-shell.reference-workspace .ops-user-identity { padding: 13px; }
+  :root .workspace-shell.reference-workspace .ops-user-metric { padding: 13px; }
+  :root .workspace-shell.reference-workspace .ops-user-record-head > div { flex-basis: 110px; }
+  :root .workspace-shell.reference-workspace .ops-user-kv > div { grid-template-columns: 72px minmax(0, 1fr); gap: 8px; }
+}
+@keyframes ops-user-sheet-in { from { opacity: 0; transform: translateY(32px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes ops-user-sheet-out { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(24px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  :root .workspace-shell.reference-workspace .ops-user-backdrop,
+  :root .workspace-shell.reference-workspace .ops-user-backdrop *,
+  :root .workspace-shell.reference-workspace .ops-user-backdrop *::before,
+  :root .workspace-shell.reference-workspace .ops-user-backdrop *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}
+:root .workspace-shell.reference-workspace:is([data-reduced-motion="true"], [data-reduce-motion="true"]) .ops-user-backdrop,
+:root .workspace-shell.reference-workspace:is([data-reduced-motion="true"], [data-reduce-motion="true"]) .ops-user-backdrop *,
+:root .workspace-shell.reference-workspace:is([data-reduced-motion="true"], [data-reduce-motion="true"]) .ops-user-backdrop *::before,
+:root .workspace-shell.reference-workspace:is([data-reduced-motion="true"], [data-reduce-motion="true"]) .ops-user-backdrop *::after,
+:root .workspace-shell.reference-workspace .ops-user-backdrop[data-reduced-motion="true"],
+:root .workspace-shell.reference-workspace .ops-user-backdrop[data-reduced-motion="true"] *,
+:root .workspace-shell.reference-workspace .ops-user-backdrop[data-reduced-motion="true"] *::before,
+:root .workspace-shell.reference-workspace .ops-user-backdrop[data-reduced-motion="true"] *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }

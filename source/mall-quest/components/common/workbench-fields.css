@@ -1,0 +1,74 @@
+.wb-field { min-width: 0; }
+.wb-field > label { margin: 0; }
+.wb-field .wb-field-control {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  width: 100%; min-width: 0; min-height: 48px; padding: 12px 14px;
+  color: var(--text); background: var(--wb-field, var(--surface)); border: 1px solid var(--line); border-radius: 14px;
+  font: inherit; font-weight: 500; text-align: left; cursor: pointer;
+  transition: border-color .16s ease, background .16s ease;
+}
+.wb-field-control > span { min-width: 0; overflow-wrap: anywhere; }
+.wb-field-control > svg { flex: none; color: var(--green); }
+.wb-field-control > [data-placeholder] { color: var(--muted); }
+.wb-field .wb-field-control:hover:not(:disabled), .wb-field .wb-field-control[aria-expanded="true"] { border-color: var(--green); background: var(--wb-soft); }
+.wb-field .wb-field-control:disabled { cursor: not-allowed; opacity: .5; }
+.wb-field .wb-field-control:focus-visible, .wb-field-popover button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
+
+/* Remain in the form's DOM for theme inheritance. Native top-layer rendering
+   places the picker above its parent dialog without an inert body portal. */
+.wb-field-popover {
+  position: fixed; inset: auto; margin: 0; box-sizing: border-box;
+  display: none; padding: 12px; overflow: auto; overscroll-behavior: contain;
+  color: var(--text); background: var(--surface); border: 1px solid var(--line); border-radius: 18px;
+  font: inherit; box-shadow: 0 18px 48px rgba(15, 36, 27, .2);
+  scrollbar-width: thin; scrollbar-color: var(--line) transparent;
+  opacity: 0; transform: translateY(4px); pointer-events: none;
+  transition: opacity 140ms ease, transform 140ms ease, display 140ms allow-discrete, overlay 140ms allow-discrete;
+}
+.wb-field-popover:popover-open { display: block; opacity: 1; transform: none; pointer-events: auto; }
+@starting-style { .wb-field-popover:popover-open { opacity: 0; transform: translateY(4px); } }
+.wb-field-popover::backdrop { background: transparent; }
+.wb-date-popover { width: 352px; max-width: calc(100vw - 16px); }
+.wb-picker-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 0 2px 8px; }
+.wb-picker-heading > strong { font-size: 14px; line-height: 1.4; }
+.wb-field-popover .wb-picker-close { display: grid; place-items: center; width: 44px; min-width: 44px; height: 44px; padding: 0; color: var(--muted); background: var(--wb-soft); border: 0; border-radius: 12px; }
+.wb-picker-footer { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--line); }
+.wb-picker-footer > span { color: var(--muted); font-size: 12px; line-height: 1.5; }
+.wb-field-popover .wb-picker-clear { flex: none; min-height: 44px; padding: 10px 12px; color: var(--green); background: var(--wb-soft); border: 0; border-radius: 12px; font-size: 13px; font-weight: 600; }
+.wb-field-popover .wb-picker-clear:disabled { opacity: .5; cursor: not-allowed; }
+
+.wb-calendar { width: 100%; font: inherit; }
+.wb-calendar-months { position: relative; }
+.wb-calendar-caption { display: flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 48px; }
+.wb-calendar-caption-label { font-size: 14px; font-weight: 700; white-space: nowrap; }
+.wb-calendar-nav { position: absolute; inset: 0 0 auto; display: flex; justify-content: space-between; pointer-events: none; }
+.wb-field-popover .wb-calendar-nav-button { display: grid; place-items: center; width: 44px; min-width: 44px; height: 44px; padding: 0; border: 0; border-radius: 12px; color: var(--green); background: transparent; pointer-events: auto; }
+.wb-calendar-chevron { width: 18px; height: 18px; fill: currentColor; }
+.wb-calendar-grid { width: 100%; table-layout: fixed; border-collapse: collapse; }
+.wb-calendar-weekday { height: 32px; padding: 0; color: var(--muted); font-size: 12px; font-weight: 500; text-align: center; }
+.wb-calendar-day { padding: 1px; text-align: center; }
+.wb-field-popover .wb-calendar-day-button { display: grid; place-items: center; width: 100%; min-width: 0; min-height: 44px; padding: 0; color: var(--text); background: transparent; border: 1px solid transparent; border-radius: 12px; font: inherit; font-size: 14px; font-weight: 500; }
+.wb-calendar-today .wb-calendar-day-button { border-color: var(--green); color: var(--green); }
+.wb-calendar-outside .wb-calendar-day-button { color: var(--muted); opacity: .6; }
+.wb-calendar-day-button:hover:not(:disabled), .wb-calendar-nav-button:hover:not(:disabled) { background: var(--wb-soft); }
+.wb-calendar-selected .wb-calendar-day-button { color: var(--wb-accent-text, #fff); background: var(--wb-accent, var(--green)); font-weight: 700; border-color: transparent; opacity: 1; }
+.wb-calendar-selected .wb-calendar-day-button:hover { background: var(--wb-accent, var(--green)); }
+.wb-calendar-disabled .wb-calendar-day-button { opacity: .28; cursor: not-allowed; }
+.wb-calendar-hidden { visibility: hidden; }
+
+.wb-choice-popover { width: 240px; padding: 6px; }
+.wb-field-popover .wb-choice-option { display: flex; align-items: center; justify-content: space-between; gap: 14px; width: 100%; min-height: 48px; padding: 12px 14px; color: var(--text); background: transparent; border: 0; border-radius: 12px; font: inherit; text-align: left; }
+.wb-choice-option > span { min-width: 0; overflow-wrap: anywhere; }
+.wb-choice-option > svg { flex: none; color: var(--green); visibility: hidden; }
+.wb-choice-option > svg[data-checked] { visibility: visible; }
+.wb-field-popover .wb-choice-option[aria-selected="true"] { color: var(--green); background: var(--wb-soft); font-weight: 700; }
+.wb-field-popover .wb-choice-option:hover:not(:disabled) { background: var(--wb-soft-hover, var(--wb-soft)); }
+.wb-fields > .wb-coupon-validity { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; min-width: 0; padding: 16px; border: 1px solid var(--line); border-radius: 16px; background: var(--wb-field, var(--surface)); }
+.wb-coupon-validity > .wb-validity-heading { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px 16px; min-width: 0; }
+.wb-validity-heading > strong { color: var(--text); font-size: 13px; font-weight: 600; }
+.wb-coupon-validity .wb-validity-switch { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; margin: 0; color: var(--text); cursor: pointer; font-size: 13px; font-weight: 500; }
+.wb-coupon-validity .wb-validity-switch > input[type="checkbox"] { flex: none; width: 20px; height: 20px; min-height: 0; margin: 0; padding: 0; accent-color: var(--green); }
+.wb-coupon-validity > .wb-validity-note { grid-column: 1 / -1; margin: 0; color: var(--muted); font-size: 12px; font-weight: 400; line-height: 1.6; overflow-wrap: anywhere; }
+@media (max-width: 640px) { .wb-fields > .wb-coupon-validity { grid-template-columns: minmax(0, 1fr); padding: 14px; } }
+html[data-quest-reduce-motion="true"] .wb-field-popover { transition: none; }
+@media (prefers-reduced-motion: reduce) { .wb-field-popover { transition: none; } }

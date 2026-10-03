@@ -1,0 +1,75 @@
+:root .workspace-shell.reference-workspace .account-application-manager { display: grid; gap: 22px; min-width: 0; }
+:root .workspace-shell.reference-workspace .account-application-manager :is(h2,h3,p) { margin: 0; overflow-wrap: anywhere; }
+:root .workspace-shell.reference-workspace .account-application-manager h2 { display: flex; align-items: center; gap: 10px; font-size: 22px; font-weight: 650; line-height: 1.5; }
+:root .workspace-shell.reference-workspace .account-application-manager h3 { display: flex; align-items: center; gap: 9px; font-size: 17px; font-weight: 600; line-height: 1.6; }
+:root .workspace-shell.reference-workspace .account-application-manager :is(h2,h3) > svg { flex: none; }
+:root .workspace-shell.reference-workspace .account-application-manager p { line-height: 1.8; font-size: 14px; }
+:root .workspace-shell.reference-workspace .account-application-manager .aa-panel { display: grid; gap: 22px; margin: 0; padding: clamp(20px,3vw,28px); min-width: 0; border: 1px solid var(--line); border-radius: 24px; background: var(--surface); color: var(--text); }
+:root .workspace-shell.reference-workspace .account-application-manager .aa-heading { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 18px; min-width: 0; }
+:root .workspace-shell.reference-workspace .account-application-manager .aa-heading > div:first-child { flex: 1 1 240px; display: grid; gap: 10px; min-width: 0; }
+:root .workspace-shell.reference-workspace .account-application-manager .aa-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; min-width: 0; }
+:root .workspace-shell.reference-workspace .account-application-manager .aa-actions button { display: inline-flex; align-items: center; justify-content: center; gap: 9px; padding: 11px 16px; min-height: 44px; max-width: 100%; white-space: normal; overflow-wrap: anywhere; line-height: 1.6; }
+:root .workspace-shell.reference-workspace .account-application-manager .aa-actions button > svg { flex: none; }
+:root .workspace-shell.reference-workspace .account-application-manager .aa-actions .gold-button { background: var(--wb-accent); color: var(--wb-accent-text); }
+:root .workspace-shell.reference-workspace .account-application-manager .aa-feedback { display: flex; align-items: flex-start; gap: 10px; padding: 15px 17px; border-radius: 16px; background: var(--wb-soft); color: var(--text); }
+:root .workspace-shell.reference-workspace .account-application-manager .aa-feedback > svg { flex: none; margin-top: 3px; }
+:root .workspace-shell.reference-workspace .account-application-manager .aa-feedback.error { color: var(--wb-danger); background: var(--wb-danger-bg); }
+:root .workspace-shell.reference-workspace .account-application-manager .aa-tags { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+:root .workspace-shell.reference-workspace .account-application-manager .aa-tag { display: inline-flex; align-items: center; gap: 7px; padding: 6px 10px; border: 1px solid var(--line); border-radius: 999px; background: var(--wb-soft); color: var(--text); font-size: 12px; line-height: 1.5; }
+:root .workspace-shell.reference-workspace .account-application-manager .aa-tag.pending { color: var(--wb-amber); background: var(--wb-amber-soft); }
+:root .workspace-shell.reference-workspace .account-application-manager .aa-tag.rejected { color: var(--wb-danger); background: var(--wb-danger-bg); }
+:root .workspace-shell.reference-workspace .account-application-manager .aa-filters { display: flex; align-items: flex-end; flex-wrap: wrap; gap: 16px; }
+:root .workspace-shell.reference-workspace .account-application-manager label { display: grid; gap: 8px; min-width: 0; font-size: 14px; line-height: 1.6; }
+:root .workspace-shell.reference-workspace .account-application-manager .aa-filters label { flex: 1 1 180px; max-width: 320px; }
+:root .workspace-shell.reference-workspace .account-application-manager .aa-select { position: relative; display: block; min-width: 0; }
+:root .workspace-shell.reference-workspace .account-application-manager .aa-select select { width: 100%; min-width: 0; min-height: 46px; padding: 12px 44px 12px 14px; cursor: pointer; appearance: none; }
+:root .workspace-shell.reference-workspace .account-application-manager .aa-select > svg { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--gold); pointer-events: none; }
+:root .workspace-shell.reference-workspace .account-application-manager .aa-select select:hover:not(:disabled) { border-color: var(--gold); background: var(--wb-soft); }
+:root .workspace-shell.reference-workspace .account-application-manager .aa-records { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,340px),1fr)); gap: 20px; min-width: 0; }
+:root .workspace-shell.reference-workspace .account-application-manager .aa-record { display: grid; align-content: start; gap: 18px; min-width: 0; padding: 24px; border: 1px solid var(--line); border-radius: 20px; background: var(--surface); }
+:root .workspace-shell.reference-workspace .account-application-manager .aa-facts { margin: 0; display: grid; gap: 12px; min-width: 0; font-size: 14px; line-height: 1.8; }
+:root .workspace-shell.reference-workspace .account-application-manager .aa-facts > div { display: grid; grid-template-columns: 86px minmax(0,1fr); gap: 14px; min-width: 0; }
+:root .workspace-shell.reference-workspace .account-application-manager .aa-facts dt { color: var(--muted); }
+:root .workspace-shell.reference-workspace .account-application-manager .aa-facts dd { min-width: 0; margin: 0; overflow-wrap: anywhere; }
+:root .workspace-shell.reference-workspace .account-application-manager .aa-facts dd small { display: block; margin-top: 3px; font-size: 11px; }
+:root .workspace-shell.reference-workspace .account-application-manager .aa-detail-block { display: grid; gap: 16px; min-width: 0; border-top: 1px solid var(--line); padding-top: 20px; }
+:root .workspace-shell.reference-workspace .account-application-manager .aa-preserve { white-space: pre-wrap; }
+:root .workspace-shell.reference-workspace .account-application-manager .aa-note { display: flex; align-items: flex-start; gap: 12px; padding: 16px 18px; border: 1px solid var(--line); border-radius: 16px; background: var(--wb-soft); }
+:root .workspace-shell.reference-workspace .account-application-manager .aa-note > svg { flex: none; margin-top: 4px; }
+:root .workspace-shell.reference-workspace .account-application-manager .aa-note > div { display: grid; gap: 8px; min-width: 0; }
+:root .workspace-shell.reference-workspace .account-application-manager .aa-confirm { display: grid; gap: 14px; padding: 18px; border: 1px solid var(--line); border-radius: 18px; background: var(--wb-soft); overflow-wrap: anywhere; }
+:root .workspace-shell.reference-workspace .account-application-manager .aa-empty { display: grid; gap: 12px; justify-items: center; padding: 32px 20px; text-align: center; border: 1px dashed var(--line); border-radius: 18px; background: var(--wb-soft); }
+:root .workspace-shell.reference-workspace .account-application-manager .aa-empty > svg { color: var(--gold); }
+:root .workspace-shell.reference-workspace .account-application-manager .aa-pagination { display: flex; justify-content: space-between; align-items: center; gap: 14px; flex-wrap: wrap; }
+:root .workspace-shell.reference-workspace .account-application-manager .aa-dialog { position: fixed; inset: 0; width: min(680px,calc(100vw - 32px)); max-width: none; max-height: calc(100dvh - 40px); margin: auto; padding: 0; border: 1px solid var(--line); border-radius: 24px; background: var(--surface); color: var(--text); overflow: hidden; box-shadow: 0 26px 90px #0004; }
+:root .workspace-shell.reference-workspace .account-application-manager .aa-dialog[open] { display: grid; grid-template-rows: auto minmax(0,1fr); animation: aa-enter .24s var(--wb-ease) both; }
+:root .workspace-shell.reference-workspace .account-application-manager .aa-dialog::backdrop { background: #10231b66; backdrop-filter: blur(7px); animation: aa-fade .24s ease both; }
+:root .workspace-shell.reference-workspace .account-application-manager .aa-dialog.is-closing { animation: aa-exit .2s ease both; }
+:root .workspace-shell.reference-workspace .account-application-manager .aa-dialog.is-closing::backdrop { animation: aa-fade-out .2s ease both; }
+:root .workspace-shell.reference-workspace .account-application-manager .aa-dialog-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; padding: 24px 26px 20px; border-bottom: 1px solid var(--line); }
+:root .workspace-shell.reference-workspace .account-application-manager .aa-dialog-head > div { display: grid; gap: 8px; min-width: 0; }
+:root .workspace-shell.reference-workspace .account-application-manager .aa-close { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; flex: none; border: 1px solid var(--line); border-radius: 50%; background: var(--wb-soft); color: var(--text); }
+:root .workspace-shell.reference-workspace .account-application-manager .aa-dialog-content { display: grid; gap: 24px; min-height: 0; padding: 24px 26px 28px; overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--muted) transparent; scrollbar-gutter: stable; }
+:root .workspace-shell.reference-workspace .account-application-manager .aa-dialog-content::-webkit-scrollbar { width: 6px; }
+:root .workspace-shell.reference-workspace .account-application-manager .aa-dialog-content::-webkit-scrollbar-thumb { border-radius: 9px; background: var(--muted); }
+:root .workspace-shell.reference-workspace .account-application-manager .aa-reason > span { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+:root .workspace-shell.reference-workspace .account-application-manager .aa-reason small { font-size: 12px; font-weight: 400; }
+:root .workspace-shell.reference-workspace .account-application-manager textarea { width: 100%; min-width: 0; max-width: 100%; min-height: 120px; padding: 12px 14px; line-height: 1.8; resize: vertical; }
+@keyframes aa-enter { from { opacity: 0; transform: translateY(12px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes aa-exit { from { opacity: 1; transform: translateY(0) scale(1); } to { opacity: 0; transform: translateY(10px) scale(.98); } }
+@keyframes aa-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes aa-fade-out { from { opacity: 1; } to { opacity: 0; } }
+@media(max-width: 640px) {
+  :root .workspace-shell.reference-workspace .account-application-manager .aa-heading > .aa-actions { width: 100%; }
+  :root .workspace-shell.reference-workspace .account-application-manager .aa-filters label { max-width: none; }
+  :root .workspace-shell.reference-workspace .account-application-manager .aa-record { padding: 18px; }
+  :root .workspace-shell.reference-workspace .account-application-manager .aa-facts > div { grid-template-columns: 76px minmax(0,1fr); gap: 10px; }
+  :root .workspace-shell.reference-workspace .account-application-manager .aa-dialog-head { padding: 20px 20px 16px; }
+  :root .workspace-shell.reference-workspace .account-application-manager .aa-dialog-content { padding: 20px; }
+}
+@media(prefers-reduced-motion: reduce) {
+  :root .workspace-shell.reference-workspace .account-application-manager :is(.aa-dialog[open],.aa-dialog.is-closing),
+  :root .workspace-shell.reference-workspace .account-application-manager .aa-dialog::backdrop { animation: none; }
+}
+:root:has([data-reduce-motion="true"]) .account-application-manager :is(.aa-dialog[open],.aa-dialog.is-closing),
+:root:has([data-reduce-motion="true"]) .account-application-manager .aa-dialog::backdrop { animation: none; }

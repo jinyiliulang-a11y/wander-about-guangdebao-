@@ -1,0 +1,38 @@
+/* The return action joins the existing login content's delayed arrival. */
+:root .client-shell[data-client-theme].reference-client.quest-client-login .reference-auth-back {
+  color: var(--text);
+}
+:root .client-shell[data-client-theme].reference-client.quest-client-login .login-footer > .text-button {
+  color: var(--text);
+}
+:root .client-shell[data-client-theme].reference-client.quest-client-login .reference-auth-back:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+:root .client-shell[data-client-theme].reference-client.quest-client-login .quest-theme-auth-actions {
+  animation: quest-login-back-arrive .58s cubic-bezier(.2, .78, .22, 1) .76s both;
+}
+:root .client-shell[data-client-theme].reference-client.quest-client-login.is-leaving > .auth-panel {
+  pointer-events: none;
+  animation: quest-login-exit 180ms cubic-bezier(.4, 0, .8, .3) both;
+}
+@keyframes quest-login-back-arrive {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes quest-login-exit {
+  from { opacity: 1; transform: translateY(0) scale(1); }
+  to { opacity: 0; transform: translateY(-10px) scale(.985); }
+}
+@media (prefers-reduced-motion: reduce) {
+  :root .client-shell[data-client-theme].reference-client.quest-client-login :is(.quest-theme-auth-actions, .auth-panel) {
+    animation: none;
+  }
+}
+:root .client-shell[data-client-theme].reference-client.quest-client-login[data-reduce-motion="true"] :is(.quest-theme-auth-actions, .auth-panel) {
+  animation: none;
+}
+:root[data-quest-reduce-motion="true"] .client-shell[data-client-theme].reference-client.quest-client-login :is(.quest-theme-auth-actions, .auth-panel) {
+  animation: none;
+}

@@ -1,0 +1,101 @@
+:root .client-shell[data-client-theme].reference-client .recording-coupon-control[aria-label] {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 14px;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  margin: 20px 0;
+  padding: 22px;
+  border: 1px solid var(--client-accent-line, var(--line));
+  border-radius: 22px;
+  background: var(--client-soft, var(--surface));
+  color: var(--text);
+}
+
+:root .client-shell[data-client-theme].reference-client .recording-coupon-heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  min-width: 0;
+}
+
+:root .client-shell[data-client-theme].reference-client .recording-coupon-heading > svg {
+  flex: 0 0 auto;
+  margin-top: 3px;
+}
+
+:root .client-shell[data-client-theme].reference-client .recording-coupon-heading > div {
+  display: grid;
+  gap: 6px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+:root .client-shell[data-client-theme].reference-client .recording-coupon-control[aria-label] h3,
+:root .client-shell[data-client-theme].reference-client .recording-coupon-control[aria-label] p {
+  display: block;
+  min-width: 0;
+  margin: 0;
+  color: var(--text);
+  line-height: 1.75;
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+:root .client-shell[data-client-theme].reference-client .recording-coupon-control[aria-label] h3 {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.65;
+  letter-spacing: normal;
+  text-align: left;
+  animation: none;
+}
+
+:root .client-shell[data-client-theme].reference-client .recording-coupon-control[aria-label] p {
+  font-size: 14px;
+}
+
+:root .client-shell[data-client-theme].reference-client .recording-coupon-control[aria-label] .recording-coupon-note {
+  color: var(--client-soft-ink, var(--muted));
+  font-size: 12px;
+}
+
+:root .client-shell[data-client-theme].reference-client .recording-coupon-control[aria-label] .recording-coupon-error {
+  padding: 12px 14px;
+  border: 1px solid color-mix(in srgb, var(--ui-danger-ink, #ab4345) 40%, var(--line));
+  border-radius: 14px;
+  background: var(--surface);
+  color: var(--ui-danger-ink, #ab4345);
+}
+
+:root .client-shell[data-client-theme].reference-client .recording-coupon-actions {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  min-width: 0;
+  gap: 12px;
+}
+
+:root .client-shell[data-client-theme].reference-client .recording-coupon-actions > button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  min-height: 48px;
+  padding: 12px 16px;
+  border-radius: 14px;
+  font-size: 14px;
+  line-height: 1.65;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  text-align: center;
+}
+
+:root .client-shell[data-client-theme].reference-client .recording-coupon-actions > button > svg {
+  flex: 0 0 auto;
+}

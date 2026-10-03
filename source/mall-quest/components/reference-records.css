@@ -1,0 +1,99 @@
+/* Footprints / Collection reference structure with actual reward and badge records. */
+:root .client-shell[data-client-theme].reference-client :is(.reference-footprints, .reference-achievements) {
+  --record-surface: var(--surface, #fff);
+  --record-paper: var(--bg, #f6f7f2);
+  --record-line: var(--line, #e4e9e2);
+  --record-text: var(--text, #17211b);
+  --record-muted: var(--muted, #89938c);
+  --record-soft: #e8f1e3;
+  --record-soft-ink: #55735d;
+  display: block;
+  width: 100%;
+  max-width: none;
+}
+:root .client-shell[data-client-theme="dark"].reference-client :is(.reference-footprints, .reference-achievements) { --record-soft: #283e31; --record-soft-ink: #b9d9ab; }
+:root .client-shell[data-client-theme].reference-client .reference-footprints .records-topline { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 17px; }
+:root .client-shell[data-client-theme].reference-client .reference-footprints .records-topline .eyebrow { margin: 0; color: var(--record-muted); font-size: 10px; }
+:root .client-shell[data-client-theme].reference-client .reference-footprints .footprint-total { color: var(--record-soft-ink); background: var(--record-soft); border-radius: 99px; padding: 7px 10px; font-size: 11px; font-weight: 600; }
+:root .client-shell[data-client-theme].reference-client .reference-footprints .footprint-summary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; padding: 18px 8px; margin: 0 0 28px; color: #fff; background: #183b2b; border: 0; border-radius: 22px; box-shadow: 0 13px 28px #183b2b1f; }
+:root .client-shell[data-client-theme].reference-client .reference-footprints .footprint-summary > div { display: flex; flex-direction: column; align-items: center; min-width: 0; border-right: 1px solid #ffffff1f; }
+:root .client-shell[data-client-theme].reference-client .reference-footprints .footprint-summary > div:last-child { border: 0; }
+:root .client-shell[data-client-theme].reference-client .reference-footprints .footprint-summary strong { color: #fff; font-size: 20px; }
+:root .client-shell[data-client-theme].reference-client .reference-footprints .footprint-summary span { color: #a8bbae; margin-top: 3px; font-size: 11px; }
+:root .client-shell[data-client-theme].reference-client .reference-footprints .footprint-timeline { display: block; position: relative; margin: 0; padding: 0; border: 0; }
+:root .client-shell[data-client-theme].reference-client .reference-footprints .footprint-row { display: grid; grid-template-columns: 32px minmax(0, 1fr); align-items: stretch; gap: 10px; min-height: 148px; margin: 0; padding: 0; background: transparent; border: 0; border-radius: 0; box-shadow: none; }
+:root .client-shell[data-client-theme].reference-client .reference-footprints .footprint-row > div { min-width: 0; flex: initial; grid-column: auto; }
+:root .client-shell[data-client-theme].reference-client .reference-footprints .timeline-axis { display: flex; justify-content: center; position: relative; }
+:root .client-shell[data-client-theme].reference-client .reference-footprints .timeline-axis > span { position: relative; z-index: 2; width: 13px; height: 13px; margin-top: 4px; background: #aebbb0; border: 3px solid var(--record-paper); border-radius: 50%; box-shadow: 0 0 0 1px #aebbb0; }
+:root .client-shell[data-client-theme].reference-client .reference-footprints .timeline-axis > span.latest { width: 17px; height: 17px; margin-top: 2px; background: #315b43; border-color: var(--record-surface); box-shadow: 0 0 0 4px var(--record-soft); }
+:root .client-shell[data-client-theme].reference-client .reference-footprints .timeline-axis > span.latest i { position: absolute; inset: 3px; background: #d8edbc; border-radius: 50%; }
+:root .client-shell[data-client-theme].reference-client .reference-footprints .timeline-axis > div { position: absolute; top: 18px; bottom: -4px; width: 2px; background: linear-gradient(#9eb09f, var(--record-line)); }
+:root .client-shell[data-client-theme].reference-client .reference-footprints .footprint-content { min-width: 0; padding-bottom: 17px; }
+:root .client-shell[data-client-theme].reference-client .reference-footprints .footprint-date { display: flex; align-items: baseline; flex-wrap: wrap; gap: 7px; min-height: 25px; }
+:root .client-shell[data-client-theme].reference-client .reference-footprints .footprint-date b { color: var(--record-text); font-size: 11px; }
+:root .client-shell[data-client-theme].reference-client .reference-footprints .footprint-date time { color: var(--record-muted); font-size: 10px; }
+:root .client-shell[data-client-theme].reference-client .reference-footprints .footprint-card { display: flex; align-items: center; gap: 12px; box-sizing: border-box; width: 100%; min-height: 102px; padding: 10px; text-align: left; color: var(--record-text); background: var(--record-surface); border: 1px solid var(--record-line); border-radius: 18px; box-shadow: 0 8px 22px #293a2f0f; }
+:root .client-shell[data-client-theme].reference-client .reference-footprints .footprint-card:hover { transform: none; box-shadow: 0 8px 22px #293a2f0f; }
+:root .client-shell[data-client-theme].reference-client .reference-footprints .footprint-art { display: grid; place-items: center; position: relative; flex: none; width: 66px; height: 78px; color: #fff; border-radius: 13px; overflow: hidden; }
+:root .client-shell[data-client-theme].reference-client .reference-footprints .footprint-art::after { content: ""; position: absolute; width: 55px; height: 55px; border: 1px solid #ffffff47; border-radius: 50%; }
+:root .client-shell[data-client-theme].reference-client .reference-footprints .footprint-art svg { position: relative; z-index: 1; }
+:root .client-shell[data-client-theme].reference-client .reference-footprints .footprint-art.amber { background: linear-gradient(145deg, #e5bd70, #9e6333); }
+:root .client-shell[data-client-theme].reference-client .reference-footprints .footprint-art.blue { background: linear-gradient(145deg, #8fc6c5, #416f78); }
+:root .client-shell[data-client-theme].reference-client .reference-footprints .footprint-art.green { background: linear-gradient(145deg, #8daf80, #43664b); }
+:root .client-shell[data-client-theme].reference-client .reference-footprints .footprint-art.rose { background: linear-gradient(145deg, #d9a28c, #955d54); }
+:root .client-shell[data-client-theme].reference-client .reference-footprints .footprint-art.purple { background: linear-gradient(145deg, #aaa1c6, #625b83); }
+:root .client-shell[data-client-theme].reference-client .reference-footprints .footprint-copy { display: flex; flex-direction: column; flex: 1; align-items: flex-start; min-width: 0; }
+:root .client-shell[data-client-theme].reference-client .reference-footprints .footprint-copy > b { color: var(--record-text); font-size: 13px; line-height: 1.5; overflow-wrap: anywhere; }
+:root .client-shell[data-client-theme].reference-client .reference-footprints .footprint-copy small { display: flex; align-items: flex-start; gap: 3px; margin-top: 5px; color: var(--record-muted); font-size: 10px; line-height: 1.6; }
+:root .client-shell[data-client-theme].reference-client .reference-footprints .footprint-copy small svg { flex: none; margin-top: 2px; }
+:root .client-shell[data-client-theme].reference-client .reference-footprints .footprint-copy em { display: flex; align-items: center; gap: 4px; margin-top: 9px; padding: 4px 7px; color: var(--record-soft-ink); background: var(--record-soft); border-radius: 6px; font-size: 10px; font-style: normal; line-height: 1.55; }
+:root .client-shell[data-client-theme].reference-client .reference-footprints .footprint-copy em svg { flex: none; }
+:root .client-shell[data-client-theme].reference-client .reference-footprints .journey-start { margin: 5px 0 0 42px; color: var(--record-muted); font-size: 10px; line-height: 1.7; }
+:root .client-shell[data-client-theme].reference-client :is(.reference-footprints, .reference-achievements) .records-note { margin: 18px 0 0; color: var(--record-muted); font-size: 11px; line-height: 1.8; }
+:root .client-shell[data-client-theme].reference-client .reference-achievements .badge-summary { display: flex; align-items: center; flex-wrap: nowrap; gap: 17px; margin: 0 0 22px; padding: 20px; color: #fff; background: #183b2b; border: 0; border-radius: 23px; }
+:root .client-shell[data-client-theme].reference-client .reference-achievements .badge-summary > div { min-width: 0; }
+:root .client-shell[data-client-theme].reference-client .reference-achievements .badge-summary > .badge-ring { display: grid; place-content: center; flex: none; box-sizing: border-box; width: 88px; height: 88px; text-align: center; border: 7px solid #86aa73; border-radius: 50%; box-shadow: inset 0 0 0 2px #ffffff1a; }
+:root .client-shell[data-client-theme].reference-client .reference-achievements .badge-ring strong { color: #fff; font-size: 22px; line-height: 1; }
+:root .client-shell[data-client-theme].reference-client .reference-achievements .badge-ring span { margin-top: 4px; color: #9db1a2; font-size: 11px; }
+:root .client-shell[data-client-theme].reference-client .reference-achievements .badge-summary .eyebrow { margin: 0 0 8px; color: #96aa9c; font-size: 10px; }
+:root .client-shell[data-client-theme].reference-client .reference-achievements .badge-summary h3 { margin: 0 0 5px; color: #fff; font-size: 17px; line-height: 1.45; }
+:root .client-shell[data-client-theme].reference-client .reference-achievements .badge-summary small { color: #a8bbae; font-size: 11px; line-height: 1.55; }
+:root .client-shell[data-client-theme].reference-client .reference-achievements .badge-summary progress { display: block; width: 100%; height: 5px; margin: 12px 0 0; accent-color: #b9d999; }
+:root .client-shell[data-client-theme].reference-client .reference-achievements .achievement-section { margin: 20px 0; }
+:root .client-shell[data-client-theme].reference-client .reference-achievements .achievement-section > h2 { display: flex; align-items: center; gap: 9px; margin: 0 0 13px; color: var(--record-text); font-size: 14px; }
+:root .client-shell[data-client-theme].reference-client .reference-achievements .achievement-section > h2 small { color: var(--record-muted); font-size: 11px; font-weight: 400; }
+:root .client-shell[data-client-theme].reference-client .reference-achievements .badge-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 16px; }
+:root .client-shell[data-client-theme].reference-client .reference-achievements .badge-card { display: flex; flex-direction: column; align-items: center; gap: 0; position: relative; min-width: 0; min-height: 177px; padding: 17px 12px; text-align: center; color: var(--record-text); background: var(--record-surface); border: 1px solid var(--record-line); border-radius: 20px; box-shadow: none; }
+:root .client-shell[data-client-theme].reference-client .reference-achievements .badge-card:hover { transform: none; box-shadow: none; }
+:root .client-shell[data-client-theme].reference-client .reference-achievements .badge-medal { display: grid; place-items: center; flex: none; width: 60px; height: 60px; margin-bottom: 12px; color: #fff; border-radius: 21px; box-shadow: 0 9px 18px #2b3d311f; }
+:root .client-shell[data-client-theme].reference-client .reference-achievements .badge-medal.green { background: linear-gradient(145deg, #91b37c, #467052); }
+:root .client-shell[data-client-theme].reference-client .reference-achievements .badge-medal.amber { background: linear-gradient(145deg, #e5bd70, #9e6631); }
+:root .client-shell[data-client-theme].reference-client .reference-achievements .badge-medal.blue { background: linear-gradient(145deg, #91c0c0, #477680); }
+:root .client-shell[data-client-theme].reference-client .reference-achievements .badge-medal.rose { background: linear-gradient(145deg, #d9a28c, #955d54); }
+:root .client-shell[data-client-theme].reference-client .reference-achievements .badge-medal.purple { background: linear-gradient(145deg, #aaa1c6, #625b83); }
+:root .client-shell[data-client-theme].reference-client .reference-achievements .badge-card > b { color: var(--record-text); font-size: 12px; line-height: 1.5; }
+:root .client-shell[data-client-theme].reference-client .reference-achievements .badge-card > small { margin-top: 4px; color: var(--record-muted); font-size: 10px; line-height: 1.65; }
+:root .client-shell[data-client-theme].reference-client .reference-achievements .badge-card em { display: flex; align-items: center; gap: 4px; margin-top: auto; padding: 4px 7px; color: var(--record-soft-ink); background: var(--record-soft); border-radius: 5px; font-size: 10px; font-style: normal; }
+:root .client-shell[data-client-theme].reference-client .reference-achievements .badge-card.locked { filter: grayscale(.65); opacity: .8; }
+:root .client-shell[data-client-theme].reference-client .reference-achievements .badge-card.locked em { color: var(--record-muted); background: var(--record-paper); }
+:root .client-shell[data-client-theme].reference-client .reference-achievements .badge-card .achievement-progress { display: flex; flex: none; align-items: center; gap: 6px; box-sizing: border-box; width: 100%; margin: 12px 0 9px; }
+:root .client-shell[data-client-theme].reference-client .reference-achievements .badge-card progress { flex: 1; min-width: 0; width: auto; height: 5px; margin: 0; accent-color: var(--record-soft-ink); }
+:root .client-shell[data-client-theme].reference-client .reference-achievements .badge-card .achievement-progress small { margin: 0; color: var(--record-muted); font-size: 10px; white-space: nowrap; }
+:root .client-shell[data-client-theme].reference-client .reference-achievements .badge-card .achievement-reward { margin: 0 0 10px; color: var(--record-soft-ink); font-size: 10px; line-height: 1.65; }
+:root .client-shell[data-client-theme].reference-client .reference-achievements .achievement-section > .muted { color: var(--record-muted); font-size: 11px; line-height: 1.75; }
+@media (max-width: 359px) {
+  :root .client-shell[data-client-theme].reference-client .reference-achievements .badge-summary { gap: 12px; padding: 17px; }
+  :root .client-shell[data-client-theme].reference-client .reference-achievements .badge-summary > .badge-ring { width: 76px; height: 76px; }
+  :root .client-shell[data-client-theme].reference-client .reference-achievements .badge-summary h3 { font-size: 15px; }
+  :root .client-shell[data-client-theme].reference-client .reference-footprints .footprint-art { width: 53px; }
+  :root .client-shell[data-client-theme].reference-client .reference-footprints .footprint-card { gap: 9px; }
+}
+/* Long names and large counts must grow inside their own cards. */
+:root .client-shell[data-client-theme].reference-client .reference-footprints :is(.footprint-summary strong,.footprint-summary span,.footprint-total,.footprint-copy small,.footprint-copy em,.records-note,.journey-start) {max-width:100%;overflow-wrap:anywhere;}
+:root .client-shell[data-client-theme].reference-client .reference-footprints .records-topline {flex-wrap:wrap;}
+:root .client-shell[data-client-theme].reference-client .reference-footprints .footprint-card {min-width:0;}
+:root .client-shell[data-client-theme].reference-client .reference-achievements :is(.badge-summary h3,.badge-summary small,.badge-card>b,.badge-card>small,.achievement-section>h2,.achievement-reward,.badge-card em) {max-width:100%;overflow-wrap:anywhere;}
+:root .client-shell[data-client-theme].reference-client .reference-achievements .badge-summary>div:not(.badge-ring) {flex:1;}
+:root .client-shell[data-client-theme].reference-client .reference-achievements .achievement-section>h2 {flex-wrap:wrap;}
+:root .client-shell[data-client-theme].reference-client .reference-achievements .badge-card .achievement-progress {flex-wrap:wrap;}
+:root .client-shell[data-client-theme].reference-client .reference-achievements .badge-card .achievement-progress small {white-space:normal;overflow-wrap:anywhere;max-width:100%;}

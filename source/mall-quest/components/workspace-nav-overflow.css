@@ -1,0 +1,92 @@
+:root .workspace-shell.reference-workspace .workspace-nav-overflow {
+  width: 100%;
+  min-width: 0;
+}
+
+:root .workspace-shell.reference-workspace .workspace-nav-overflow > nav {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+}
+
+:root .workspace-shell.reference-workspace .workspace-nav-more {
+  display: none;
+}
+
+@media (max-width: 980px) {
+  :root .workspace-shell.reference-workspace .workspace-nav-overflow {
+    position: relative;
+    isolation: isolate;
+  }
+
+  :root .workspace-shell.reference-workspace .workspace-nav-overflow > nav {
+    position: relative;
+    z-index: 0;
+    display: flex;
+    width: 100%;
+    max-width: 100%;
+    gap: 5px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 2px 0 3px;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+  }
+
+  :root .workspace-shell.reference-workspace .workspace-nav-overflow > nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  :root .workspace-shell.reference-workspace .workspace-nav-overflow[data-overflow] > .workspace-nav-more {
+    position: absolute;
+    z-index: 2;
+    top: 50%;
+    transform: translateY(-50%);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    margin: 0;
+    border: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
+    border-radius: 12px;
+    color: var(--green);
+    background: color-mix(in srgb, var(--wb-soft) 60%, transparent);
+    backdrop-filter: blur(6px);
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: color .2s var(--wb-ease), background .2s var(--wb-ease), opacity .2s var(--wb-ease);
+  }
+
+  :root .workspace-shell.reference-workspace .workspace-nav-left {
+    left: 0;
+  }
+
+  :root .workspace-shell.reference-workspace .workspace-nav-right {
+    right: 0;
+  }
+
+  :root .workspace-shell.reference-workspace .workspace-nav-more > svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  :root .workspace-shell.reference-workspace .workspace-nav-overflow[data-overflow] > .workspace-nav-more[data-visible] {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  :root .workspace-shell.reference-workspace .workspace-nav-overflow[data-overflow] > .workspace-nav-more:hover {
+    color: var(--text);
+    background: color-mix(in srgb, var(--wb-soft-hover) 85%, transparent);
+  }
+
+  :root .workspace-shell.reference-workspace .workspace-nav-more:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+  }
+}

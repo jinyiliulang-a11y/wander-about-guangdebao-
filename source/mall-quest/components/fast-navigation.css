@@ -1,0 +1,21 @@
+/* Content arrives immediately; a short entry animation runs alongside it. */
+:root .client-shell[data-client-theme].reference-client .screen-default {
+  animation: quest-fast-page-enter 220ms ease-out both;
+}
+@keyframes quest-fast-page-enter { from { opacity: .5; } to { opacity: 1; } }
+:root .client-shell[data-client-theme].reference-client :is(.screen-into-child, .screen-out-of-child) {
+  animation-duration: 220ms;
+  animation-delay: 0s;
+}
+:root .workspace-shell.reference-workspace .wb-view-enter { animation: quest-workspace-enter 320ms cubic-bezier(.22,1,.36,1) both; }
+@keyframes quest-workspace-enter { from { opacity: .65; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+/* One page motion prevents its nested records from starting another stagger. */
+:root .workspace-shell.reference-workspace .wb-view-enter :is(.wb-card-grid, .inventory-grid, .review-list, .wb-overview, .wb-metrics) > :is(.wb-record, .inventory-card, .review-card, .wb-metric-card, .wb-overview-card) { animation: none; }
+/* A selected item keeps its width while the menu scrolls to it. */
+:root .workspace-shell.reference-workspace .nav-item,
+:root .workspace-shell.reference-workspace .nav-item.active { font-weight: 600; }
+@media (prefers-reduced-motion: reduce) {
+  :root .client-shell[data-client-theme].reference-client :is(.screen-default, .screen-into-child, .screen-out-of-child),
+  :root .workspace-shell.reference-workspace .wb-view-enter { animation-duration: .01ms; }
+}
+:root [data-reduce-motion="true"] :is(.screen-default, .screen-into-child, .screen-out-of-child, .wb-view-enter) { animation-duration: .01ms; }

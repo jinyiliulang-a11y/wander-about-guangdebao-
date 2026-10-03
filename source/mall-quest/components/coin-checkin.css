@@ -1,0 +1,144 @@
+/* Keep task confirmation and answer controls clear of the reference reset. */
+:root .client-shell[data-client-theme].reference-client .treasure-detail-copy .coin-checkin.notice {
+  display: block;
+  box-sizing: border-box;
+  min-width: 0;
+  max-width: 100%;
+  margin: 18px 0 0;
+  padding: 16px;
+  border: 1px solid var(--client-accent-line, var(--line));
+  border-radius: 18px;
+  background: var(--client-soft, var(--bg));
+  color: var(--text);
+}
+
+:root .client-shell[data-client-theme].reference-client .treasure-detail-copy .coin-checkin > div {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+}
+
+:root .client-shell[data-client-theme].reference-client .treasure-detail-copy .coin-checkin strong {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0;
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+:root .client-shell[data-client-theme].reference-client .treasure-detail-copy .coin-checkin strong > svg {
+  flex: 0 0 auto;
+  margin-top: 2px;
+}
+
+:root .client-shell[data-client-theme].reference-client .treasure-detail-copy .coin-checkin p {
+  margin: 0;
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.75;
+  overflow-wrap: anywhere;
+}
+
+:root .client-shell[data-client-theme].reference-client .treasure-detail-copy :is(.coin-checkin small, .verify-hint) {
+  display: block;
+  margin: 0;
+  color: var(--client-soft-ink, var(--text));
+  font-size: 12px;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+
+:root .client-shell[data-client-theme].reference-client .treasure-detail-copy .verify-form {
+  display: grid;
+  gap: 14px;
+  min-width: 0;
+  margin: 24px 0 0;
+}
+
+:root .client-shell[data-client-theme].reference-client .treasure-detail-copy .verify-form > .clue-heading {
+  margin: 0;
+}
+
+:root .client-shell[data-client-theme].reference-client .treasure-detail-copy .verify-form > .field-label {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+  margin: 0;
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+:root .client-shell[data-client-theme].reference-client .treasure-detail-copy .verify-form input {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  min-height: 48px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+:root .client-shell[data-client-theme].reference-client .treasure-detail-copy .verify-form input:focus-visible {
+  outline: 2px solid var(--client-soft-ink, var(--text));
+  outline-offset: 2px;
+}
+
+:root .client-shell[data-client-theme].reference-client .treasure-detail-copy :is(.coin-checkin, .verify-form) .inline-error {
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid color-mix(in srgb, var(--ui-danger-ink, #ab4345) 35%, var(--surface));
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--ui-danger-ink, #ab4345);
+  font-size: 14px;
+  line-height: 1.75;
+  overflow-wrap: anywhere;
+}
+
+/* The adapter's pale clue surfaces need theme-matched dark backgrounds. */
+:root .client-shell[data-client-theme="dark"].reference-client .treasure-detail-copy .detail-reward {
+  background: var(--client-soft);
+  color: var(--client-soft-ink, var(--text));
+}
+
+:root .client-shell[data-client-theme="dark"].reference-client .treasure-detail-copy .detail-reward strong,
+:root .client-shell[data-client-theme="dark"].reference-client .treasure-detail-copy .detail-summary p {
+  color: var(--client-soft-ink, var(--text));
+}
+
+:root .client-shell[data-client-theme="dark"].reference-client .treasure-detail-copy .clue-item {
+  background: var(--surface);
+  border-color: var(--line);
+}
+
+:root .client-shell[data-client-theme="dark"].reference-client .treasure-detail-copy .clue-item.open {
+  background: var(--client-soft);
+  border-color: var(--client-accent-line, var(--line));
+}
+
+:root .client-shell[data-client-theme="dark"].reference-client .treasure-detail-copy .clue-item b {
+  color: var(--text);
+}
+
+:root .client-shell[data-client-theme="dark"].reference-client .treasure-detail-copy .clue-item :is(p, small, .clue-number) {
+  color: var(--client-soft-ink, var(--text));
+}
+
+:root .client-shell[data-client-theme="dark"].reference-client .treasure-detail-copy .clue-number {
+  background: var(--surface);
+}
+
+:root .client-shell[data-client-theme="dark"].reference-client .treasure-detail-copy .clue-item > svg {
+  color: var(--client-soft-ink, var(--text));
+}

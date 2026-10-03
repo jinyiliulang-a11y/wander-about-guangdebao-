@@ -1,0 +1,86 @@
+:root .workspace-shell.reference-workspace .store-activity-manager { display: grid; gap: 22px; min-width: 0; }
+:root .workspace-shell.reference-workspace .store-activity-manager .sa-panel { min-width: 0; margin: 0; padding: clamp(20px,3vw,28px); display: grid; gap: 20px; border: 1px solid var(--line); border-radius: 24px; background: var(--surface); color: var(--text); }
+:root .workspace-shell.reference-workspace .store-activity-manager :is(h2,h3,p) { margin: 0; overflow-wrap: anywhere; }
+:root .workspace-shell.reference-workspace .store-activity-manager h2 { font-size: 22px; font-weight: 650; line-height: 1.5; }
+:root .workspace-shell.reference-workspace .store-activity-manager h3 { font-size: 18px; font-weight: 600; line-height: 1.5; }
+:root .workspace-shell.reference-workspace .store-activity-manager p { line-height: 1.8; font-size: 14px; }
+:root .workspace-shell.reference-workspace .store-activity-manager .sa-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; flex-wrap: wrap; min-width: 0; }
+:root .workspace-shell.reference-workspace .store-activity-manager .sa-heading > div:first-child { display: grid; gap: 9px; flex: 1 1 220px; min-width: 0; }
+:root .workspace-shell.reference-workspace .store-activity-manager .sa-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; min-width: 0; }
+:root .workspace-shell.reference-workspace .store-activity-manager .sa-actions button { min-height: 44px; padding: 11px 16px; display: inline-flex; align-items: center; justify-content: center; gap: 9px; white-space: normal; line-height: 1.6; overflow-wrap: anywhere; }
+:root .workspace-shell.reference-workspace .store-activity-manager .sa-actions button > svg { flex: none; }
+:root .workspace-shell.reference-workspace .store-activity-manager .sa-actions .gold-button { color: var(--wb-accent-text); background: var(--wb-accent); }
+:root .workspace-shell.reference-workspace .store-activity-manager .sa-status { display: inline-flex; align-items: center; gap: 7px; padding: 6px 10px; border: 1px solid var(--line); border-radius: 999px; color: var(--text); background: var(--wb-soft); font-size: 12px; line-height: 1.5; }
+:root .workspace-shell.reference-workspace .store-activity-manager .sa-status.pending { color: var(--wb-amber); background: var(--wb-amber-soft); }
+:root .workspace-shell.reference-workspace .store-activity-manager .sa-status.rejected { color: var(--wb-danger); background: var(--wb-danger-bg); }
+:root .workspace-shell.reference-workspace .store-activity-manager .sa-tags { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+:root .workspace-shell.reference-workspace .store-activity-manager .sa-note { display: flex; align-items: flex-start; gap: 12px; padding: 18px; border: 1px solid var(--line); border-radius: 18px; background: var(--wb-soft); }
+:root .workspace-shell.reference-workspace .store-activity-manager .sa-note > svg { flex: none; margin-top: 3px; }
+:root .workspace-shell.reference-workspace .store-activity-manager .sa-note > div { min-width: 0; display: grid; gap: 9px; }
+:root .workspace-shell.reference-workspace .store-activity-manager .sa-feedback { display: flex; align-items: flex-start; gap: 10px; padding: 14px 16px; border-radius: 14px; background: var(--wb-soft); color: var(--text); }
+:root .workspace-shell.reference-workspace .store-activity-manager .sa-feedback > svg { flex: none; margin-top: 4px; }
+:root .workspace-shell.reference-workspace .store-activity-manager .sa-feedback.error { color: var(--wb-danger); background: var(--wb-danger-bg); }
+:root .workspace-shell.reference-workspace .store-activity-manager .sa-filters { display: flex; align-items: flex-end; flex-wrap: wrap; gap: 16px; }
+:root .workspace-shell.reference-workspace .store-activity-manager .sa-filters > label { flex: 1 1 180px; max-width: 320px; }
+:root .workspace-shell.reference-workspace .store-activity-manager .sa-filters > .wb-field { display: grid; flex: 1 1 180px; max-width: 320px; gap: 8px; font-size: 14px; line-height: 1.6; }
+:root .workspace-shell.reference-workspace .store-activity-manager label { display: grid; gap: 8px; min-width: 0; font-size: 14px; line-height: 1.6; }
+:root .workspace-shell.reference-workspace .store-activity-manager .sa-select { position: relative; display: block; min-width: 0; }
+:root .workspace-shell.reference-workspace .store-activity-manager .sa-select select { appearance: none; width: 100%; cursor: pointer; padding-right: 44px; }
+:root .workspace-shell.reference-workspace .store-activity-manager .sa-select > svg { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--gold); pointer-events: none; }
+:root .workspace-shell.reference-workspace .store-activity-manager :is(input,textarea,select) { width: 100%; min-width: 0; max-width: 100%; }
+:root .workspace-shell.reference-workspace .store-activity-manager .sa-select select:hover:not(:disabled) { border-color: var(--gold); background: var(--wb-soft); }
+:root .workspace-shell.reference-workspace .store-activity-manager .sa-form { display: grid; gap: 20px; }
+:root .workspace-shell.reference-workspace .store-activity-manager .sa-form fieldset { margin: 0; padding: 0; border: 0; min-width: 0; display: grid; gap: 18px; }
+:root .workspace-shell.reference-workspace .store-activity-manager .sa-fields { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 18px; }
+:root .workspace-shell.reference-workspace .store-activity-manager .sa-field-head { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+:root .workspace-shell.reference-workspace .store-activity-manager .sa-field-head small { font-size: 12px; font-weight: 400; }
+:root .workspace-shell.reference-workspace .store-activity-manager textarea { min-height: 130px; resize: vertical; line-height: 1.8; }
+:root .workspace-shell.reference-workspace .store-activity-manager .sa-records { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,310px),1fr)); gap: 18px; }
+:root .workspace-shell.reference-workspace .store-activity-manager .sa-record { display: grid; gap: 16px; min-width: 0; padding: 22px; border: 1px solid var(--line); border-radius: 20px; background: var(--surface); }
+:root .workspace-shell.reference-workspace .store-activity-manager .sa-summary { white-space: pre-wrap; }
+:root .workspace-shell.reference-workspace .store-activity-manager .sa-record .sa-summary { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; }
+:root .workspace-shell.reference-workspace .store-activity-manager .sa-facts { margin: 0; display: grid; gap: 12px; font-size: 14px; }
+:root .workspace-shell.reference-workspace .store-activity-manager .sa-facts > div { display: grid; grid-template-columns: 72px minmax(0,1fr); gap: 14px; }
+:root .workspace-shell.reference-workspace .store-activity-manager .sa-facts dt { color: var(--muted); }
+:root .workspace-shell.reference-workspace .store-activity-manager .sa-facts dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
+:root .workspace-shell.reference-workspace .store-activity-manager .sa-empty { display: grid; gap: 12px; justify-items: center; padding: 30px 18px; text-align: center; background: var(--wb-soft); border: 1px dashed var(--line); border-radius: 18px; }
+:root .workspace-shell.reference-workspace .store-activity-manager .sa-empty > svg { color: var(--gold); }
+:root .workspace-shell.reference-workspace .store-activity-manager .sa-pagination { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 14px; align-items: center; }
+:root .workspace-shell.reference-workspace .store-activity-manager .sa-confirm { padding: 18px; display: grid; gap: 14px; border: 1px solid var(--line); border-radius: 16px; background: var(--wb-soft); }
+:root .workspace-shell.reference-workspace .store-activity-manager .sa-form-panel { animation: sa-enter .24s var(--wb-ease) both; scroll-margin-top: 96px; }
+:root .workspace-shell.reference-workspace .store-activity-manager .sa-dialog { position: fixed; inset: 0; padding: 0; width: min(640px,calc(100vw - 32px)); max-width: none; max-height: calc(100dvh - 40px); margin: auto; border: 1px solid var(--line); border-radius: 24px; background: var(--surface); color: var(--text); overflow: hidden; box-shadow: 0 26px 90px #0004; }
+:root .workspace-shell.reference-workspace .store-activity-manager .sa-dialog[open] { display: grid; grid-template-rows: auto minmax(0,1fr); animation: sa-enter .24s var(--wb-ease) both; }
+:root .workspace-shell.reference-workspace .store-activity-manager .sa-dialog::backdrop { background: #10231b66; backdrop-filter: blur(7px); animation: sa-fade .24s ease both; }
+:root .workspace-shell.reference-workspace .store-activity-manager .sa-dialog.is-closing { animation: sa-exit .2s ease both; }
+:root .workspace-shell.reference-workspace .store-activity-manager .sa-dialog.is-closing::backdrop { animation: sa-fade-out .2s ease both; }
+:root .workspace-shell.reference-workspace .store-activity-manager .sa-dialog-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; padding: 24px 26px 18px; border-bottom: 1px solid var(--line); }
+:root .workspace-shell.reference-workspace .store-activity-manager .sa-dialog-head > div { display: grid; gap: 8px; min-width: 0; }
+:root .workspace-shell.reference-workspace .store-activity-manager .sa-close { display: inline-flex; justify-content: center; align-items: center; width: 44px; height: 44px; flex: none; border: 1px solid var(--line); border-radius: 50%; color: var(--text); background: var(--wb-soft); }
+:root .workspace-shell.reference-workspace .store-activity-manager .sa-dialog-content { display: grid; gap: 22px; min-height: 0; overflow-y: auto; padding: 24px 26px 28px; scrollbar-width: thin; scrollbar-color: var(--muted) transparent; scrollbar-gutter: stable; }
+:root .workspace-shell.reference-workspace .store-activity-manager .sa-dialog-content::-webkit-scrollbar { width: 6px; }
+:root .workspace-shell.reference-workspace .store-activity-manager .sa-dialog-content::-webkit-scrollbar-thumb { background: var(--muted); border-radius: 9px; }
+@keyframes sa-enter { from { opacity: 0; transform: translateY(12px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes sa-exit { from { opacity: 1; transform: translateY(0) scale(1); } to { opacity: 0; transform: translateY(10px) scale(.98); } }
+@keyframes sa-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes sa-fade-out { from { opacity: 1; } to { opacity: 0; } }
+@media(max-width: 980px) {
+  :root .workspace-shell.reference-workspace .store-activity-manager .sa-form-panel { scroll-margin-top: calc(145px + env(safe-area-inset-top)); }
+}
+@media(max-width: 980px) and (max-height: 480px) {
+  :root .workspace-shell.reference-workspace .store-activity-manager .sa-form-panel { scroll-margin-top: calc(80px + env(safe-area-inset-top)); }
+}
+@media(max-width: 640px) {
+  :root .workspace-shell.reference-workspace .store-activity-manager .sa-fields { grid-template-columns: minmax(0,1fr); }
+  :root .workspace-shell.reference-workspace .store-activity-manager .sa-heading > .sa-actions { width: 100%; }
+  :root .workspace-shell.reference-workspace .store-activity-manager .sa-filters > label { max-width: none; }
+  :root .workspace-shell.reference-workspace .store-activity-manager .sa-filters > .wb-field { max-width: none; }
+  :root .workspace-shell.reference-workspace .store-activity-manager .sa-record { padding: 18px; }
+  :root .workspace-shell.reference-workspace .store-activity-manager .sa-dialog-head { padding: 20px 20px 16px; }
+  :root .workspace-shell.reference-workspace .store-activity-manager .sa-dialog-content { padding: 20px; }
+}
+@media(prefers-reduced-motion: reduce) {
+  :root .workspace-shell.reference-workspace .store-activity-manager :is(.sa-form-panel,.sa-dialog[open],.sa-dialog.is-closing),
+  :root .workspace-shell.reference-workspace .store-activity-manager .sa-dialog::backdrop { animation: none; }
+}
+:root:has([data-reduce-motion="true"]) .store-activity-manager :is(.sa-form-panel,.sa-dialog[open],.sa-dialog.is-closing),
+:root:has([data-reduce-motion="true"]) .store-activity-manager .sa-dialog::backdrop { animation: none; }

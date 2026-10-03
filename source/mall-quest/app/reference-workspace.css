@@ -1,0 +1,522 @@
+/* Workspace adaptation of the coin-hunt reference. Keep business controls intact;
+   every rule belongs to a workspace or its dedicated login, never the client. */
+:root :is(.workspace-shell.reference-workspace, .reference-workspace-login) {
+  color-scheme: light;
+  --bg: #f6f7f2;
+  --sidebar: #fbfcf8;
+  --surface: #fff;
+  --line: #e2e7df;
+  --muted: #5e6c63;
+  --text: #17211b;
+  --gold: #315b43;
+  --green: #315b43;
+  --wb-accent: #183b2b;
+  --wb-accent-text: #fff;
+  --wb-soft: #eaf1e5;
+  --wb-soft-hover: #ddebd5;
+  --wb-field: #fbfcf9;
+  --wb-glass: #ffffffc9;
+  --wb-glass-line: #ffffffde;
+  --wb-shadow: 0 12px 32px #253c2c09;
+  --wb-raised: 0 18px 44px #253c2c10;
+  --wb-danger: #a25a50;
+  --wb-danger-bg: #f8efeb;
+  --wb-blue: #4d7775;
+  --wb-blue-soft: #e5f0ed;
+  --wb-amber: #84672f;
+  --wb-amber-soft: #f5edda;
+  --wb-purple: #74688d;
+  --wb-purple-soft: #eeebf4;
+  --wb-ease: cubic-bezier(.2,.78,.22,1);
+  font-family: 'DM Sans', 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  line-height: 1.6;
+  min-height: 100dvh;
+}
+
+:root :is(.workspace-shell.reference-workspace, .reference-workspace-login)[data-client-theme="dark"] {
+  color-scheme: dark;
+  --bg: #15221c;
+  --sidebar: #1b2c23;
+  --surface: #21352a;
+  --line: #3a4e41;
+  --muted: #b0beb3;
+  --text: #f0f5ec;
+  --gold: #bdd2a4;
+  --green: #b6d5aa;
+  --wb-accent: #bdd2a4;
+  --wb-accent-text: #193522;
+  --wb-soft: #293e30;
+  --wb-soft-hover: #354e3b;
+  --wb-field: #1b2c23;
+  --wb-glass: #1b2c23dc;
+  --wb-glass-line: #50634c55;
+  --wb-shadow: 0 12px 32px #00000016;
+  --wb-raised: 0 18px 44px #00000024;
+  --wb-danger: #efb3a8;
+  --wb-danger-bg: #462e2a;
+  --wb-blue: #a6cecb;
+  --wb-blue-soft: #2c4542;
+  --wb-amber: #dec693;
+  --wb-amber-soft: #423d2d;
+  --wb-purple: #c3b8d5;
+  --wb-purple-soft: #373748;
+}
+
+:root .workspace-shell.reference-workspace {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  overflow-x: clip;
+  padding-bottom: 0;
+}
+:root :is(.workspace-shell.reference-workspace, .reference-workspace-login) :where(*) { box-sizing: border-box; }
+:root :is(.workspace-shell.reference-workspace, .reference-workspace-login) :where(button, input, select, textarea) { font-family: inherit; }
+:root :is(.workspace-shell.reference-workspace, .reference-workspace-login) :where(h1, h2, h3) { color: var(--text); letter-spacing: -.025em; }
+:root :is(.workspace-shell.reference-workspace, .reference-workspace-login) :where(small, .muted, .wb-note, .verify-hint) { color: var(--muted); }
+:root :is(.workspace-shell.reference-workspace, .reference-workspace-login) :where(button):hover:not(:disabled) { filter: none; }
+:root :is(.workspace-shell.reference-workspace, .reference-workspace-login) :where(button):disabled { cursor: not-allowed; opacity: .5; }
+:root :is(.workspace-shell.reference-workspace, .reference-workspace-login) :where(button, input, textarea, select, summary):focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+
+/* A calm fixed rail and translucent header replace the original dark console. */
+:root .workspace-shell.reference-workspace .sidebar {
+  display: flex;
+  position: fixed;
+  inset: 0 auto 0 0;
+  width: 244px;
+  padding: 30px 19px 19px;
+  background: var(--wb-glass);
+  border: 0;
+  border-right: 1px solid var(--line);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  z-index: 35;
+}
+:root :is(.workspace-shell.reference-workspace, .reference-workspace-login) .brand { color: var(--text); gap: 11px; font-size: 23px; letter-spacing: -.04em; padding: 0 7px; background: transparent; border: 0; }
+:root :is(.workspace-shell.reference-workspace, .reference-workspace-login) .brand-symbol { color: #ecf6de; background: #183b2b; border: 0; width: 44px; height: 44px; border-radius: 16px; box-shadow: 0 8px 18px #183b2b18; }
+:root :is(.workspace-shell.reference-workspace, .reference-workspace-login) .brand .brand-english { color: var(--muted); font-size: 10px; font-weight: 400; letter-spacing: .7px; margin-top: 3px; }
+:root .workspace-shell.reference-workspace .mall-switch { color: var(--text); background: var(--wb-soft); border: 1px solid var(--line); border-radius: 17px; padding: 13px 12px; margin: 29px 0 25px; font-size: 12px; }
+:root .workspace-shell.reference-workspace .mall-switch small { color: var(--muted); font-size: 10px; }
+:root .workspace-shell.reference-workspace .mall-icon { color: var(--green); }
+:root .workspace-shell.reference-workspace .nav-caption { color: var(--muted); font-size: 10px; margin: 0 12px 12px; letter-spacing: .1em; }
+:root .workspace-shell.reference-workspace .sidebar > nav { display: grid; gap: 5px; min-width: 0; }
+:root .workspace-shell.reference-workspace .nav-item { color: var(--muted); padding: 12px 13px; margin: 0; gap: 11px; border-radius: 14px; font-size: 13px; min-height: 45px; font-weight: 500; transition: color .24s var(--wb-ease), background .24s var(--wb-ease), box-shadow .24s var(--wb-ease), transform .24s var(--wb-ease); }
+:root .workspace-shell.reference-workspace .nav-item:hover { color: var(--text); background: var(--wb-soft); transform: translateX(2px); }
+:root .workspace-shell.reference-workspace .nav-item.active { color: var(--green); background: var(--wb-soft); font-weight: 700; box-shadow: inset 0 0 0 1px var(--line), 0 4px 12px #183b2b05; }
+:root .workspace-shell.reference-workspace .nav-item.active::before { left: -5px; width: 3px; height: 18px; background: var(--green); border-radius: 3px; }
+:root .workspace-shell.reference-workspace .nav-item i { color: var(--green); background: var(--wb-soft-hover); border-radius: 99px; padding: 1px 6px; font-size: 10px; }
+:root .workspace-shell.reference-workspace .sidebar-footer { padding-top: 21px; }
+:root .workspace-shell.reference-workspace .sidebar-footer > button { color: var(--muted); padding: 10px 12px; font-size: 11px; border-radius: 12px; }
+:root .workspace-shell.reference-workspace .sidebar-footer > button:hover { color: var(--green); background: var(--wb-soft); }
+:root .workspace-shell.reference-workspace :is(.sidebar-user, .sidebar-merchant-info) { color: var(--text); border-top: 1px solid var(--line); margin-top: 15px; padding: 19px 7px 0; font-size: 12px; }
+:root .workspace-shell.reference-workspace .sidebar-merchant-info { border-radius: 0; align-items: flex-start; }
+:root .workspace-shell.reference-workspace .sidebar-merchant-info strong { font-size: 12px; overflow-wrap: anywhere; }
+:root .workspace-shell.reference-workspace .sidebar-merchant-info em { color: var(--green); font-style: normal; font-size: 10px; }
+:root .workspace-shell.reference-workspace :is(.avatar, .top-avatar) { color: var(--green); background: var(--wb-soft); border: 1px solid var(--line); border-radius: 13px; }
+:root .workspace-shell.reference-workspace .main-shell { width: calc(100% - 244px); min-width: 0; margin-left: 244px; min-height: 100dvh; }
+:root .workspace-shell.reference-workspace .topbar { display: flex; position: sticky; top: 0; z-index: 30; height: 76px; padding: 0 clamp(20px, 3vw, 40px); gap: 15px; color: var(--text); background: var(--wb-glass); border-bottom: 1px solid var(--line); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+:root .workspace-shell.reference-workspace .breadcrumb { min-width: 0; font-size: 12px; color: var(--muted); gap: 10px; }
+:root .workspace-shell.reference-workspace .breadcrumb strong { color: var(--text); }
+:root .workspace-shell.reference-workspace .topbar-actions { gap: 11px; flex: none; }
+:root .workspace-shell.reference-workspace .demo-label { color: var(--muted); background: var(--wb-soft); border: 1px solid var(--line); border-radius: 99px; font-size: 9px; letter-spacing: .04em; padding: 5px 9px; }
+:root .workspace-shell.reference-workspace .top-help { color: var(--muted); font-size: 11px; }
+:root .workspace-shell.reference-workspace :is(.mobile-brand, .mobile-nav) { display: none; }
+:root .workspace-shell.reference-workspace .main-shell > main { width: 100%; max-width: 1500px; margin: 0 auto; padding: 31px clamp(20px, 3vw, 40px) 35px; min-width: 0; }
+:root .workspace-shell.reference-workspace :is(.content, .screen-view, .wb-stack, .wb-panel, .review-list, .redeem-entry) { min-width: 0; max-width: 100%; }
+:root .workspace-shell.reference-workspace :is(h1, h2, h3, p, dd) { min-width: 0; max-width: 100%; overflow-wrap: anywhere; }
+:root .workspace-shell.reference-workspace .page-heading { align-items: flex-start; gap: 18px; margin-bottom: 24px; }
+:root .workspace-shell.reference-workspace .page-heading > div { min-width: 0; }
+:root .workspace-shell.reference-workspace .page-heading h1 { font-size: clamp(24px, 2.5vw, 31px); color: var(--text); letter-spacing: -.045em; line-height: 1.25; font-weight: 700; }
+:root .workspace-shell.reference-workspace .page-heading p { color: var(--muted); margin-top: 9px; font-size: 12px; line-height: 1.75; }
+:root .workspace-shell.reference-workspace .eyebrow { color: var(--muted); letter-spacing: .14em; font-size: 10px; margin-bottom: 8px; }
+:root .workspace-shell.reference-workspace .heading-star { color: var(--green); }
+:root .workspace-shell.reference-workspace .page-footer { color: var(--muted); border-top: 1px solid var(--line); margin: 0 clamp(20px, 3vw, 40px); padding: 18px 0 25px; font-size: 10px; gap: 12px; flex-wrap: wrap; }
+
+/* White paper cards, softened status chips and reference-style pill tabs. */
+:root .workspace-shell.reference-workspace :is(.surface, .panel, .wb-record, .wb-pending-item) { color: var(--text); background: var(--surface); border: 1px solid var(--line); border-radius: 23px; box-shadow: var(--wb-shadow); }
+:root .workspace-shell.reference-workspace :is(.wb-panel, .review-card, .published-list, .activity-log, .merchant-info, .redeem-form) { padding: 25px; }
+:root .workspace-shell.reference-workspace .wb-stack { gap: 21px; }
+:root .workspace-shell.reference-workspace .workspace-view[data-workspace-view="overview"] > .merchant-recent-records { margin-top: 24px; }
+:root .workspace-shell.reference-workspace .merchant-recent-records .section-heading > div { flex: 1 1 auto; }
+:root .workspace-shell.reference-workspace .merchant-recent-records .section-heading p { margin-top: 8px; line-height: 1.8; }
+:root .workspace-shell.reference-workspace .merchant-recent-records .log-row > div { min-width: 0; }
+:root .workspace-shell.reference-workspace .merchant-recent-records .log-row :is(strong, small) { overflow-wrap: anywhere; }
+:root .workspace-shell.reference-workspace .merchant-recent-records .log-icon { flex-shrink: 0; }
+:root .workspace-shell.reference-workspace :is(.wb-heading, .section-heading) { display: flex; align-items: flex-start; justify-content: space-between; gap: 13px; flex-wrap: wrap; margin-bottom: 18px; }
+:root .workspace-shell.reference-workspace :is(.wb-heading, .section-heading) > div:first-child { min-width: 0; }
+:root .workspace-shell.reference-workspace :is(.wb-panel h2, .review-card h2, .published-list h2, .activity-log h2, .merchant-info h2) { font-size: 18px; font-weight: 700; }
+:root .workspace-shell.reference-workspace :is(.wb-panel h3, .wb-record h3, .scanner-card h3) { font-size: 14px; font-weight: 700; }
+/* Data headings contain user-entered text. Normal inline flow lets a long
+   unbroken name wrap instead of becoming an anonymous oversized flex item. */
+:root .workspace-shell.reference-workspace .wb-panel :is(h2, h3) { display: block; }
+:root .workspace-shell.reference-workspace .wb-panel :is(h2, h3) > svg { display: inline-block; vertical-align: middle; margin-right: 8px; }
+:root .workspace-shell.reference-workspace :is(.wb-heading > div > p, .wb-note) { font-size: 11px; line-height: 1.75; }
+:root .workspace-shell.reference-workspace .staff-current { color: var(--muted); background: var(--wb-glass); border: 1px solid var(--line); border-radius: 15px; padding: 10px 13px; display: flex; align-items: center; gap: 12px; margin-bottom: 18px; flex-wrap: wrap; font-size: 11px; }
+:root .workspace-shell.reference-workspace .staff-current > .pill { display: inline-block; min-width: 0; max-width: 100%; white-space: normal; overflow-wrap: anywhere; }
+:root .workspace-shell.reference-workspace .staff-current > .pill svg { display: inline-block; vertical-align: -2px; margin-right: 5px; }
+:root .workspace-shell.reference-workspace .workspace-logout { font-size: 11px; min-height: 32px; padding: 5px 0; }
+:root .workspace-shell.reference-workspace .pill { color: var(--muted); background: var(--wb-field); border: 1px solid var(--line); padding: 5px 9px; border-radius: 99px; font-size: 10px; line-height: 1.4; }
+:root .workspace-shell.reference-workspace :is(.pill.green, .pill.gold) { color: var(--green); border-color: var(--line); background: var(--wb-soft); }
+:root .workspace-shell.reference-workspace .tabs { display: flex; gap: 5px; padding: 5px; margin: 0 0 22px; width: 100%; max-width: 100%; border: 1px solid var(--line); border-radius: 17px; background: var(--wb-glass); box-shadow: 0 5px 18px #253c2c04; overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; scrollbar-width: thin; scrollbar-color: var(--line) transparent; }
+:root .workspace-shell.reference-workspace .tabs button { color: var(--muted); padding: 10px 15px; border: 0; border-radius: 12px; font-size: 12px; min-height: 40px; flex: none; transition: background .28s var(--wb-ease), color .28s var(--wb-ease), box-shadow .28s var(--wb-ease), transform .24s var(--wb-ease); }
+:root .workspace-shell.reference-workspace .tabs button:hover { color: var(--green); background: var(--wb-soft); }
+:root .workspace-shell.reference-workspace .tabs button.active { color: var(--green); background: var(--wb-soft); box-shadow: 0 3px 10px #183b2b09, inset 0 0 0 1px var(--line); font-weight: 700; }
+:root .workspace-shell.reference-workspace .tabs button span { color: var(--green); background: var(--wb-soft-hover); border: 0; padding: 1px 6px; border-radius: 99px; font-size: 9px; }
+
+/* Inputs keep their native semantics, validation, disabled and upload behavior. */
+:root :is(.workspace-shell.reference-workspace, .reference-workspace-login) .field-label { color: var(--text); font-size: 12px; gap: 8px; margin-bottom: 0; }
+:root :is(.workspace-shell.reference-workspace, .reference-workspace-login) :is(input:not([type="checkbox"]):not([type="radio"]):not([type="file"]), select, textarea) { min-width: 0; max-width: 100%; min-height: 46px; color: var(--text); background: var(--wb-field); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; font-size: 13px; transition: border-color .2s var(--wb-ease), box-shadow .2s var(--wb-ease), background .2s var(--wb-ease); }
+:root :is(.workspace-shell.reference-workspace, .reference-workspace-login) :is(input, textarea)::placeholder { color: var(--muted); opacity: .8; }
+:root :is(.workspace-shell.reference-workspace, .reference-workspace-login) :is(input, select, textarea):focus { border-color: #739163; box-shadow: 0 0 0 3px #73916320; outline: none; }
+:root :is(.workspace-shell.reference-workspace, .reference-workspace-login) :is(input, select, textarea):disabled { opacity: .6; cursor: not-allowed; }
+:root .workspace-shell.reference-workspace input[readonly] { color: var(--muted); background: var(--wb-soft); }
+:root .workspace-shell.reference-workspace :is(.wb-form, .wb-form fieldset) { gap: 17px; }
+:root .workspace-shell.reference-workspace .wb-form fieldset { min-width: 0; }
+:root .workspace-shell.reference-workspace .wb-fields { gap: 16px; }
+:root .workspace-shell.reference-workspace .wb-checkbox { color: var(--text); font-size: 13px; gap: 10px; }
+:root .workspace-shell.reference-workspace .wb-checkbox input { accent-color: var(--gold); min-height: 0; width: 18px; height: 18px; border-radius: 6px; }
+:root .workspace-shell.reference-workspace .search-field { color: var(--muted); background: var(--wb-field); border: 1px solid var(--line); border-radius: 14px; max-width: 100%; min-width: 0; min-height: 46px; gap: 8px; padding: 0 12px; }
+/* Match the native-input rule's type exclusions so its stronger specificity
+   cannot reintroduce an inner border inside the single search-field frame. */
+:root .workspace-shell.reference-workspace .search-field > input:not([type="checkbox"]):not([type="radio"]):not([type="file"]) { background: transparent; border: 0; border-radius: 0; padding: 0; min-height: 44px; width: 100%; box-shadow: none; outline: none; }
+:root .workspace-shell.reference-workspace .search-field > svg { flex: none; }
+:root .workspace-shell.reference-workspace .search-field:focus-within { border-color: var(--green); box-shadow: 0 0 0 3px #73916320; }
+:root .workspace-shell.reference-workspace .search-field:has(> input:focus-visible) { outline: 2px solid var(--green); outline-offset: -1px; box-shadow: none; }
+:root .workspace-shell.reference-workspace .wb-compact-label { color: var(--muted); font-size: 11px; gap: 8px; flex-wrap: wrap; }
+:root .workspace-shell.reference-workspace .wb-compact-label select { min-height: 37px; padding: 7px 10px; border-radius: 10px; font-size: 11px; }
+:root .workspace-shell.reference-workspace .wb-actions { gap: 9px; }
+:root .workspace-shell.reference-workspace .wb-dashboard-shortcuts { margin-block: 18px; gap: 12px; flex-wrap: wrap; }
+:root .workspace-shell.reference-workspace .wb-confirm { color: var(--text); background: var(--wb-soft); border: 1px solid var(--line); border-radius: 16px; padding: 16px; gap: 13px; font-size: 12px; }
+:root .workspace-shell.reference-workspace .wb-facts { gap: 17px; }
+:root .workspace-shell.reference-workspace .wb-facts dt { color: var(--muted); font-size: 11px; }
+:root .workspace-shell.reference-workspace .wb-facts dd { color: var(--text); font-size: 13px; }
+:root .workspace-shell.reference-workspace .wb-record { padding: 20px; gap: 12px; box-shadow: none; }
+:root .workspace-shell.reference-workspace .wb-record > p { font-size: 12px; overflow-wrap: anywhere; }
+:root .workspace-shell.reference-workspace .wb-card-grid { gap: 16px; }
+:root .workspace-shell.reference-workspace .wb-detail summary { color: var(--green); font-size: 12px; padding: 13px 0; }
+
+:root :is(.workspace-shell.reference-workspace, .reference-workspace-login) :is(.gold-button, .primary-button) { background: var(--wb-accent); color: var(--wb-accent-text); border: 1px solid transparent; border-radius: 14px; min-height: 43px; padding: 11px 16px; gap: 7px; font-size: 12px; font-weight: 600; box-shadow: 0 8px 21px #183b2b13; transition: transform .22s var(--wb-ease), background .22s var(--wb-ease), box-shadow .22s var(--wb-ease); }
+:root :is(.workspace-shell.reference-workspace, .reference-workspace-login) :is(.gold-button, .primary-button):hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 12px 25px #183b2b20; }
+:root :is(.workspace-shell.reference-workspace, .reference-workspace-login) .outline-button { color: var(--green); background: var(--surface); border: 1px solid var(--line); border-radius: 14px; min-height: 43px; padding: 10px 15px; gap: 7px; font-size: 12px; box-shadow: none; transition: background .22s var(--wb-ease), border-color .22s var(--wb-ease), transform .22s var(--wb-ease); }
+:root :is(.workspace-shell.reference-workspace, .reference-workspace-login) .outline-button:hover:not(:disabled) { background: var(--wb-soft); border-color: #71936088; transform: translateY(-1px); }
+:root :is(.workspace-shell.reference-workspace, .reference-workspace-login) :is(.gold-button, .primary-button, .outline-button):active:not(:disabled) { transform: translateY(1px) scale(.985); }
+:root :is(.workspace-shell.reference-workspace, .reference-workspace-login) .text-button { color: var(--green); gap: 6px; font-size: 12px; border-radius: 8px; }
+:root .workspace-shell.reference-workspace .icon-button { color: var(--green); background: var(--surface); border: 1px solid var(--line); width: 38px; height: 38px; border-radius: 50%; }
+:root .workspace-shell.reference-workspace .icon-button:hover { background: var(--wb-soft); }
+:root :is(.workspace-shell.reference-workspace, .reference-workspace-login) :is(.danger-button, .wb-danger) { color: var(--wb-danger); }
+
+/* Tables scroll inside their paper card; long data cannot widen the page. */
+:root .workspace-shell.reference-workspace .wb-table-scroll { min-width: 0; max-width: 100%; width: 100%; overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: thin; scrollbar-color: var(--line) transparent; border: 1px solid var(--line); border-radius: 16px; }
+:root .workspace-shell.reference-workspace .wb-table-scroll table { width: 100%; border-collapse: collapse; background: var(--surface); color: var(--text); font-size: 12px; }
+:root .workspace-shell.reference-workspace .wb-table-scroll :is(th, td) { border-bottom: 1px solid var(--line); padding: 13px 15px; line-height: 1.7; vertical-align: middle; }
+:root .workspace-shell.reference-workspace .wb-table-scroll th { color: var(--muted); background: var(--wb-field); font-size: 11px; font-weight: 600; }
+:root .workspace-shell.reference-workspace .wb-table-scroll tbody tr:last-child td { border-bottom: 0; }
+:root .workspace-shell.reference-workspace .wb-table-scroll tbody tr:hover { background: var(--wb-field); }
+:root .workspace-shell.reference-workspace .wb-table-scroll td small { color: var(--muted); font-size: 10px; margin-top: 3px; }
+:root .workspace-shell.reference-workspace .wb-table-scroll .text-button { min-height: 30px; font-size: 11px; padding: 5px 0; }
+:root .workspace-shell.reference-workspace .wb-table-scroll .wb-actions { flex-wrap: nowrap; }
+
+/* Dashboard cards follow the reference LevelCenter's real-data water fills. */
+:root .workspace-shell.reference-workspace :is(.wb-overview, .wb-metrics) { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 15px; margin: 20px 0; }
+:root .workspace-shell.reference-workspace :is(.wb-metric-card, .wb-overview-card, .wb-metrics > div) { position: relative; isolation: isolate; overflow: hidden; display: grid; align-content: start; gap: 8px; min-width: 0; color: var(--text); background: var(--surface); border: 1px solid var(--line); border-radius: 22px; padding: 22px; box-shadow: var(--wb-shadow); }
+:root .workspace-shell.reference-workspace :is(.wb-metric-card, .wb-overview-card, .wb-metrics > div) > :not(.wb-data-water) { position: relative; z-index: 1; }
+:root .workspace-shell.reference-workspace :is(.wb-metric-card, .wb-overview-card, .wb-metrics > div) strong { color: var(--text); font-size: clamp(23px, 2.5vw, 31px); letter-spacing: -.045em; line-height: 1.3; font-weight: 700; overflow-wrap: anywhere; }
+:root .workspace-shell.reference-workspace :is(.wb-metric-label, .wb-overview-card > span:last-child, .wb-metrics > div > span:not(.wb-data-water):not(.wb-metric-icon)) { color: var(--muted); font-size: 12px; }
+:root .workspace-shell.reference-workspace .wb-metric-note { color: var(--text); font-size: 11px; line-height: 1.65; overflow-wrap: anywhere; }
+:root .workspace-shell.reference-workspace :is(.wb-metric-icon, .wb-overview-icon) { display: inline-grid; place-items: center; color: var(--green); background: var(--wb-soft); border-radius: 14px; width: 42px; height: 42px; margin: 0 0 5px; }
+:root .workspace-shell.reference-workspace .wb-blue :is(.wb-metric-icon, .wb-overview-icon) { color: var(--wb-blue); background: var(--wb-blue-soft); }
+:root .workspace-shell.reference-workspace .wb-gold :is(.wb-metric-icon, .wb-overview-icon) { color: var(--wb-amber); background: var(--wb-amber-soft); }
+:root .workspace-shell.reference-workspace .wb-purple :is(.wb-metric-icon, .wb-overview-icon) { color: var(--wb-purple); background: var(--wb-purple-soft); }
+:root .workspace-shell.reference-workspace .wb-data-water { display: block; position: absolute; inset: auto 0 0; z-index: 0; height: clamp(0%, var(--water-level, 0%), 100%); opacity: .47; background: #c4dec6; pointer-events: none; animation: wb-water-rise .9s var(--wb-ease) both; animation-delay: calc(var(--wb-index, 0) * 70ms); transition: height .9s var(--wb-ease); }
+:root .workspace-shell.reference-workspace :is(.wb-blue .wb-data-water, .wb-data-water.wb-water-blue) { background: #bddbd7; }
+:root .workspace-shell.reference-workspace :is(.wb-gold .wb-data-water, .wb-data-water.wb-water-gold, .wb-data-water.wb-water-amber) { background: #ead9ab; }
+:root .workspace-shell.reference-workspace :is(.wb-purple .wb-data-water, .wb-data-water.wb-water-purple) { background: #d6d0e6; }
+:root .workspace-shell.reference-workspace .wb-data-water::before,
+:root .workspace-shell.reference-workspace .wb-data-water::after { content: ''; position: absolute; background: inherit; border-radius: 45%; width: 160%; height: 24px; top: -12px; left: -30%; }
+:root .workspace-shell.reference-workspace .wb-data-water::before { opacity: .72; animation: wb-data-wave 4.5s linear infinite; }
+:root .workspace-shell.reference-workspace .wb-data-water::after { opacity: .38; top: -9px; animation: wb-data-wave 6s linear infinite reverse; }
+:root .workspace-shell.reference-workspace .wb-data-water i { position: absolute; top: 32%; right: 22%; border: 1px solid #ffffffa6; border-radius: 50%; width: 6px; height: 6px; box-shadow: -44px 25px 0 -1px #ffffff59, 17px 43px 0 1px #ffffff47; animation: wb-water-bubbles 3s ease-in-out infinite; }
+:root .workspace-shell.reference-workspace .wb-data-water:is([data-empty="true"], [data-known="false"]) { display: none; }
+:root .workspace-shell.reference-workspace[data-client-theme="dark"] .wb-data-water { opacity: .16; }
+:root .workspace-shell.reference-workspace .wb-metrics-secondary strong { font-size: 23px; }
+:root .workspace-shell.reference-workspace .wb-rate-card { grid-template-columns: 42px minmax(0, 1fr) auto; align-items: center; column-gap: 15px; row-gap: 2px; margin: 0 0 17px; padding: 19px 22px; }
+:root .workspace-shell.reference-workspace .wb-rate-card .wb-metric-icon { grid-column: 1; grid-row: 1 / 3; margin: 0; }
+:root .workspace-shell.reference-workspace .wb-rate-card strong { grid-column: 3; grid-row: 1 / 3; color: var(--green); font-size: 27px; }
+:root .workspace-shell.reference-workspace .wb-rate-card .wb-metric-label { grid-column: 2; grid-row: 1; color: var(--text); font-size: 12px; }
+:root .workspace-shell.reference-workspace .wb-rate-card .wb-metric-note { grid-column: 2; grid-row: 2; }
+:root .workspace-shell.reference-workspace :is(.wb-metric-card, .wb-record, .inventory-card, .review-card) { transition: box-shadow .24s var(--wb-ease), border-color .24s var(--wb-ease); }
+:root .workspace-shell.reference-workspace :is(.wb-metric-card, .wb-record, .inventory-card, .review-card):hover { box-shadow: var(--wb-raised); border-color: #71936055; }
+:root .workspace-shell.reference-workspace .wb-chart { color: var(--muted); }
+:root .workspace-shell.reference-workspace .wb-chart svg { display: block; max-width: 100%; height: auto; color: var(--muted); }
+:root .workspace-shell.reference-workspace .wb-chart text { font-size: 12px; }
+:root .workspace-shell.reference-workspace .wb-chart :is(line, .wb-chart-grid) { stroke: var(--line); }
+:root .workspace-shell.reference-workspace .wb-chart polyline:nth-of-type(1) { stroke: var(--green); }
+:root .workspace-shell.reference-workspace .wb-chart polyline:nth-of-type(2) { stroke: var(--wb-purple); }
+:root .workspace-shell.reference-workspace .wb-legend { gap: 14px; font-size: 11px; flex-wrap: wrap; }
+:root .workspace-shell.reference-workspace .wb-legend span:first-child { color: var(--green); }
+:root .workspace-shell.reference-workspace .wb-legend span:last-child { color: var(--wb-purple); }
+:root .workspace-shell.reference-workspace .wb-pending-item { padding: 18px; border-radius: 17px; background: var(--wb-field); box-shadow: none; gap: 13px; }
+:root .workspace-shell.reference-workspace .wb-pending-item > div { flex: 1 1 140px; min-width: 0; max-width: 100%; }
+:root .workspace-shell.reference-workspace .wb-pending-icon { color: var(--green); background: var(--wb-soft); padding: 12px; border-radius: 13px; }
+:root .workspace-shell.reference-workspace .wb-pending-item h3 { font-size: 13px; }
+:root .workspace-shell.reference-workspace .wb-pending-item p { color: var(--muted); font-size: 11px; line-height: 1.7; }
+
+/* Inventory, content review, merchant details and redemption share the cards. */
+:root .workspace-shell.reference-workspace :is(.inventory-grid, .coupon-grid) { gap: 19px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+:root .workspace-shell.reference-workspace :is(.inventory-card, .coupon-card) { background: var(--surface); color: var(--text); border: 1px solid var(--line); border-radius: 24px; overflow: hidden; box-shadow: var(--wb-shadow); }
+:root .workspace-shell.reference-workspace .inventory-card > div:not(.store-art) { padding: 22px; }
+:root .workspace-shell.reference-workspace .inventory-card h2 { font-size: 17px; margin: 12px 0 7px; }
+:root .workspace-shell.reference-workspace .inventory-card h3 { color: var(--green); font-size: 13px; }
+:root .workspace-shell.reference-workspace .inventory-card p { color: var(--muted); font-size: 11px; line-height: 1.7; margin: 10px 0 20px; }
+:root .workspace-shell.reference-workspace .inventory-progress { gap: 8px; flex-wrap: wrap; font-size: 11px; }
+:root .workspace-shell.reference-workspace progress { border-radius: 99px; background: var(--wb-soft); height: 7px; }
+:root .workspace-shell.reference-workspace progress::-webkit-progress-bar { background: var(--wb-soft); }
+:root .workspace-shell.reference-workspace progress::-webkit-progress-value { background: var(--green); border-radius: 99px; transition: width .75s var(--wb-ease); }
+:root .workspace-shell.reference-workspace progress::-moz-progress-bar { background: var(--green); border-radius: 99px; }
+:root .workspace-shell.reference-workspace .log-row { color: var(--text); border-color: var(--line); padding: 16px 0; gap: 12px; }
+:root .workspace-shell.reference-workspace .log-row > div { min-width: 0; }
+:root .workspace-shell.reference-workspace .log-row strong { font-size: 12px; overflow-wrap: anywhere; }
+:root .workspace-shell.reference-workspace .log-row small { font-size: 10px; color: var(--muted); overflow-wrap: anywhere; }
+:root .workspace-shell.reference-workspace .log-icon { color: var(--green); background: var(--wb-soft); border: 0; border-radius: 13px; }
+:root .workspace-shell.reference-workspace .review-list { gap: 20px; }
+:root .workspace-shell.reference-workspace .review-card > p { color: var(--muted); font-size: 11px; }
+:root .workspace-shell.reference-workspace .review-card ol { display: grid; gap: 9px; margin: 19px 0; }
+:root .workspace-shell.reference-workspace .review-card li { color: var(--text); background: var(--wb-field); border: 1px solid var(--line); border-radius: 13px; padding: 12px; gap: 10px; font-size: 12px; flex-wrap: wrap; overflow-wrap: anywhere; }
+:root .workspace-shell.reference-workspace .review-card li > span { color: var(--green); background: var(--wb-soft); border-radius: 7px; width: 22px; height: 22px; display: inline-grid; place-items: center; flex: none; font-size: 10px; }
+:root .workspace-shell.reference-workspace .clue-photo { max-width: 100%; border-radius: 12px; }
+:root .workspace-shell.reference-workspace .review-actions { gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+:root .workspace-shell.reference-workspace .review-task-row { min-width: 0; }
+:root .workspace-shell.reference-workspace .review-task-row > div:first-child { min-width: min(180px, 100%); }
+:root .workspace-shell.reference-workspace .review-task-actions { gap: 12px; }
+:root .workspace-shell.reference-workspace .review-history-list p { color: var(--muted); font-size: 12px; }
+:root .workspace-shell.reference-workspace .merchant-info-heading { gap: 15px; }
+:root .workspace-shell.reference-workspace .merchant-info-heading > div { flex: 1; min-width: 0; }
+:root .workspace-shell.reference-workspace .merchant-info-heading h2 { margin: 8px 0 3px; }
+:root .workspace-shell.reference-workspace .merchant-info-heading p { font-size: 12px; }
+:root .workspace-shell.reference-workspace :is(.journey-icon, .redeem-icon) { color: var(--green); background: var(--wb-soft); border: 1px solid var(--line); border-radius: 20px; width: 64px; height: 64px; flex: none; }
+:root .workspace-shell.reference-workspace .merchant-info-grid { gap: 0 25px; margin-top: 22px; }
+:root .workspace-shell.reference-workspace .merchant-info-grid > div { border-color: var(--line); padding: 18px 0; min-width: 0; }
+:root .workspace-shell.reference-workspace .merchant-info-grid dt { color: var(--muted); font-size: 11px; margin-bottom: 7px; }
+:root .workspace-shell.reference-workspace .merchant-info-grid dd { color: var(--text); font-size: 13px; overflow-wrap: anywhere; }
+:root .workspace-shell.reference-workspace :is(.merchant-info-note, .share-channel-guide > p) { color: var(--muted); font-size: 11px; line-height: 1.8; border-color: var(--line); }
+:root .workspace-shell.reference-workspace .share-channel-guide { background: var(--wb-field); border: 1px solid var(--line); border-radius: 17px; padding: 18px; margin-top: 20px; }
+:root .workspace-shell.reference-workspace .share-channel-guide :is(h3, .field-label) { font-size: 12px; }
+:root .workspace-shell.reference-workspace .share-channel-guide input { width: 100%; }
+:root .workspace-shell.reference-workspace .redeem-layout { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
+:root .workspace-shell.reference-workspace .redeem-form > p { color: var(--muted); font-size: 12px; line-height: 1.8; margin: 10px 0 20px; }
+:root .workspace-shell.reference-workspace .redeem-form h2 { font-size: 20px; }
+:root .workspace-shell.reference-workspace .redeem-form > small { color: var(--muted); font-size: 10px; }
+:root .workspace-shell.reference-workspace .merchant-scan-button { background: var(--wb-soft); color: var(--green); margin: 18px 0 20px; }
+:root .workspace-shell.reference-workspace .redeem-form > .field-label { margin-bottom: 16px; }
+:root .workspace-shell.reference-workspace .redeem-coupon-preview { color: var(--green); background: var(--wb-soft); border: 1px solid var(--line); border-radius: 16px; padding: 16px; font-size: 12px; margin: 15px 0; }
+:root .workspace-shell.reference-workspace .redeem-coupon-preview p { margin: 7px 0; font-size: 11px; }
+:root .workspace-shell.reference-workspace .scanner-card { background: var(--surface); border: 1px solid var(--line); border-radius: 22px; padding: 21px; box-shadow: var(--wb-shadow); scroll-margin-top: 96px; }
+:root .workspace-shell.reference-workspace .scanner-view { background: var(--wb-field); border: 1px solid var(--line); border-radius: 17px; margin: 17px 0; overflow: hidden; }
+:root .workspace-shell.reference-workspace .scanner-placeholder { color: var(--muted); min-height: 200px; font-size: 12px; }
+:root .workspace-shell.reference-workspace .scanner-placeholder svg { color: var(--green); }
+:root .workspace-shell.reference-workspace .scanner-card :is(p, small) { color: var(--muted); font-size: 11px; line-height: 1.8; }
+:root .workspace-shell.reference-workspace .scanner-card .inline-error { color: var(--wb-danger); }
+:root .workspace-shell.reference-workspace .scanner-upload { display: inline-flex; align-items: center; justify-content: center; cursor: pointer; }
+:root .workspace-shell.reference-workspace .scanner-upload:focus-within { outline: 2px solid var(--gold); outline-offset: 3px; }
+
+/* Feedback, permissions and dialogs use the same readable surface hierarchy. */
+:root :is(.workspace-shell.reference-workspace, .reference-workspace-login) :is(.error-banner, .wb-error) { color: var(--wb-danger); background: var(--wb-danger-bg); border: 1px solid #ba80704a; border-radius: 14px; padding: 12px 15px; font-size: 12px; }
+:root .workspace-shell.reference-workspace .inline-error { color: var(--wb-danger); font-size: 12px; }
+:root .workspace-shell.reference-workspace :is(.notice, .wb-notice) { color: var(--green); background: var(--wb-soft); border: 1px solid var(--line); border-radius: 14px; font-size: 12px; }
+:root .workspace-shell.reference-workspace :is(.empty-state, .wb-empty) { background: var(--surface); color: var(--muted); border: 1px dashed var(--line); border-radius: 23px; padding: 48px 20px; min-width: 0; gap: 12px; }
+:root .workspace-shell.reference-workspace .wb-panel .wb-empty { background: var(--wb-field); border-radius: 15px; padding: 30px 15px; font-size: 12px; }
+:root .workspace-shell.reference-workspace .empty-state > svg { color: var(--green); background: var(--wb-soft); border-radius: 18px; padding: 13px; width: 58px; height: 58px; }
+:root .workspace-shell.reference-workspace .empty-state h2 { color: var(--text); font-size: 16px; }
+:root .workspace-shell.reference-workspace .empty-state p { color: var(--muted); font-size: 12px; }
+:root .workspace-shell.reference-workspace .modal-backdrop { background: #10241bab; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); padding: 24px; }
+:root .workspace-shell.reference-workspace .modal { color: var(--text); background: var(--surface); border: 1px solid var(--line); border-radius: 26px; padding: 26px; max-width: 100%; max-height: 90dvh; box-shadow: 0 35px 90px #10241b40; animation: wb-dialog-enter .38s var(--wb-ease) both; }
+:root .workspace-shell.reference-workspace .modal-head { gap: 14px; margin-bottom: 20px; }
+:root .workspace-shell.reference-workspace .modal-head h2 { color: var(--text); font-size: 18px; }
+:root .workspace-shell.reference-workspace .modal > p { font-size: 13px; line-height: 1.8; }
+:root .workspace-shell.reference-workspace .modal-actions { gap: 10px; flex-wrap: wrap; }
+:root .workspace-shell.reference-workspace .toast { color: #f0f5ec; background: #183b2beb; border: 1px solid #d6e4cd55; border-radius: 17px; padding: 13px 18px; box-shadow: 0 15px 40px #183b2b24; backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); font-size: 12px; bottom: 24px; left: calc(50% + 122px); max-width: min(480px, calc(100% - 32px)); overflow-wrap: anywhere; }
+
+/* Workspace login mirrors reference auth: quiet hero, white card, green CTA. */
+:root .reference-workspace-login.role-login-screen {
+  --role-login-width: 460px;
+  display: block;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: calc(27px + env(safe-area-inset-top)) calc(clamp(16px, 6vw, 70px) + env(safe-area-inset-right)) calc(45px + env(safe-area-inset-bottom)) calc(clamp(16px, 6vw, 70px) + env(safe-area-inset-left));
+  position: relative;
+  isolation: isolate;
+  overflow-x: clip;
+  background: radial-gradient(circle at 15% 9%, #ddeecd88, transparent 37%), radial-gradient(circle at 92% 76%, #dfede78c, transparent 32%), var(--bg);
+}
+:root .reference-workspace-login[data-client-theme="dark"].role-login-screen { background: radial-gradient(circle at 15% 9%, #35533955, transparent 37%), radial-gradient(circle at 92% 76%, #2c4a4155, transparent 32%), var(--bg); }
+:root .reference-workspace-login > header { max-width: 1120px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 18px; }
+:root .reference-workspace-login > header .outline-button { background: var(--wb-glass); border-radius: 99px; font-size: 11px; }
+:root .reference-workspace-login .role-login-intro { width: min(100%, var(--role-login-width)); max-width: var(--role-login-width); margin: 42px auto 24px; border-radius: 26px; padding: 27px 23px 28px; color: #fff; background: linear-gradient(135deg, #183b2b, #2d5841); box-shadow: 0 15px 40px #183b2b16; animation: wb-view-enter .52s var(--wb-ease) both; }
+:root .reference-workspace-login .role-login-intro .eyebrow { color: #b4c9b8; font-size: 10px; letter-spacing: .14em; }
+:root .reference-workspace-login .role-login-intro h1 { color: #fff; font-size: clamp(27px, 5vw, 35px); letter-spacing: -.045em; margin: 10px 0 9px; line-height: 1.3; }
+:root .reference-workspace-login .role-login-intro p { color: #d1ddce; font-size: 12px; max-width: 440px; margin: 0 auto; line-height: 1.8; }
+:root .reference-workspace-login .player-login-card { width: min(100%, var(--role-login-width)); max-width: var(--role-login-width); border: 1px solid var(--line); border-radius: 26px; color: var(--text); background: var(--surface); padding: 29px; margin: 0 auto; box-shadow: var(--wb-raised); animation: wb-view-enter .5s var(--wb-ease) .08s both; }
+:root .reference-workspace-login .login-symbol { color: var(--green); background: var(--wb-soft); border-radius: 17px; display: grid; place-items: center; width: 52px; height: 52px; }
+:root .reference-workspace-login .player-login-card h2 { color: var(--text); font-size: 22px; margin: 16px 0 8px; line-height: 1.35; }
+:root .reference-workspace-login .player-login-card > p { color: var(--muted); font-size: 12px; line-height: 1.8; }
+:root .reference-workspace-login .player-login-card form { gap: 18px; margin: 23px 0 0; }
+:root .reference-workspace-login .player-login-card fieldset { display: grid; gap: 17px; padding: 0; border: 0; margin: 0; min-width: 0; }
+:root .reference-workspace-login .player-login-card .field-label { display: grid; gap: 8px; font-size: 12px; }
+:root .reference-workspace-login .player-login-card :is(input, select) { width: 100%; font-size: 14px; min-height: 48px; background: var(--wb-field); }
+:root .reference-workspace-login .verify-hint { color: var(--muted); background: var(--wb-field); border: 1px solid var(--line); border-radius: 13px; padding: 11px 12px; margin: 0; font-size: 10px; line-height: 1.8; }
+:root .reference-workspace-login .player-login-card .gold-button { min-height: 49px; font-size: 13px; border-radius: 15px; }
+:root .reference-workspace-login .player-login-card > .outline-button { margin-top: 15px; }
+:root .reference-workspace-login .error-banner { max-width: 460px; margin: 16px auto; }
+
+/* The same reference coin-fill transition serves workspace routes and login. */
+:root :is(.workspace-shell.reference-workspace, .reference-workspace-login) .route-loader { position: fixed; inset: 0; z-index: 200; display: grid; place-items: center; padding: 24px; animation: ref-route-loader-in .18s both; }
+:root :is(.workspace-shell.reference-workspace, .reference-workspace-login) .route-loader-card { position: relative; display: flex; flex-direction: column; justify-content: center; align-items: center; width: min(54vw, 180px); min-height: 174px; padding: 18px; overflow: hidden; background: #f9fbf6e6; border: 1px solid #ffffffe6; border-radius: 24px; box-shadow: 0 20px 55px #18302038, inset 0 1px #fff; backdrop-filter: blur(22px) saturate(135%); -webkit-backdrop-filter: blur(22px) saturate(135%); animation: ref-loader-card-arrive .3s cubic-bezier(.2,.8,.2,1) both; }
+:root :is(.workspace-shell.reference-workspace, .reference-workspace-login)[data-client-theme="dark"] .route-loader-card { background: #21352aed; border-color: #50634c88; box-shadow: 0 20px 55px #00000038, inset 0 1px #50634c55; }
+:root :is(.workspace-shell.reference-workspace, .reference-workspace-login) .route-loader-card::before { content: ''; position: absolute; top: -120px; right: -80px; width: 180px; height: 180px; border-radius: 50%; background: #cce2b461; }
+:root :is(.workspace-shell.reference-workspace, .reference-workspace-login) .route-animation { z-index: 1; position: relative; width: 116px; height: 116px; }
+:root :is(.workspace-shell.reference-workspace, .reference-workspace-login) .route-animation svg { width: 100%; display: block; overflow: visible; }
+:root :is(.workspace-shell.reference-workspace, .reference-workspace-login) .coin-paper { fill: #f6efd9; }
+:root :is(.workspace-shell.reference-workspace, .reference-workspace-login) .coin-crayon { fill: none; stroke: #d5a13d; stroke-width: 21px; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1px; animation: ref-crayon-fill .58s linear forwards; }
+:root :is(.workspace-shell.reference-workspace, .reference-workspace-login) .coin-rim { fill: none; stroke: #f4d077; stroke-width: 6px; filter: drop-shadow(0 8px 10px #98671e33); }
+:root :is(.workspace-shell.reference-workspace, .reference-workspace-login) .route-runner { fill: #81571c; opacity: .65; filter: drop-shadow(0 0 3px #764b1073); animation: ref-runner-vanish .1s .57s forwards; }
+:root :is(.workspace-shell.reference-workspace, .reference-workspace-login) .coin-stamp { display: grid; place-items: center; position: absolute; inset: 0; opacity: 0; color: #754d16; animation: ref-coin-stamp-in .24s cubic-bezier(.18,.82,.24,1.2) .52s forwards; }
+:root :is(.workspace-shell.reference-workspace, .reference-workspace-login) .coin-stamp::after { content: ''; position: absolute; border: 1px dashed #6c451166; border-radius: 50%; width: 65px; height: 65px; }
+:root :is(.workspace-shell.reference-workspace, .reference-workspace-login) .coin-stamp span { position: relative; z-index: 1; color: #754d16; text-shadow: 0 1px #ffffff73; font-size: 26px; font-weight: 700; }
+
+/* Entrance motion uses reference curves. Renders of busy/forms keep DOM identity. */
+:root .workspace-shell.reference-workspace .wb-view-enter { animation: wb-view-enter .42s var(--wb-ease) both; }
+:root .workspace-shell.reference-workspace :is(.wb-overview, .wb-metrics) > :is(.wb-metric-card, .wb-overview-card) { animation: wb-card-enter .42s var(--wb-ease) both; animation-delay: calc(var(--wb-index, 0) * 55ms); }
+:root .workspace-shell.reference-workspace :is(.wb-card-grid, .inventory-grid, .review-list) > :is(.wb-record, .inventory-card, .review-card) { animation: wb-card-enter .42s var(--wb-ease) both; }
+:root .workspace-shell.reference-workspace :is(.wb-card-grid, .inventory-grid, .review-list) > :nth-child(2) { animation-delay: 55ms; }
+:root .workspace-shell.reference-workspace :is(.wb-card-grid, .inventory-grid, .review-list) > :nth-child(3) { animation-delay: 110ms; }
+:root .workspace-shell.reference-workspace :is(.wb-card-grid, .inventory-grid, .review-list) > :nth-child(4) { animation-delay: 165ms; }
+@keyframes wb-view-enter { from { opacity: 0; transform: translateY(16px) scale(.99); } to { opacity: 1; transform: none; } }
+@keyframes wb-card-enter { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+@keyframes wb-dialog-enter { from { opacity: 0; transform: translateY(21px) scale(.97); } to { opacity: 1; transform: none; } }
+@keyframes wb-water-rise { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); } }
+@keyframes wb-data-wave { 0%,100% { transform: translateX(-3%) rotate(-2deg); } 50% { transform: translateX(3%) rotate(2deg); } }
+@keyframes wb-water-bubbles { 0%,100% { opacity: .35; transform: translateY(5px); } 50% { opacity: .85; transform: translateY(-7px); } }
+
+@media (min-width: 981px) and (max-width: 1180px) {
+  :root .workspace-shell.reference-workspace .sidebar { width: 218px; padding: 26px 15px 18px; }
+  :root .workspace-shell.reference-workspace .main-shell { width: calc(100% - 218px); margin-left: 218px; }
+  :root .workspace-shell.reference-workspace .wb-overview-card { padding: 18px; }
+  :root .workspace-shell.reference-workspace :is(.inventory-grid, .coupon-grid) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  :root .workspace-shell.reference-workspace .toast { left: calc(50% + 109px); }
+}
+@media (max-width: 980px) {
+  :root .workspace-shell.reference-workspace .sidebar { position: sticky; inset: auto; top: 0; width: 100%; padding: calc(15px + env(safe-area-inset-top)) calc(20px + env(safe-area-inset-right)) 10px calc(20px + env(safe-area-inset-left)); display: flex; flex-direction: column; gap: 12px; border-right: 0; border-bottom: 1px solid var(--line); overflow: visible; background: var(--wb-glass); }
+  :root .workspace-shell.reference-workspace .sidebar .brand { padding: 0; font-size: 21px; }
+  :root .workspace-shell.reference-workspace .sidebar .brand-symbol { width: 36px; height: 36px; border-radius: 12px; }
+  :root .workspace-shell.reference-workspace .sidebar :is(.mall-switch, .nav-caption, .sidebar-footer, .sidebar-role) { display: none; }
+  :root .workspace-shell.reference-workspace .sidebar > nav { display: flex; width: 100%; max-width: 100%; gap: 5px; overflow-x: auto; overflow-y: hidden; padding: 2px 0 3px; overscroll-behavior-x: contain; scrollbar-width: none; }
+  :root .workspace-shell.reference-workspace .sidebar > nav::-webkit-scrollbar { display: none; }
+  :root .workspace-shell.reference-workspace .nav-item { flex: 0 0 auto; width: auto; gap: 7px; font-size: 11px; padding: 10px 12px; min-height: 38px; border-radius: 12px; white-space: nowrap; }
+  :root .workspace-shell.reference-workspace .nav-item svg { width: 16px; height: 16px; }
+  :root .workspace-shell.reference-workspace .nav-item.active::before { display: none; }
+  :root .workspace-shell.reference-workspace .nav-item:hover { transform: none; }
+  :root .workspace-shell.reference-workspace .main-shell { width: 100%; margin-left: 0; min-height: calc(100dvh - 115px); }
+  :root .workspace-shell.reference-workspace .topbar { position: relative; top: auto; height: auto; min-height: 59px; padding: 13px calc(21px + env(safe-area-inset-right)) 13px calc(21px + env(safe-area-inset-left)); flex-wrap: wrap; gap: 10px; z-index: 25; }
+  :root .workspace-shell.reference-workspace .breadcrumb { display: flex; gap: 8px; font-size: 11px; }
+  :root .workspace-shell.reference-workspace .topbar-actions { margin-left: auto; gap: 9px; }
+  :root .workspace-shell.reference-workspace .top-help { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; padding: 8px; color: var(--green); background: var(--wb-field); border: 1px solid var(--line); border-radius: 50%; }
+  :root .workspace-shell.reference-workspace .top-help span { display: none; }
+  :root .workspace-shell.reference-workspace .main-shell > main { padding: 26px calc(22px + env(safe-area-inset-right)) calc(32px + env(safe-area-inset-bottom)) calc(22px + env(safe-area-inset-left)); }
+  :root :is(.workspace-shell.reference-workspace, .reference-workspace-login) :is(input:not([type="checkbox"]):not([type="radio"]):not([type="file"]), select, textarea) { font-size: 16px; }
+  :root .workspace-shell.reference-workspace :is(.wb-overview, .wb-metrics) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  :root .workspace-shell.reference-workspace :is(.inventory-grid, .coupon-grid) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  :root .workspace-shell.reference-workspace .redeem-layout { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+  :root .workspace-shell.reference-workspace .toast { left: 50%; bottom: max(20px, env(safe-area-inset-bottom)); }
+  :root .workspace-shell.reference-workspace .scanner-card { scroll-margin-top: 128px; }
+}
+@media (max-width: 640px) {
+  :root .workspace-shell.reference-workspace .sidebar { padding: calc(13px + env(safe-area-inset-top)) calc(16px + env(safe-area-inset-right)) 8px calc(16px + env(safe-area-inset-left)); gap: 10px; }
+  :root .workspace-shell.reference-workspace .topbar { padding: 11px calc(17px + env(safe-area-inset-right)) 11px calc(17px + env(safe-area-inset-left)); min-height: 55px; }
+  :root .workspace-shell.reference-workspace .topbar-actions { gap: 7px; }
+  :root .workspace-shell.reference-workspace .demo-label { font-size: 8px; padding: 4px 7px; }
+  :root .workspace-shell.reference-workspace .topbar .icon-button { width: 34px; height: 34px; }
+  :root .workspace-shell.reference-workspace .top-avatar { display: none; }
+  :root .workspace-shell.reference-workspace .main-shell > main { padding: 24px calc(16px + env(safe-area-inset-right)) calc(28px + env(safe-area-inset-bottom)) calc(16px + env(safe-area-inset-left)); }
+  :root .workspace-shell.reference-workspace .page-heading { gap: 13px; flex-wrap: wrap; margin-bottom: 21px; }
+  :root .workspace-shell.reference-workspace .page-heading h1 { font-size: 25px; }
+  :root .workspace-shell.reference-workspace .page-heading p { font-size: 11px; }
+  :root .workspace-shell.reference-workspace .staff-current { gap: 8px; font-size: 10px; padding: 10px; }
+  :root .workspace-shell.reference-workspace .staff-current > span:nth-child(2) { width: 100%; order: 3; }
+  :root .workspace-shell.reference-workspace .workspace-logout { margin-left: auto; font-size: 10px; }
+  :root .workspace-shell.reference-workspace .tabs { border-radius: 15px; margin-bottom: 18px; }
+  :root .workspace-shell.reference-workspace .tabs button { padding: 9px 12px; font-size: 11px; min-height: 37px; }
+  :root .workspace-shell.reference-workspace :is(.wb-panel, .review-card, .published-list, .activity-log, .merchant-info, .redeem-form) { padding: 19px; border-radius: 21px; }
+  :root .workspace-shell.reference-workspace :is(.wb-metric-card, .wb-overview-card, .wb-metrics > div) { padding: 17px; border-radius: 19px; gap: 7px; }
+  :root .workspace-shell.reference-workspace :is(.wb-overview, .wb-metrics) { gap: 11px; margin: 18px 0; }
+  :root .workspace-shell.reference-workspace :is(.wb-metric-card, .wb-overview-card, .wb-metrics > div) strong { font-size: 25px; }
+  :root .workspace-shell.reference-workspace :is(.wb-metric-icon, .wb-overview-icon) { width: 35px; height: 35px; border-radius: 12px; }
+  :root .workspace-shell.reference-workspace .wb-metric-label { font-size: 11px; }
+  :root .workspace-shell.reference-workspace .wb-metric-note { font-size: 11px; }
+  :root .workspace-shell.reference-workspace .wb-rate-card { grid-template-columns: 35px minmax(0, 1fr) auto; column-gap: 11px; row-gap: 3px; padding: 17px; }
+  :root .workspace-shell.reference-workspace .wb-rate-card strong { font-size: 23px; }
+  :root .workspace-shell.reference-workspace .wb-rate-card .wb-metric-label { font-size: 11px; }
+  :root .workspace-shell.reference-workspace .wb-fields { grid-template-columns: minmax(0, 1fr); gap: 15px; }
+  :root .workspace-shell.reference-workspace .wb-facts { grid-template-columns: minmax(0, 1fr); }
+  :root .workspace-shell.reference-workspace .wb-heading > .wb-actions { width: 100%; }
+  :root .workspace-shell.reference-workspace .wb-search { width: 100%; }
+  :root .workspace-shell.reference-workspace .wb-search .search-field { flex: 1; width: auto; }
+  :root .workspace-shell.reference-workspace .wb-pending-item { gap: 10px; padding: 15px; flex-wrap: wrap; }
+  :root .workspace-shell.reference-workspace .wb-pending-item > .outline-button { margin-left: auto; }
+  :root .workspace-shell.reference-workspace :is(.redeem-layout, .inventory-grid, .coupon-grid) { grid-template-columns: minmax(0, 1fr); gap: 18px; }
+  :root .workspace-shell.reference-workspace .merchant-info-grid { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  :root .workspace-shell.reference-workspace .merchant-info-heading { align-items: flex-start; gap: 12px; }
+  :root .workspace-shell.reference-workspace .merchant-info-heading > div { min-width: 0; }
+  :root .workspace-shell.reference-workspace .merchant-info-heading h2 { overflow-wrap: anywhere; }
+  :root .workspace-shell.reference-workspace .review-actions { gap: 8px; justify-content: flex-start; }
+  :root .workspace-shell.reference-workspace .review-actions > .text-button { margin-right: 0; }
+  :root .workspace-shell.reference-workspace .review-task-row > .review-task-actions { width: 100%; gap: 12px; }
+  :root .workspace-shell.reference-workspace .scanner-card { padding: 18px; }
+  :root .workspace-shell.reference-workspace .scanner-actions .outline-button { flex: 1 1 130px; font-size: 11px; }
+  :root .workspace-shell.reference-workspace .modal-backdrop { padding: 13px; }
+  :root .workspace-shell.reference-workspace .modal { border-radius: 22px; padding: 21px; max-height: 92dvh; }
+  :root .workspace-shell.reference-workspace .page-footer { margin: 0 17px; font-size: 9px; padding: 16px 0 22px; }
+  :root .reference-workspace-login.role-login-screen { padding: calc(18px + env(safe-area-inset-top)) calc(16px + env(safe-area-inset-right)) calc(35px + env(safe-area-inset-bottom)) calc(16px + env(safe-area-inset-left)); }
+  :root .reference-workspace-login > header { gap: 12px; }
+  :root .reference-workspace-login > header .brand { font-size: 21px; padding: 0; gap: 8px; }
+  :root .reference-workspace-login > header .brand-symbol { width: 37px; height: 37px; border-radius: 13px; }
+  :root .reference-workspace-login > header .outline-button { padding: 8px 11px; font-size: 10px; min-height: 36px; }
+  :root .reference-workspace-login .role-login-intro { margin: 29px auto 19px; padding: 24px 17px; border-radius: 23px; }
+  :root .reference-workspace-login .role-login-intro .eyebrow { font-size: 9px; }
+  :root .reference-workspace-login .role-login-intro p { font-size: 11px; }
+  :root .reference-workspace-login .player-login-card { padding: 23px 20px; border-radius: 23px; }
+  :root .reference-workspace-login .player-login-card :is(input, select) { font-size: 16px; }
+}
+@media (max-width: 359px) {
+  :root .workspace-shell.reference-workspace .sidebar { padding-left: calc(12px + env(safe-area-inset-left)); padding-right: calc(12px + env(safe-area-inset-right)); }
+  :root .workspace-shell.reference-workspace .main-shell > main { padding-left: calc(12px + env(safe-area-inset-left)); padding-right: calc(12px + env(safe-area-inset-right)); }
+  :root .workspace-shell.reference-workspace .topbar { padding-left: calc(13px + env(safe-area-inset-left)); padding-right: calc(13px + env(safe-area-inset-right)); }
+  :root .workspace-shell.reference-workspace .demo-label { display: none; }
+  :root .workspace-shell.reference-workspace :is(.wb-panel, .review-card, .published-list, .activity-log, .merchant-info, .redeem-form) { padding: 16px; }
+  :root .workspace-shell.reference-workspace :is(.wb-metric-card, .wb-overview-card, .wb-metrics > div) { padding: 14px; }
+  :root .workspace-shell.reference-workspace :is(.wb-metric-card, .wb-overview-card, .wb-metrics > div) strong { font-size: 22px; }
+  :root .workspace-shell.reference-workspace :is(.gold-button, .outline-button) { padding-left: 12px; padding-right: 12px; }
+  :root .reference-workspace-login > header .brand .brand-english { font-size: 9px; }
+}
+
+/* A landscape phone or reduced keyboard viewport keeps the navigation usable
+   without spending a third of the visible height on the brand row. */
+@media (max-width: 980px) and (max-height: 480px) {
+  :root .workspace-shell.reference-workspace .sidebar { padding-top: calc(6px + env(safe-area-inset-top)); padding-bottom: 6px; gap: 0; }
+  :root .workspace-shell.reference-workspace .sidebar .brand { display: none; }
+  :root .workspace-shell.reference-workspace .scanner-card { scroll-margin-top: calc(68px + env(safe-area-inset-top)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root :is(.workspace-shell.reference-workspace, .reference-workspace-login),
+  :root :is(.workspace-shell.reference-workspace, .reference-workspace-login) *,
+  :root :is(.workspace-shell.reference-workspace, .reference-workspace-login) *::before,
+  :root :is(.workspace-shell.reference-workspace, .reference-workspace-login) *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}
+:root :is(.workspace-shell.reference-workspace, .reference-workspace-login)[data-reduce-motion="true"],
+:root :is(.workspace-shell.reference-workspace, .reference-workspace-login)[data-reduce-motion="true"] *,
+:root :is(.workspace-shell.reference-workspace, .reference-workspace-login)[data-reduce-motion="true"] *::before,
+:root :is(.workspace-shell.reference-workspace, .reference-workspace-login)[data-reduce-motion="true"] *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }

@@ -1,0 +1,271 @@
+/* Preserve the reward dialog's scrolling, with a rounded, inset scrollbar. */
+/* A zero-height sticky anchor keeps the original content geometry while the
+   close control stays reachable in both long reward and treasure dialogs. */
+:root .client-shell[data-client-theme].reference-client .reference-card-modal .reference-card-close-anchor {
+  position: sticky;
+  top: 0;
+  z-index: 6;
+  width: 100%;
+  height: 0;
+  min-height: 0;
+  pointer-events: none;
+}
+:root .client-shell[data-client-theme].reference-client .reference-card-modal .reference-card-close-anchor > .modal-close {
+  pointer-events: auto;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+}
+:root .client-shell[data-client-theme].reference-client .reference-card-modal .enlarged-coupon > .reference-card-close-anchor {
+  width: calc(100% + 2 * var(--reference-card-padding-inline));
+  margin: 0 calc(-1 * var(--reference-card-padding-inline));
+  top: 0;
+  transform: translateY(calc(-1 * var(--reference-card-padding-top)));
+}
+:root .client-shell[data-client-theme].reference-client .reference-card-modal.is-closing .reference-card-close-anchor > .modal-close {
+  pointer-events: none;
+}
+:root .client-shell.reference-client .reference-card-modal .enlarged-coupon {
+  --coupon-scroll-thumb: color-mix(in srgb, var(--client-soft-ink, #315b43) 68%, transparent);
+}
+
+/* Keep action labels readable when either the dialog narrows or text grows. */
+:root .client-shell[data-client-theme].reference-client .reference-card-modal .enlarged-coupon .share-actions {
+  display: flex;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+:root .client-shell[data-client-theme].reference-client .reference-card-modal .enlarged-coupon .share-actions > button {
+  flex: 1 1 10em;
+  min-width: min(100%, 10em);
+  max-width: 100%;
+  min-height: 44px;
+  line-height: 1.5;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+:root .client-shell[data-client-theme].reference-client .reference-card-modal .enlarged-coupon .share-actions > button > svg {
+  flex: none;
+}
+
+/* Draw the original corner arcs inside the card, so decoration never creates
+   extra horizontal or bottom scrolling space. */
+:root .client-shell.reference-client .reference-card-modal .enlarged-coupon::before,
+:root .client-shell.reference-client .reference-card-modal .enlarged-coupon::after {
+  border: 0;
+  border-radius: 0;
+  max-width: 100%;
+}
+
+:root .client-shell.reference-client .reference-card-modal .enlarged-coupon::before {
+  top: 0;
+  right: 0;
+  width: 160px;
+  height: 75px;
+  background: radial-gradient(circle at calc(100% - 40px) -45px,
+    transparent 119px, #4b6b531f 119px 120px, transparent 120px);
+}
+
+:root .client-shell.reference-client .reference-card-modal .enlarged-coupon::after {
+  bottom: 0;
+  left: 0;
+  width: 115px;
+  height: 60px;
+  background: radial-gradient(circle at 20px calc(100% + 35px),
+    transparent 94px, #4b6b531f 94px 95px, transparent 95px);
+}
+
+@supports selector(::-webkit-scrollbar) {
+  :root .client-shell.reference-client .reference-card-modal .enlarged-coupon,
+  :root .client-shell.reference-client .reference-card-modal .enlarged-coupon .feedback-panel > textarea {
+    /* Chromium standard non-auto values override the WebKit part geometry. */
+    scrollbar-width: auto;
+    scrollbar-color: auto;
+  }
+  :root .client-shell.reference-client .reference-card-modal .enlarged-coupon::-webkit-scrollbar,
+  :root .client-shell.reference-client .reference-card-modal .enlarged-coupon .feedback-panel > textarea::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+    background: transparent;
+  }
+  :root .client-shell.reference-client .reference-card-modal .enlarged-coupon::-webkit-scrollbar-track,
+  :root .client-shell.reference-client .reference-card-modal .enlarged-coupon .feedback-panel > textarea::-webkit-scrollbar-track {
+    margin-top: 22px;
+    margin-bottom: 22px;
+    border-radius: 99px;
+    background: transparent;
+  }
+  :root .client-shell.reference-client .reference-card-modal .enlarged-coupon .feedback-panel > textarea::-webkit-scrollbar-track {
+    margin-top: 8px;
+    margin-bottom: 8px;
+  }
+  :root .client-shell.reference-client .reference-card-modal .enlarged-coupon::-webkit-scrollbar-track-piece,
+  :root .client-shell.reference-client .reference-card-modal .enlarged-coupon .feedback-panel > textarea::-webkit-scrollbar-track-piece {
+    background: transparent;
+  }
+  :root .client-shell.reference-client .reference-card-modal .enlarged-coupon::-webkit-scrollbar-thumb,
+  :root .client-shell.reference-client .reference-card-modal .enlarged-coupon .feedback-panel > textarea::-webkit-scrollbar-thumb {
+    min-height: 32px;
+    border: 1px solid transparent;
+    border-radius: 99px;
+    background-color: var(--coupon-scroll-thumb);
+    background-clip: padding-box;
+  }
+  :root .client-shell.reference-client .reference-card-modal .enlarged-coupon::-webkit-scrollbar-button,
+  :root .client-shell.reference-client .reference-card-modal .enlarged-coupon .feedback-panel > textarea::-webkit-scrollbar-button {
+    display: none;
+    width: 0;
+    height: 0;
+    border: 0;
+    background: transparent;
+  }
+  :root .client-shell.reference-client .reference-card-modal .enlarged-coupon::-webkit-scrollbar-corner,
+  :root .client-shell.reference-client .reference-card-modal .enlarged-coupon .feedback-panel > textarea::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  :root .client-shell.reference-client .reference-card-modal .enlarged-coupon,
+  :root .client-shell.reference-client .reference-card-modal .enlarged-coupon .feedback-panel > textarea {
+    scrollbar-width: thin;
+    scrollbar-color: var(--client-soft-ink, #315b43) transparent;
+  }
+}
+
+:root .client-shell.reference-client .reference-card-modal .enlarged-coupon .feedback-panel {
+  display: grid;
+  gap: 12px;
+  width: 100%;
+  min-width: 0;
+  margin: 24px 0 0;
+  padding: 16px;
+  border: 1px solid var(--client-accent-line, var(--line));
+  border-radius: 16px;
+  background: var(--client-soft, var(--bg));
+  color: var(--text);
+  text-align: left;
+}
+
+:root .client-shell.reference-client .reference-card-modal .enlarged-coupon .feedback-panel h3 {
+  margin: 0;
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+
+:root .client-shell.reference-client .reference-card-modal .enlarged-coupon .feedback-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+}
+
+:root .client-shell.reference-client .reference-card-modal .enlarged-coupon .feedback-options > button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 0;
+  max-width: 100%;
+  min-height: 44px;
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+:root .client-shell.reference-client .reference-card-modal .enlarged-coupon .feedback-options > button.selected {
+  border-color: #183b2b;
+  background: #183b2b;
+  color: #f8fcf5;
+}
+
+:root .client-shell.reference-client .reference-card-modal .enlarged-coupon .feedback-panel > :is(input, textarea) {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  min-height: 48px;
+  margin: 0;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.7;
+  box-shadow: none;
+  overflow-wrap: anywhere;
+}
+
+:root .client-shell.reference-client .reference-card-modal .enlarged-coupon .feedback-panel > textarea {
+  min-height: 100px;
+  resize: vertical;
+  white-space: pre-wrap;
+}
+
+:root .client-shell.reference-client .reference-card-modal .enlarged-coupon .feedback-panel > :is(input, textarea)::placeholder {
+  color: var(--muted);
+  opacity: 1;
+}
+
+:root .client-shell.reference-client .reference-card-modal .enlarged-coupon .feedback-panel > .text-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  justify-self: start;
+  gap: 8px;
+  width: fit-content;
+  max-width: 100%;
+  min-height: 44px;
+  margin: 2px 0 0;
+  padding: 10px 14px;
+  border: 1px solid var(--client-accent-line, var(--line));
+  border-radius: 11px;
+  background: var(--surface);
+  color: var(--client-soft-ink, var(--text));
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+:root .client-shell.reference-client .reference-card-modal .enlarged-coupon .feedback-panel > .text-button > svg {
+  flex: none;
+}
+
+:root .client-shell.reference-client .reference-card-modal .enlarged-coupon .feedback-panel :is(button, input, textarea):focus-visible {
+  outline: 2px solid var(--client-soft-ink, var(--text));
+  outline-offset: 2px;
+}
+
+@media (hover: hover) {
+  :root .client-shell.reference-client .reference-card-modal .enlarged-coupon .feedback-options > button:not(.selected):hover,
+  :root .client-shell.reference-client .reference-card-modal .enlarged-coupon .feedback-panel > .text-button:hover {
+    background: var(--client-soft, var(--bg));
+  }
+  :root .client-shell.reference-client .reference-card-modal .enlarged-coupon .feedback-options > button.selected:hover {
+    background: #254f39;
+    color: #f8fcf5;
+  }
+}
+
+@media (max-width: 600px) {
+  :root .client-shell.reference-client .reference-card-modal .enlarged-coupon .feedback-panel > :is(input, textarea) {
+    font-size: 16px;
+  }
+}

@@ -1,0 +1,52 @@
+/* The shared client card rules own outer padding, borders and theme colors. */
+:root .client-shell[data-client-theme].reference-client .experience-settings > h2 {
+  margin: 12px 0 10px;
+  overflow-wrap: anywhere;
+}
+:root .client-shell[data-client-theme].reference-client .experience-settings .preference-row > div:first-child {
+  flex: 1 1 0;
+  min-width: 0;
+}
+:root .client-shell[data-client-theme].reference-client .experience-settings .preference-row p {
+  margin: 8px 0 0;
+  overflow-wrap: anywhere;
+}
+:root .client-shell[data-client-theme].reference-client .experience-settings .preference-row:has(> .preference-theme) {
+  flex-wrap: wrap;
+}
+:root .client-shell[data-client-theme].reference-client .experience-settings .preference-row:has(> .preference-theme) > div:first-child {
+  flex-basis: 180px;
+}
+:root .client-shell[data-client-theme].reference-client .experience-settings .preference-theme {
+  display: flex;
+  flex: 0 1 auto;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-width: 0;
+  max-width: 100%;
+}
+:root .client-shell[data-client-theme].reference-client .experience-settings .preference-theme > button {
+  min-width: 44px;
+  min-height: 44px;
+}
+:root .client-shell[data-client-theme].reference-client .experience-settings .preference-switch {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 58px;
+  height: 44px;
+  min-width: 58px;
+  min-height: 44px;
+  flex: 0 0 58px;
+}
+:root .client-shell[data-client-theme].reference-client .experience-settings .preference-switch > span {
+  flex: 0 0 22px;
+}
+:root .client-shell[data-client-theme].reference-client .experience-settings :is(.preference-switch, .preference-theme > button):focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+@media (prefers-reduced-motion: reduce) {
+  :root .client-shell[data-client-theme].reference-client .experience-settings .preference-switch > span { transition: none; }
+}
+:root .client-shell[data-client-theme].reference-client[data-reduce-motion="true"] .experience-settings .preference-switch > span { transition: none; }

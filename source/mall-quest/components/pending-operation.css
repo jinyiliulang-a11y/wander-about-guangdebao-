@@ -1,0 +1,10 @@
+:root :is(.client-shell[data-client-theme].reference-client, .workspace-shell.reference-workspace) .pending-operation {
+  display: grid; gap: 12px; min-width: 0; padding: 18px; margin: 16px 0;
+  color: var(--text); background: var(--surface); border: 1px solid var(--line); border-radius: 18px;
+}
+:root :is(.client-shell[data-client-theme].reference-client, .workspace-shell.reference-workspace) .pending-operation :is(strong,p) {
+  margin: 0; color: var(--text); line-height: 1.7; overflow-wrap: anywhere;
+}
+:root :is(.client-shell[data-client-theme].reference-client, .workspace-shell.reference-workspace) .pending-operation > div {
+  display: flex; flex-wrap: wrap; gap: 10px; min-width: 0;
+}

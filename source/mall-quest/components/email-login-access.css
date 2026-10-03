@@ -1,0 +1,10 @@
+:root :is(.client-shell[data-client-theme].reference-client.auth-shell,.reference-workspace-login) .account-access .email-code-fields { display:grid; grid-template-columns:minmax(0,1fr); gap:18px; min-width:0; }
+:root :is(.client-shell[data-client-theme].reference-client.auth-shell,.reference-workspace-login) .account-access .email-code-row { display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:end; gap:10px; min-width:0; }
+:root :is(.client-shell[data-client-theme].reference-client.auth-shell,.reference-workspace-login) .account-access .email-code-send { min-height:50px; max-width:160px; padding:12px 14px; white-space:normal; }
+:root :is(.client-shell[data-client-theme].reference-client.auth-shell,.reference-workspace-login) .account-access :is(.email-code-error,.email-code-notice) { padding:13px 15px; border:1px solid var(--line,#dfe5db); border-radius:14px; font-size:13px; line-height:1.8; overflow-wrap:anywhere; color:var(--text,#17251c); background:var(--surface,#fff); }
+:root :is(.client-shell[data-client-theme].reference-client.auth-shell,.reference-workspace-login) .account-access .email-code-error { color:var(--danger,#ac4345); }
+:root :is(.client-shell[data-client-theme="dark"].reference-client.auth-shell,.reference-workspace-login[data-client-theme="dark"]) .account-access .email-code-error { color:#ffb6b3; }
+@media(max-width:420px) {
+  :root :is(.client-shell[data-client-theme].reference-client.auth-shell,.reference-workspace-login) .account-access .email-code-row { grid-template-columns:minmax(0,1fr); }
+  :root :is(.client-shell[data-client-theme].reference-client.auth-shell,.reference-workspace-login) .account-access .email-code-send { width:100%; max-width:none; }
+}

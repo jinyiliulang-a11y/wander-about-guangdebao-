@@ -1,0 +1,279 @@
+/* Client skin adapted from the supplied coin-hunt UI; no mock business state. */
+:root .client-shell[data-client-theme] {
+  color-scheme: light;
+  --bg: #f6f7f2;
+  --sidebar: #fff;
+  --surface: #fff;
+  --line: #e2e7de;
+  --muted: #68736c;
+  --text: #172b20;
+  --gold: #315b43;
+  --green: #477656;
+  --client-soft: #edf2e7;
+  --client-accent: #183b2b;
+  --client-map: #e7edde;
+  --client-shadow: 0 12px 32px #29372e0c;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100dvh;
+  font-family: "Segoe UI", "Microsoft YaHei", "PingFang SC", sans-serif;
+}
+:root .client-shell[data-client-theme][data-client-theme="dark"] {
+  color-scheme: dark;
+  --bg: #15221c;
+  --sidebar: #1b2c23;
+  --surface: #21352a;
+  --line: #3a4e41;
+  --muted: #b0beb3;
+  --text: #f0f5ec;
+  --gold: #bdd2a4;
+  --green: #b6d5aa;
+  --client-soft: #293e30;
+  --client-accent: #a9c993;
+  --client-map: #273e2c;
+  --client-shadow: 0 12px 32px #00000016;
+}
+:root .client-shell[data-client-theme] :is(h1,h2,h3,h4,strong,b,.field-label) { color: var(--text); }
+:root .client-shell[data-client-theme] :is(p,small) { overflow-wrap: anywhere; }
+:root .client-shell[data-client-theme] small { font-size: 12px; color: var(--muted); }
+:root .client-shell[data-client-theme] :is(.eyebrow,.tiny-label,.mini-label,.muted,.text-button,.breadcrumb,.breadcrumb strong) { color: var(--muted); }
+:root .client-shell[data-client-theme] :is(input,textarea,select) { border-color: var(--line); color: var(--text); background: var(--surface); border-radius: 14px; }
+:root .client-shell[data-client-theme] :is(input,textarea)::placeholder { color: var(--muted); opacity: .8; }
+:root .client-shell[data-client-theme] :is(.surface,.panel,.empty-state) { background: var(--surface); border-color: var(--line); border-radius: 24px; box-shadow: var(--client-shadow); }
+:root .client-shell[data-client-theme] .gold-button { background: #183b2b; color: #fff; border: 1px solid #183b2b; border-radius: 15px; min-height: 46px; box-shadow: none; }
+:root .client-shell[data-client-theme] .gold-button:hover:not(:disabled) { background: #214d39; filter: none; transform: translateY(-1px); }
+:root .client-shell[data-client-theme][data-client-theme="dark"] .gold-button { background: #bdd2a4; border-color: #bdd2a4; color: #193522; }
+:root .client-shell[data-client-theme] .outline-button { background: var(--surface); color: var(--text); border-color: var(--line); border-radius: 14px; }
+:root .client-shell[data-client-theme] .outline-button:hover:not(:disabled) { background: var(--client-soft); filter: none; }
+:root .client-shell[data-client-theme] :is(.icon-button,.back-button) { color: var(--gold); border-color: var(--line); background: var(--surface); border-radius: 50%; min-width: 40px; min-height: 40px; }
+:root .client-shell[data-client-theme] :is(.icon-button,.back-button):hover { background: var(--client-soft); }
+:root .client-shell[data-client-theme] .back-button > span { background: var(--surface); color: var(--gold); border: 0; }
+:root .client-shell[data-client-theme] .text-button { font-size: 13px; min-height: 40px; }
+:root .client-shell[data-client-theme] .danger-button { color: #ab4345; }
+:root .client-shell[data-client-theme][data-client-theme="dark"] .danger-button { color: #ffb6b3; }
+:root .client-shell[data-client-theme] .pill { background: var(--client-soft); color: var(--muted); border-color: var(--line); border-radius: 20px; font-size: 12px; }
+:root .client-shell[data-client-theme] :is(.pill.gold,.pill.green) { background: #eaf2df; border-color: #dce8d1; color: #3b6044; }
+:root .client-shell[data-client-theme][data-client-theme="dark"] :is(.pill.gold,.pill.green) { background: #314e36; border-color: #466c44; color: #d4e8c0; }
+:root .client-shell[data-client-theme] :is(.tabs,.role-toggle) { background: var(--client-soft); border-radius: 16px; border-color: var(--line); padding: 5px; }
+:root .client-shell[data-client-theme] :is(.tabs button,.role-toggle button) { color: var(--muted); border-radius: 12px; min-height: 42px; }
+:root .client-shell[data-client-theme] :is(.tabs button.active,.role-toggle button.active) { color: var(--gold); background: var(--surface); box-shadow: 0 3px 10px #29432a08; }
+:root .client-shell[data-client-theme] .tabs button span { background: var(--client-soft); color: var(--gold); }
+:root .client-shell[data-client-theme] :is(.notice,.error-banner,.inline-error,.verify-hint) { border-radius: 14px; }
+:root .client-shell[data-client-theme] .notice { background: var(--client-soft); border-color: var(--line); color: var(--gold); }
+:root .client-shell[data-client-theme] .error-banner { background: #fff0e9; color: #8a402d; border-color: #ebc8b8; }
+:root .client-shell[data-client-theme][data-client-theme="dark"] .error-banner { background: #492e28; color: #f3bfaa; }
+:root .client-shell[data-client-theme] .inline-error { color: #ab4345; }
+:root .client-shell[data-client-theme] .sidebar { display: none; }
+:root .client-shell[data-client-theme] .main-shell { margin-left: 0; padding-bottom: 112px; max-width: 1080px; margin-inline: auto; }
+:root .client-shell[data-client-theme].without-mobile-nav .main-shell { padding-bottom: 20px; }
+:root .client-shell[data-client-theme] .main-shell > main { max-width: none; padding: 20px 28px 28px; }
+:root .client-shell[data-client-theme] .topbar { height: 88px; padding: 24px 28px 16px; background: var(--bg); border: 0; position: relative; }
+:root .client-shell[data-client-theme] .breadcrumb { display: none; }
+:root .client-shell[data-client-theme] .mobile-brand { display: flex; align-items: center; gap: 10px; color: var(--text); font-size: 20px; font-weight: 700; }
+:root .client-shell[data-client-theme] .mobile-brand > svg { color: var(--gold); }
+:root .client-shell[data-client-theme] :is(.brand,.mobile-brand,.entry-header) .brand-english { display: block; font-size: 11px; font-weight: 400; line-height: 1.35; letter-spacing: 1px; color: var(--muted); text-transform: none; margin-top: 3px; }
+:root .client-shell[data-client-theme] .topbar-actions { gap: 12px; }
+:root .client-shell[data-client-theme] .top-help { color: var(--muted); }
+:root .client-shell[data-client-theme] .top-avatar { display: grid; background: #d8e8c9; color: #385d3f; border-radius: 14px; width: 40px; height: 40px; }
+:root .client-shell[data-client-theme] .demo-label { border: 0; background: var(--client-soft); color: var(--muted); border-radius: 8px; padding: 4px 8px; font-size: 12px; }
+:root .client-shell[data-client-theme] .page-heading { margin-bottom: 24px; gap: 14px; }
+:root .client-shell[data-client-theme] .heading-main { gap: 12px; min-width: 0; }
+:root .client-shell[data-client-theme] .eyebrow { font-size: 11px; letter-spacing: 1.7px; margin-bottom: 6px; }
+:root .client-shell[data-client-theme] .page-heading h1 { font-size: 28px; font-weight: 650; letter-spacing: -.7px; }
+:root .client-shell[data-client-theme] .heading-star { color: #ddad5b; }
+:root .client-shell[data-client-theme] .page-heading p { font-size: 14px; line-height: 1.7; }
+:root .client-shell[data-client-theme] .page-footer { padding: 18px 28px; color: var(--muted); border-color: var(--line); font-size: 12px; }
+:root .client-shell[data-client-theme] .mobile-nav { display: flex; width: min(380px, calc(100% - 36px)); position: fixed; left: 50%; right: auto; transform: translateX(-50%); bottom: max(18px,env(safe-area-inset-bottom)); z-index: 50; background: color-mix(in srgb,var(--surface) 85%,transparent); border: 1px solid color-mix(in srgb,var(--line) 70%,transparent); border-radius: 29px; padding: 6px; justify-content: space-around; box-shadow: 0 18px 36px #243c2420; backdrop-filter: blur(20px); }
+:root .client-shell[data-client-theme] .mobile-nav button { flex: 1; min-width: 0; height: 61px; padding: 8px 5px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 4px; border-radius: 23px; font-size: 12px; color: var(--muted); }
+:root .client-shell[data-client-theme] .mobile-nav button.active { background: var(--surface); color: var(--gold); box-shadow: 0 4px 16px #29432a09; }
+:root .client-shell[data-client-theme] .explore-layout { grid-template-columns: minmax(0,1fr) 285px; gap: 22px; align-items: start; }
+:root .client-shell[data-client-theme] .map-panel { border: 0; border-radius: 27px; background: var(--surface); box-shadow: var(--client-shadow); }
+:root .client-shell[data-client-theme] .map-toolbar { background: var(--surface); border-color: var(--line); height: 60px; padding: 10px 16px; }
+:root .client-shell[data-client-theme] .floor-tabs { background: var(--client-soft); border-radius: 12px; }
+:root .client-shell[data-client-theme] .floor-tabs button { color: var(--muted); border-radius: 9px; }
+:root .client-shell[data-client-theme] .floor-tabs button.active { background: #183b2b; color: #fff; }
+:root .client-shell[data-client-theme][data-client-theme="dark"] .floor-tabs button.active { background: #bdd2a4; color: #193522; }
+:root .client-shell[data-client-theme] .map-meta { color: var(--muted); }
+:root .client-shell[data-client-theme] .map-canvas { background: var(--client-map); min-height: 345px; aspect-ratio: 1.45; }
+:root .client-shell[data-client-theme] .map-grid { background-image: linear-gradient(#92a58414 1px,transparent 1px),linear-gradient(90deg,#92a58414 1px,transparent 1px); background-size: 32px 32px; transform: rotate(-12deg) scale(1.3); }
+:root .client-shell[data-client-theme] .mall-plan svg { max-height: none; }
+:root .client-shell[data-client-theme] .mall-plan svg > path:first-of-type { fill: #f1f3e9; stroke: #c3d0b6; }
+:root .client-shell[data-client-theme] .mall-plan svg > g:not(.svg-zone) { fill: #d7e5c7; stroke: #b5c5a4; }
+:root .client-shell[data-client-theme] .mall-plan svg > path:nth-of-type(3) { fill: #bcd9d2; stroke: #9cc4ba; }
+:root .client-shell[data-client-theme] .mall-plan svg > path:nth-of-type(4) { fill: #dfeade; stroke: #9cb59a; }
+:root .client-shell[data-client-theme] .mall-plan svg > g[font-family] { fill: #77856a; stroke: none; font-size: 15px; }
+:root .client-shell[data-client-theme] .svg-zone circle:first-child { fill: #9aad7a14; stroke: #719360; }
+:root .client-shell[data-client-theme] .svg-zone circle:nth-child(2) { fill: #315b43; stroke: #fff; stroke-width: 4px; }
+:root .client-shell[data-client-theme] .svg-zone text { fill: #fff; }
+:root .client-shell[data-client-theme] .svg-zone:hover circle:first-child { fill: #71936030; }
+:root .client-shell[data-client-theme][data-client-theme="dark"] .mall-plan svg > path:first-of-type { fill: #2e4531; stroke: #577454; }
+:root .client-shell[data-client-theme][data-client-theme="dark"] .mall-plan svg > g:not(.svg-zone) { fill: #405e3d; stroke: #66875c; }
+:root .client-shell[data-client-theme][data-client-theme="dark"] .mall-plan svg > path:nth-of-type(3) { fill: #31584d; stroke: #6d9585; }
+:root .client-shell[data-client-theme][data-client-theme="dark"] .mall-plan svg > path:nth-of-type(4) { fill: #3e5b43; stroke: #77996a; }
+:root .client-shell[data-client-theme][data-client-theme="dark"] .mall-plan svg > g[font-family] { fill: #d2dfc7; }
+:root .client-shell[data-client-theme] .map-compass { color: var(--gold); }
+:root .client-shell[data-client-theme] .map-controls { background: var(--surface); border-color: var(--line); border-radius: 17px; right: 14px; bottom: 68px; box-shadow: var(--client-shadow); }
+:root .client-shell[data-client-theme] .map-controls button { color: var(--gold); width: 37px; height: 37px; }
+:root .client-shell[data-client-theme] .map-controls button + button { border-color: var(--line); }
+:root .client-shell[data-client-theme] .map-controls button:hover { background: var(--client-soft); }
+:root .client-shell[data-client-theme] .map-bottom { background: color-mix(in srgb,var(--surface) 82%,transparent); backdrop-filter: blur(10px); color: var(--muted); border-color: var(--line); font-size: 12px; }
+:root .client-shell[data-client-theme] .map-bottom span:first-child { color: var(--gold); }
+:root .client-shell[data-client-theme] .map-note { color: var(--muted); font-size: 12px; gap: 6px; flex-wrap: wrap; }
+:root .client-shell[data-client-theme] .map-note svg { color: var(--gold); }
+:root .client-shell[data-client-theme] .map-empty { background: var(--surface); color: var(--text); border-radius: 20px; min-width: 220px; }
+:root .client-shell[data-client-theme] .client-map-stats { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); padding: 20px 12px; background: var(--surface); border-radius: 0 0 24px 24px; margin: 12px 0 0; box-shadow: var(--client-shadow); }
+:root .client-shell[data-client-theme] .client-map-stats > div { display: grid; gap: 3px; text-align: center; }
+:root .client-shell[data-client-theme] .client-map-stats > div + div { border-left: 1px solid var(--line); }
+:root .client-shell[data-client-theme] .client-map-stats strong { font-size: 21px; font-weight: 650; }
+:root .client-shell[data-client-theme] .client-map-stats span { font-size: 12px; color: var(--muted); }
+:root .client-shell[data-client-theme] .quest-preview { display: flex; background: var(--surface); border-color: var(--line); border-radius: 26px; padding: 22px; box-shadow: var(--client-shadow); }
+:root .client-shell[data-client-theme] .preview-number { color: #d6ddcf; }
+:root .client-shell[data-client-theme] .quest-emblem { color: #315b43; background: #e6edd9; border-color: #d5e0c6; border-radius: 22px; box-shadow: none; }
+:root .client-shell[data-client-theme] .preview-clue { color: var(--muted); }
+:root .client-shell[data-client-theme] :is(.preview-meta,.preview-author,.reward-condition) { color: var(--muted); font-size: 12px; }
+:root .client-shell[data-client-theme] .reward-preview { background: var(--client-soft); border-color: var(--line); border-radius: 16px; }
+:root .client-shell[data-client-theme] .reward-preview > span { color: var(--gold); }
+:root .client-shell[data-client-theme] :is(.author-avatar,.log-icon) { color: var(--gold); background: var(--client-soft); }
+:root .client-shell[data-client-theme] .nearby-section { margin-top: 30px; }
+:root .client-shell[data-client-theme] .section-heading h2 { font-size: 19px; font-weight: 600; }
+:root .client-shell[data-client-theme] .section-heading h2 span { background: var(--client-soft); color: var(--gold); }
+:root .client-shell[data-client-theme] .section-heading p { color: var(--muted); font-size: 13px; }
+:root .client-shell[data-client-theme] .search-field { background: var(--surface); border-color: var(--line); border-radius: 15px; color: var(--muted); }
+:root .client-shell[data-client-theme] .search-field input { background: transparent; }
+:root .client-shell[data-client-theme] .quest-cards { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 14px; }
+:root .client-shell[data-client-theme] .quest-card { display: flex; gap: 16px; align-items: flex-start; background: var(--surface); border-color: var(--line); border-radius: 22px; padding: 16px; min-width: 0; box-shadow: 0 2px 8px #29372e03; text-align: left; }
+:root .client-shell[data-client-theme] .quest-card:hover { background: var(--surface); border-color: #aabfa0; transform: translateY(-2px); filter: none; }
+:root .client-shell[data-client-theme] .quest-card.selected { background: var(--surface); border-color: #99b58d; }
+:root .client-shell[data-client-theme] .quest-card-art { flex: 0 0 76px; height: 86px; display: grid; position: relative; place-items: center; border-radius: 18px; background: linear-gradient(135deg,#f5d496,#e9ae62); color: #705020; overflow: hidden; }
+:root .client-shell[data-client-theme] .quest-card-art::before { content: ""; border: 1px solid #ffffff70; border-radius: 50%; width: 62px; height: 62px; position: absolute; }
+:root .client-shell[data-client-theme] .quest-card-art > span { position: absolute; right: 13px; bottom: 11px; font-size: 17px; }
+:root .client-shell[data-client-theme] .quest-card-art.tone-1 { background: linear-gradient(135deg,#c7e3e0,#8cb9b3); color: #35585e; }
+:root .client-shell[data-client-theme] .quest-card-art.tone-2 { background: linear-gradient(135deg,#e5ecc7,#aac392); color: #496542; }
+:root .client-shell[data-client-theme] .quest-card-content { min-width: 0; flex: 1; }
+:root .client-shell[data-client-theme] .card-top { margin-bottom: 8px; gap: 8px; }
+:root .client-shell[data-client-theme] .quest-index { color: var(--muted); font-size: 12px; }
+:root .client-shell[data-client-theme] .quest-card h3 { font-size: 16px; line-height: 1.5; margin-bottom: 4px; }
+:root .client-shell[data-client-theme] .quest-card p { font-size: 12px; color: var(--muted); }
+:root .client-shell[data-client-theme] .card-reward { color: var(--gold); font-size: 13px; margin: 12px 0; }
+:root .client-shell[data-client-theme] .card-reward { border-color: var(--line); }
+:root .client-shell[data-client-theme] .card-bottom { flex-wrap: wrap; color: var(--muted); font-size: 12px; border-color: var(--line); gap: 5px; }
+:root .client-shell[data-client-theme] .task-meta { font-size: 12px; }
+:root .client-shell[data-client-theme] .list-empty { color: var(--muted); }
+:root .client-shell[data-client-theme] .modal-backdrop { background: #20332566; backdrop-filter: blur(7px); padding: 20px; }
+:root .client-shell[data-client-theme] .modal { color: var(--text); background: var(--surface); border-color: var(--line); border-radius: 27px; box-shadow: 0 24px 80px #183b2b30; max-height: min(90dvh,950px); }
+:root .client-shell[data-client-theme] .modal-head { border-color: var(--line); margin-bottom: 22px; }
+:root .client-shell[data-client-theme] .modal-head h2 { font-size: 20px; }
+:root .client-shell[data-client-theme] :is(.detail-summary,.discovery-content,.verify-form,.clue-item,.feedback-section,.share-option,.invitation-content) { color: var(--text); }
+:root .client-shell[data-client-theme] .detail-summary { background: var(--client-soft); border-color: var(--line); border-radius: 19px; }
+:root .client-shell[data-client-theme] :is(.detail-reward,.discovery-reward) { color: var(--gold); }
+:root .client-shell[data-client-theme] .clue-heading { color: var(--muted); }
+:root .client-shell[data-client-theme] .clue-item { background: var(--surface); border-color: var(--line); border-radius: 16px; }
+:root .client-shell[data-client-theme] .clue-item.open { background: var(--client-soft); border-color: #b5c8a8; }
+:root .client-shell[data-client-theme] .clue-number { color: var(--gold); background: var(--client-soft); border-color: var(--line); border-radius: 12px; }
+:root .client-shell[data-client-theme] .locked-clue .clue-number { background: var(--client-soft); color: var(--muted); }
+:root .client-shell[data-client-theme] .clue-item p { color: var(--muted); }
+:root .client-shell[data-client-theme] :is(.coupon-code,.share-preview,.share-tabs,.invitation-local-note) { background: var(--client-soft); color: var(--gold); border-color: var(--line); }
+:root .client-shell[data-client-theme] :is(.discovery-card,.feedback-form,.share-caption) { background: var(--surface); border-color: var(--line); }
+:root .client-shell[data-client-theme] .reward-art { display: grid; place-items: center; position: relative; overflow: hidden; background-image: linear-gradient(145deg,#e1ebc7,#93b887); color: #2b5239; min-height: 138px; isolation: isolate; }
+:root .client-shell[data-client-theme] .reward-art.tone-1 { background-image: linear-gradient(145deg,#d5ece8,#82b1b7); color: #335c68; }
+:root .client-shell[data-client-theme] .reward-art.tone-2 { background-image: linear-gradient(145deg,#f8dfab,#e8b071); color: #795120; }
+:root .client-shell[data-client-theme] .reward-art-orbit { position: absolute; width: 122px; height: 122px; border: 1px solid #ffffff90; border-radius: 50%; transform: rotate(-25deg); z-index: -1; }
+:root .client-shell[data-client-theme] .reward-art-orbit::before { content: ""; position: absolute; inset: 16px -18px; border: 1px solid #ffffff90; border-radius: 50%; }
+:root .client-shell[data-client-theme] .reward-art-symbol { display: grid; place-items: center; width: 78px; height: 78px; border-radius: 24px; background: #ffffff25; transform: rotate(-12deg); border: 1px solid #ffffff40; }
+:root .client-shell[data-client-theme] .reward-art-spark { position: absolute; top: 20px; right: 22px; font-size: 25px; }
+:root .client-shell[data-client-theme] .reward-art small { position: absolute; bottom: 12px; left: 8px; right: 8px; text-align: center; color: inherit; font-size: 9px; letter-spacing: .8px; opacity: .75; }
+:root .client-shell[data-client-theme] .discovery-card > .reward-art { aspect-ratio: 2; min-height: 180px; }
+:root .client-shell[data-client-theme] .share-tabs button.active { background: var(--surface); color: var(--gold); }
+:root .client-shell[data-client-theme] .invite-emblem { background: var(--client-soft); color: var(--gold); }
+:root .client-shell[data-client-theme] .toast { background: #183b2b; color: #fff; border-color: #567a58; border-radius: 16px; bottom: 110px; }
+:root .client-shell[data-client-theme].entry-screen { background: radial-gradient(ellipse at 15% 5%,#dfeacb55,transparent 45%),radial-gradient(ellipse at 90% 85%,#f3dfc450,transparent 40%),var(--bg); padding: 32px 5vw; }
+:root .client-shell[data-client-theme] .entry-header { color: var(--text); max-width: 1120px; }
+:root .client-shell[data-client-theme] .brand-symbol { background: #183b2b; color: #fff; border: 0; border-radius: 15px; }
+:root .client-shell[data-client-theme] .entry-content { max-width: 1120px; margin-inline: auto; padding-top: 70px; }
+:root .client-shell[data-client-theme] .entry-content > h1 { font-size: clamp(29px,4vw,46px); letter-spacing: -1px; }
+:root .client-shell[data-client-theme] .entry-content > p { color: var(--muted); font-size: 15px; }
+:root .client-shell[data-client-theme] .entry-cards { gap: 18px; margin-top: 42px; }
+:root .client-shell[data-client-theme] .entry-card { background: var(--surface); color: var(--text); border-color: var(--line); border-radius: 27px; box-shadow: var(--client-shadow); }
+:root .client-shell[data-client-theme] .entry-card:hover { border-color: #acc69b; box-shadow: 0 18px 40px #42603912; filter: none; }
+:root .client-shell[data-client-theme] .entry-card-number { color: #a4b097; }
+:root .client-shell[data-client-theme] .entry-card-icon { background: #eaf0df; color: #3a6349; border-radius: 20px; }
+:root .client-shell[data-client-theme] .entry-card.explorer .entry-card-icon { background: #f1e5cf; color: #916c30; }
+:root .client-shell[data-client-theme] .entry-card.merchant .entry-card-icon { background: #dfeeee; color: #3e6d70; }
+:root .client-shell[data-client-theme] .entry-card.staff .entry-card-icon { background: #ece4ed; color: #86658b; }
+:root .client-shell[data-client-theme] .entry-card p { color: var(--muted); }
+:root .client-shell[data-client-theme] .entry-card-action { color: var(--gold); border-color: var(--line); }
+:root .client-shell[data-client-theme] .entry-note { color: var(--muted); }
+:root .client-shell[data-client-theme].role-login-screen { background: radial-gradient(ellipse at 18% 12%,#dceac780,transparent 47%),radial-gradient(ellipse at 92% 80%,#f4dec670,transparent 42%),var(--bg); }
+:root .client-shell[data-client-theme] .role-login-intro { margin-top: 45px; }
+:root .client-shell[data-client-theme] .role-login-intro h1 { font-size: 34px; letter-spacing: -.5px; }
+:root .client-shell[data-client-theme] .player-login-card { background: var(--surface); border-color: var(--line); box-shadow: var(--client-shadow); border-radius: 28px; padding: 30px; }
+:root .client-shell[data-client-theme] .login-symbol { display: grid; place-items: center; width: 62px; height: 62px; background: #183b2b; color: #fff; border-radius: 21px; }
+:root .client-shell[data-client-theme] .player-login-card h2 { font-size: 24px; }
+:root .client-shell[data-client-theme] .login-footer { gap: 10px; flex-wrap: wrap; }
+:root .client-shell[data-client-theme][data-client-theme="dark"] :is(.quest-emblem,.entry-card-icon) { background: var(--client-soft); color: var(--gold); }
+@media (max-width: 767px) {
+  :root .client-shell[data-client-theme] .main-shell { padding-bottom: 100px; }
+  :root .client-shell[data-client-theme] .main-shell > main { padding: 15px 18px 24px; }
+  :root .client-shell[data-client-theme] .topbar { height: 75px; padding: 20px 18px 10px; }
+  :root .client-shell[data-client-theme] .topbar-actions { gap: 7px; }
+  :root .client-shell[data-client-theme] .top-help > span { display: none; }
+  :root .client-shell[data-client-theme] .top-avatar { display: none; }
+  :root .client-shell[data-client-theme] .demo-label { font-size: 11px; padding: 4px 6px; }
+  :root .client-shell[data-client-theme] .page-heading { gap: 10px; margin-bottom: 20px; align-items: flex-start; }
+  :root .client-shell[data-client-theme] .page-heading h1 { font-size: 25px; }
+  :root .client-shell[data-client-theme] .page-heading p { font-size: 13px; }
+  :root .client-shell[data-client-theme] .heading-main { align-items: flex-start; }
+  :root .client-shell[data-client-theme] .eyebrow { font-size: 10px; letter-spacing: 1.1px; }
+  :root .client-shell[data-client-theme] .page-footer { padding: 18px; }
+  :root .client-shell[data-client-theme] .explore-layout { grid-template-columns: 1fr; gap: 18px; }
+  :root .client-shell[data-client-theme] .map-toolbar { padding: 10px; height: auto; min-height: 60px; gap: 5px; flex-wrap: wrap; }
+  :root .client-shell[data-client-theme] .floor-tabs button { padding: 7px 8px; min-width: 33px; }
+  :root .client-shell[data-client-theme] .map-meta { font-size: 11px; }
+  :root .client-shell[data-client-theme] .map-canvas { min-height: 300px; aspect-ratio: 1.18; }
+  :root .client-shell[data-client-theme] .map-bottom { padding: 11px; font-size: 11px; }
+  :root .client-shell[data-client-theme] .client-map-stats { padding: 16px 8px; }
+  :root .client-shell[data-client-theme] .quest-preview { display: grid; grid-template-columns: minmax(0,1fr) 140px; gap: 8px 12px; padding: 18px; }
+  :root .client-shell[data-client-theme] .quest-preview .preview-top { grid-column: 1/-1; margin-bottom: 4px; }
+  :root .client-shell[data-client-theme] .quest-emblem { display: none; }
+  :root .client-shell[data-client-theme] .quest-preview :is(.tiny-label,h2,.preview-clue,.preview-meta,.preview-author) { grid-column: 1; margin: 0; }
+  :root .client-shell[data-client-theme] .quest-preview .reward-preview { grid-column: 2; grid-row: 2/5; margin: 0; width: auto; padding: 12px; }
+  :root .client-shell[data-client-theme] .quest-preview .reward-condition { grid-column: 1/-1; margin: 0; }
+  :root .client-shell[data-client-theme] .quest-preview > .gold-button { grid-column: 1/-1; grid-row: auto; }
+  :root .client-shell[data-client-theme] .preview-clue { font-size: 13px; }
+  :root .client-shell[data-client-theme] .quest-cards { grid-template-columns: 1fr; gap: 12px; }
+  :root .client-shell[data-client-theme] .quest-card { padding: 13px; gap: 13px; }
+  :root .client-shell[data-client-theme] .quest-card-art { flex-basis: 68px; height: 80px; }
+  :root .client-shell[data-client-theme] .card-bottom { font-size: 11px; }
+  :root .client-shell[data-client-theme] .task-meta { font-size: 11px; margin-bottom: 0; }
+  :root .client-shell[data-client-theme] .section-heading { gap: 12px; }
+  :root .client-shell[data-client-theme] .nearby-section { margin-top: 26px; }
+  :root .client-shell[data-client-theme] .section-heading h2 { font-size: 18px; }
+  :root .client-shell[data-client-theme] .modal-backdrop { padding: 14px; }
+  :root .client-shell[data-client-theme] .modal { padding: 22px 18px; border-radius: 25px; max-height: calc(100dvh - 28px); }
+  :root .client-shell[data-client-theme] .modal-head h2 { font-size: 18px; }
+  :root .client-shell[data-client-theme] .modal-head .icon-button { flex-shrink: 0; }
+  :root .client-shell[data-client-theme].entry-screen { padding: 22px 18px 36px; }
+  :root .client-shell[data-client-theme] .entry-header { gap: 10px; }
+  :root .client-shell[data-client-theme] .entry-content { padding-top: 46px; }
+  :root .client-shell[data-client-theme] .entry-content > h1 { font-size: 31px; }
+  :root .client-shell[data-client-theme] .entry-cards { gap: 14px; margin-top: 28px; }
+  :root .client-shell[data-client-theme] .entry-card { min-height: 220px; }
+  :root .client-shell[data-client-theme].role-login-screen { padding: 18px 18px 36px; }
+  :root .client-shell[data-client-theme] .role-login-intro { margin-top: 35px; }
+  :root .client-shell[data-client-theme] .role-login-intro h1 { font-size: 29px; }
+  :root .client-shell[data-client-theme] .player-login-card { padding: 24px 20px; }
+}
+@media (max-width: 359px) {
+  :root .client-shell[data-client-theme] .main-shell > main { padding-inline: 14px; }
+  :root .client-shell[data-client-theme] .topbar { padding-inline: 14px; }
+  :root .client-shell[data-client-theme] .demo-label { display: none; }
+  :root .client-shell[data-client-theme] .quest-preview { grid-template-columns: minmax(0,1fr) 115px; padding: 14px; }
+  :root .client-shell[data-client-theme] .quest-card { gap: 10px; padding: 12px; }
+  :root .client-shell[data-client-theme] .quest-card-art { flex-basis: 54px; height: 72px; }
+  :root .client-shell[data-client-theme] .login-code-row { flex-wrap: wrap; }
+  :root .client-shell[data-client-theme] .login-code-row input { flex-basis: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  :root .client-shell[data-client-theme] .svg-zone circle:first-child { animation: none; }
+  :root .client-shell[data-client-theme] .quest-card:hover { transform: none; }
+}

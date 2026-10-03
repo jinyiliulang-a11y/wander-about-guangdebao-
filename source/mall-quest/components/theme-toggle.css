@@ -1,0 +1,147 @@
+/* Shared visible control, using the existing parent theme and preference state. */
+:root :is(.client-shell[data-client-theme].reference-client, .workspace-shell.reference-workspace, .reference-workspace-login) button.quest-theme-toggle {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-width: max-content;
+  min-height: 44px;
+  max-width: 100%;
+  padding: 10px 13px;
+  border: 1px solid #284d36;
+  border-radius: 999px;
+  background: #183b2b;
+  color: #f6f9ef;
+  box-shadow: 0 4px 14px #183b2b1c, inset 0 1px #ffffff17;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 650;
+  line-height: 1.45;
+  white-space: nowrap;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color 160ms ease, color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+:root :is(.client-shell[data-client-theme].reference-client, .workspace-shell.reference-workspace, .reference-workspace-login) button.quest-theme-toggle[data-current-theme="dark"] {
+  border-color: #dce9c7;
+  background: #dce9c7;
+  color: #183b2b;
+  box-shadow: 0 4px 14px #0000001f, inset 0 1px #ffffff80;
+}
+:root :is(.client-shell[data-client-theme].reference-client, .workspace-shell.reference-workspace, .reference-workspace-login) button.quest-theme-toggle > :is(svg, span) {
+  flex: none;
+}
+:root :is(.client-shell[data-client-theme].reference-client, .workspace-shell.reference-workspace, .reference-workspace-login) button.quest-theme-toggle:focus-visible {
+  outline: 3px solid #c39135;
+  outline-offset: 3px;
+}
+@media (hover: hover) {
+  :root :is(.client-shell[data-client-theme].reference-client, .workspace-shell.reference-workspace, .reference-workspace-login) button.quest-theme-toggle:hover {
+    background: #284f3b;
+    color: #fff;
+    box-shadow: 0 6px 18px #183b2b29;
+  }
+  :root :is(.client-shell[data-client-theme].reference-client, .workspace-shell.reference-workspace, .reference-workspace-login) button.quest-theme-toggle[data-current-theme="dark"]:hover {
+    background: #edf4dd;
+    color: #183b2b;
+  }
+}
+:root :is(.client-shell[data-client-theme].reference-client, .workspace-shell.reference-workspace, .reference-workspace-login) button.quest-theme-toggle:active {
+  transform: scale(.97);
+}
+
+/* Only the new control's action rows adapt; existing page content stays owned
+   by its reference styles. Labels retain their readable size on small phones. */
+:root .client-shell[data-client-theme].reference-client .quest-theme-auth-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  min-width: 0;
+  max-width: 100%;
+  margin: 0 0 18px;
+}
+:root .client-shell[data-client-theme].reference-client.auth-shell .quest-theme-auth-actions > .reference-auth-back {
+  position: static;
+  min-height: 44px;
+  margin-right: auto;
+  padding: 9px 0;
+}
+:root .client-shell[data-client-theme].reference-client :is(.quest-theme-home-header, .quest-theme-page-header) {
+  flex-wrap: wrap;
+  gap: 12px;
+  min-width: 0;
+}
+:root .client-shell[data-client-theme].reference-client .quest-theme-home-header > div:first-child {
+  min-width: 0;
+  max-width: 100%;
+}
+:root .client-shell[data-client-theme].reference-client :is(.quest-theme-home-header > .header-actions, .quest-theme-page-header > .quest-theme-header-actions) {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  min-width: 0;
+  max-width: 100%;
+}
+/* The map's older icon-button rule must not squeeze this labelled control. */
+:root .client-shell[data-client-theme].reference-client .quest-theme-home-header > .header-actions > button.quest-theme-toggle {
+  width: auto;
+  height: auto;
+  min-width: max-content;
+  min-height: 44px;
+  flex: 0 0 auto;
+  padding: 10px 13px;
+  border-radius: 999px;
+  display: inline-flex;
+  gap: 7px;
+}
+/* The map's older header rule gives its icon buttons a fixed 40px circle.
+   This explicitly scoped text control keeps its intrinsic readable width. */
+:root .client-shell[data-client-theme].reference-client .reference-home .header-actions > button.quest-theme-toggle {
+  display: inline-flex;
+  width: auto;
+  height: auto;
+  min-width: max-content;
+  min-height: 44px;
+  flex: 0 0 auto;
+  gap: 7px;
+  padding: 10px 13px;
+  border-radius: 999px;
+}
+:root .reference-workspace-login > .quest-theme-login-header {
+  flex-wrap: wrap;
+}
+:root .reference-workspace-login > .quest-theme-login-header > .quest-theme-header-actions,
+:root .workspace-shell.reference-workspace .quest-theme-workspace-header > .topbar-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  min-width: 0;
+  max-width: 100%;
+}
+@media (max-width: 640px) {
+  :root .reference-workspace-login > .quest-theme-login-header > .quest-theme-header-actions {
+    width: 100%;
+  }
+}
+@media (max-width: 420px) {
+  :root .client-shell[data-client-theme].reference-client :is(.quest-theme-home-header > .header-actions, .quest-theme-page-header > .quest-theme-header-actions) {
+    width: 100%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  :root :is(.client-shell[data-client-theme].reference-client, .workspace-shell.reference-workspace, .reference-workspace-login) button.quest-theme-toggle {
+    transition: none;
+    transform: none;
+  }
+}
+:root[data-quest-reduce-motion="true"] :is(.client-shell[data-client-theme].reference-client, .workspace-shell.reference-workspace, .reference-workspace-login) button.quest-theme-toggle {
+  transition: none;
+  transform: none;
+}

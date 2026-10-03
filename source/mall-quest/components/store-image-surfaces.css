@@ -1,0 +1,10 @@
+:root .workspace-shell.reference-workspace .inventory-image-edit { margin: 6px 0 18px; min-height: 48px; }
+:root .client-shell[data-client-theme].reference-client .store-art.store-image { display: block; min-width: 0; overflow: hidden; }
+:root .client-shell[data-client-theme].reference-client .store-art.store-image-custom { background-image: none; }
+:root .client-shell[data-client-theme].reference-client .store-art.store-image > img { display: block; width: 100%; height: 100%; max-width: 100%; min-width: 0; object-fit: cover; }
+:root .client-shell[data-client-theme].reference-client .treasure-art.has-store-image { position: relative; overflow: hidden; }
+:root .client-shell[data-client-theme].reference-client .treasure-art.has-store-image > span { z-index: 1; }
+:root .client-shell[data-client-theme].reference-client .treasure-art > .store-art.treasure-store-image { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; border-radius: inherit; }
+:root .client-shell[data-client-theme].reference-client .treasure-detail > .store-art.treasure-detail-photo { width: 100%; height: clamp(130px, 28vw, 220px); margin: 0; border-radius: 0; }
+:root .client-shell[data-client-theme].reference-client .coupon-brand-icon > .store-art.wallet-store-image { width: 100%; height: 100%; min-width: 0; min-height: 0; aspect-ratio: auto; margin: 0; border-radius: inherit; }
+:root .client-shell[data-client-theme].reference-client .reference-reward-content > .store-art.reward-store-image { width: min(100%, 240px); height: 110px; margin: 20px auto; border-radius: 16px; }

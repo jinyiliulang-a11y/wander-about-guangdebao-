@@ -1,0 +1,153 @@
+import assert from 'node:assert/strict';
+import { readFileSync,readdirSync } from 'node:fs';
+import { DatabaseSync } from 'node:sqlite';
+import path from 'node:path';
+import { root,reset as resetDb,run,get,all,action,state,load,d1,demoToken,sha,close } from './business-fixture.mjs';
+import { fixtureLocation, setupFixtureGeofences } from './geofence-fixture.mjs';
+const reset = options => { const value = resetDb(options); setupFixtureGeofences(); return value; };
+
+// Exercise actual TypeScript handlers and D1 SQL only in disposable SQLite.
+// No browser, current D1, credentials, network or serial device is opened.
+let cases=0;
+const pass=name=>{cases++;console.log(`PASS ${cases}: ${name}`);};
+const reject=async(name,fn,status=400)=>{await assert.rejects(fn,error=>error.status===status);pass(name);};
+const sync=()=>load('lib/hardware-server.ts').hardwareStoreSync(new Request('http://isolated.test',{headers:{Authorization:'Bearer '+demoToken}}),{deviceId:'coin-tea-01'});
+const coupon={title:'Delete coupon fixture',type:'cash',value:5,minAmount:20,totalCount:10,validStart:null,validEnd:null,status:'active'};
+const clues=['第一条完整线索','第二条完整线索','第三条私密线索','第四条私密线索','第五条私密线索'];
+try {
+  const old=new DatabaseSync(':memory:');
+  for(const file of readdirSync(path.join(root,'drizzle')).filter(file=>file.endsWith('.sql')&&file<'0004').sort())old.exec(readFileSync(path.join(root,'drizzle',file),'utf8'));
+  old.prepare('INSERT INTO players(id,nickname,created_at) VALUES(?,?,?)').run('old-user','Old player',123);
+  const before=JSON.stringify(old.prepare('SELECT * FROM players').all());
+  old.exec(readFileSync(path.join(root,'drizzle/0004_management_fixes.sql'),'utf8'));
+  assert.equal(JSON.stringify(old.prepare('SELECT * FROM players').all()),before);
+  assert.equal(old.prepare('SELECT COUNT(*) AS n FROM player_activity').get().n,0);
+  assert.equal(old.prepare('PRAGMA integrity_check').get().integrity_check,'ok');old.close();
+  pass('0004 preserves existing identities, adds nullable soft-delete flags and starts activity without fabricated history');
+
+  reset();
+  const reward=await action('claim',{taskId:'quest-tea',answer:'茉莉',location:fixtureLocation()});
+  await action('feedback',{taskId:'quest-tea',clarity:3,comment:'Real owner feedback'});
+  const first=(await state()).ownFeedback[0];assert.equal(first.comment,'Real owner feedback');
+  assert.equal((await state('author')).feedbackCount,1);
+  pass('Own posted feedback is returned with its actual stable identifier and author feedback count');
+  await reject('A different player cannot delete feedback',()=>action('feedbackDelete',{feedbackId:first.id},'b'),403);
+  await Promise.all([action('feedbackDelete',{feedbackId:first.id}),action('feedbackDelete',{feedbackId:first.id})]);
+  assert.equal((await state()).ownFeedback.length,0);assert.equal((await state('author')).feedbackCount,0);
+  assert.equal(get('SELECT comment,deleted_at FROM feedback WHERE id=?',first.id).comment,'Real owner feedback');
+  pass('Repeated feedback deletion hides the post and preserves its stored content');
+  await action('feedback',{taskId:'quest-tea',clarity:2,comment:'New owner feedback'});
+  assert.equal((await state()).ownFeedback[0].id,first.id);assert.equal(get('SELECT deleted_at FROM feedback WHERE id=?',first.id).deleted_at,null);
+  assert.equal(get('SELECT COUNT(*) AS n FROM feedback').n,1);
+  pass('Deleted feedback can be posted again without violating unique player/task constraint');
+
+  const claimSnapshot=JSON.stringify(get('SELECT * FROM claims WHERE id=?',reward.coupon.id));
+  const ledgerSnapshot=JSON.stringify(all('SELECT * FROM points_ledger ORDER BY id'));
+  const deviceSnapshot=JSON.stringify(get('SELECT id,store_id,token_hash,enabled,created_at FROM hardware_devices'));
+  await reject('Unrelated player cannot delete a published task',()=>action('taskDelete',{taskId:'quest-tea'},'b'),403);
+  await reject('Merchant cannot delete another store task',()=>action('taskDelete',{taskId:'quest-book'},'merchant','merchant'),403);
+  await Promise.all([action('taskDelete',{taskId:'quest-tea'},'author'),action('taskDelete',{taskId:'quest-tea'},'author')]);
+  assert.equal(get("SELECT status FROM tasks WHERE id='quest-tea'").status,'offline');
+  assert.equal(get("SELECT bound_task_id FROM hardware_devices WHERE id='coin-tea-01'").bound_task_id,null);
+  assert.equal(JSON.stringify(get('SELECT * FROM claims WHERE id=?',reward.coupon.id)),claimSnapshot);
+  assert.equal(JSON.stringify(all('SELECT * FROM points_ledger ORDER BY id')),ledgerSnapshot);
+  assert.equal(JSON.stringify(get('SELECT id,store_id,token_hash,enabled,created_at FROM hardware_devices')),deviceSnapshot);
+  assert.equal(get("SELECT COUNT(*) AS n FROM task_reviews WHERE task_id='quest-tea' AND note LIKE '删除任务%'").n,1);
+  pass('Author deletion is atomic and idempotent, unbinds device, retains token, stock usage, issued snapshot, points and one audit event');
+  assert.equal((await state()).tasks.some(t=>t.id==='quest-tea'),false);
+  assert.equal((await state('author')).placements.some(t=>t.id==='quest-tea'),false);
+  assert.equal((await state()).coupons[0].id,reward.coupon.id);
+  assert.equal((await action('workbenchState',{},'admin','admin')).tasks.some(t=>t.id==='quest-tea'),false);
+  pass('Deleted task disappears from map, author and operations lists while existing wallet receipt remains');
+  const hardware=await sync();assert.equal(hardware.available,false);assert.equal(hardware.claimCount,1);
+  assert.deepEqual(Object.keys(hardware).sort(),['available','claimCount','storeId','storeName','taskId']);
+  pass('Deleted canonical task returns five-field read-only hardware sync with retained count and unavailable state');
+  await reject('Deleted canonical task cannot issue another reward',()=>action('claim',{taskId:'quest-tea',answer:'茉莉',location:fixtureLocation()},'b'));
+  await action('redeem',{code:reward.coupon.code},'merchant','merchant');assert(get('SELECT redeemed_at FROM claims WHERE id=?',reward.coupon.id).redeemed_at);
+  pass('A valid previously issued coupon remains redeemable after task deletion');
+  const history=await action('reviewHistory',{taskId:'quest-tea'},'admin','admin');assert(history.reviews.some(r=>r.note.startsWith('删除任务')));
+  pass('Deleted task retains review history accessible to authorized operations');
+  run("UPDATE tasks SET status='published' WHERE id='quest-tea'");
+  assert.equal((await sync()).available,false);
+  await reject('Deletion marker is independently rechecked when status is accidentally restored',()=>action('claim',{taskId:'quest-tea',answer:'茉莉',location:fixtureLocation()},'b'));
+  await reject('Deleted task cannot unlock paid content',()=>action('unlockClue',{taskId:'quest-tea',index:2},'b'));
+  await reject('Deleted task cannot be rebound to hardware',()=>action('deviceBind',{deviceId:'coin-tea-01',taskId:'quest-tea'},'merchant','merchant'),409);
+  await reject('Deleted canonical ID cannot be silently republished',()=>action('merchantPublish',{taskId:'quest-tea',storeId:'tea',title:'A proper quest',clues,question:'观察题至少四字',answer:'茉莉',rewardType:'points',rewardValue:50},'merchant','merchant'),409);
+
+  for(const status of ['pending','published','rejected','offline']) {
+    const id='delete-'+status;run('INSERT INTO tasks(id,author_id,store_id,title,clues,status,created_at) VALUES(?,?,?,?,?,?,?)',id,'a','book','A task for deletion',JSON.stringify(clues),status,Date.now());
+    await action('taskDelete',{taskId:id});assert(get('SELECT deleted_at FROM tasks WHERE id=?',id).deleted_at);
+  }
+  pass('Owners can delete pending, published, rejected and withdrawn tasks');
+  await action('taskDelete',{taskId:'quest-book'},'admin','admin');
+  await action('taskDelete',{taskId:'quest-craft'},'admin','admin');
+  pass('Operations can delete tasks across event stores');
+  const uuid='12345678-1234-1234-1234-123456789012';
+  const place={requestId:uuid,storeId:'book',title:'A valid posting fixture',clues,rewardType:'points',rewardValue:50};
+  await action('place',place);await action('taskDelete',{taskId:uuid});
+  await reject('Deleted explorer request cannot be resurrected by an old retry',()=>action('place',place),409);
+
+  reset();
+  const original=d1.batch;
+  d1.batch=async statements=>{run("DELETE FROM sessions WHERE token_hash=?",sha('staff-merchant'));return original(statements);};
+  await reject('Task delete rechecks staff authorization inside transaction after preflight',()=>action('taskDelete',{taskId:'quest-tea'},'merchant','merchant'),409);
+  d1.batch=original;assert.equal(get("SELECT deleted_at FROM tasks WHERE id='quest-tea'").deleted_at,null);
+  assert.equal(get('SELECT COUNT(*) AS n FROM task_reviews').n,0);
+  pass('Revoked permission produces no deletion, no audit and no hardware unbinding');
+
+  reset();
+  const tpl=await action('couponCreate',coupon,'merchant','merchant');
+  run("UPDATE tasks SET reward_coupon_id=? WHERE id='quest-tea'",tpl.templateId);
+  const issued=await action('claim',{taskId:'quest-tea',answer:'茉莉',location:fixtureLocation()});
+  await reject('A player cannot delete a merchant coupon template',()=>action('couponDelete',{templateId:tpl.templateId}),403);
+  run('INSERT INTO coupon_templates(id,store_id,title,type,value,min_amount,total_count,status,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?)','other-template','book','Other coupon','gift',0,0,5,'active',Date.now(),Date.now());
+  await reject('Merchant cannot delete another store template',()=>action('couponDelete',{templateId:'other-template'},'merchant','merchant'),403);
+  await Promise.all([action('couponDelete',{templateId:tpl.templateId},'merchant','merchant'),action('couponDelete',{templateId:tpl.templateId},'merchant','merchant')]);
+  assert.equal((await action('workbenchState',{},'merchant','merchant')).couponTemplates.some(t=>t.id===tpl.templateId),false);
+  assert.equal((await state()).couponTemplates.some(t=>t.id===tpl.templateId),false);assert.equal((await sync()).available,false);
+  assert.equal((await state()).coupons[0].reward,coupon.title);
+  pass('Idempotent coupon deletion removes template options and stops issuance without rewriting issued reward');
+  await reject('Deleted template cannot be reactivated by editor',()=>action('couponUpdate',{...coupon,templateId:tpl.templateId},'merchant','merchant'),409);
+  await reject('Deleted template cannot issue another claim',()=>action('claim',{taskId:'quest-tea',answer:'茉莉',location:fixtureLocation()},'b'));
+  await action('redeem',{code:issued.coupon.code},'merchant','merchant');
+  pass('Previously issued valid coupon redeems after template deletion');
+
+  reset();
+  let overview=await action('workbenchState',{},'admin','admin');assert.equal(overview.stats.activeUsersToday,0);
+  await state('a');await state('a');assert.equal(get('SELECT COUNT(*) AS n FROM player_activity').n,1);
+  await state('admin','admin');assert.equal(get('SELECT COUNT(*) AS n FROM player_activity').n,1);
+  const workspace=new Request('http://localhost/api/game',{headers:{Cookie:'mall_player=player-b','X-Mall-Quest-Context':'workspace'}});
+  await load('lib/game-server.ts').state(workspace,'b');assert.equal(get('SELECT COUNT(*) AS n FROM player_activity').n,1);
+  run("UPDATE players SET banned=1 WHERE id='c'");await state('c');assert.equal(get('SELECT COUNT(*) AS n FROM player_activity').n,1);
+  pass('Real daily activity counts a successful player state visit once, excludes staff bootstrap, explicit workspace context and banned players');
+  await load('lib/game-business.ts').recordPlayerActivity('b',Date.now()-86400000);
+  run("UPDATE players SET phone='13800000001' WHERE id='a'");
+  run("UPDATE stores SET status='inactive' WHERE id='craft'");run("UPDATE tasks SET expires_at=? WHERE id='quest-book'",Date.now()-1);
+  run('INSERT INTO tasks(id,author_id,store_id,title,clues,status,created_at) VALUES(?,?,?,?,?,?,?)','pending-real','a','tea','Real pending request',JSON.stringify(clues),'pending',Date.now());
+  overview=await action('workbenchState',{},'admin','admin');
+  assert.equal(overview.stats.activeUsersToday,1);assert.equal(overview.stats.todayClaimPlayers,0);assert.equal(overview.stats.registeredUsers,4);
+  assert.equal(overview.stats.storeCount,2);assert.equal(overview.stats.merchantCount,3);assert.equal(overview.stats.publishedTasks,1);
+  assert.equal(overview.pendingReviews.length,1);assert.equal(overview.pendingReviews[0].id,'pending-real');assert.equal(overview.pendingReviews[0].authorName,'Fixture a');
+  const merchant=await action('workbenchState',{},'merchant','merchant');assert.equal(merchant.pendingReviews.length,0);
+  for(const key of ['activeUsersToday','publishedTasks','merchantCount','registeredUsers'])assert.equal(Object.hasOwn(merchant.stats,key),false);
+  pass('Operator overview derives registration, visible coins, all merchants, actual daily activity and real pending reviews without exposing admin metrics to merchants');
+  await action('taskDelete',{taskId:'pending-real'});assert.equal((await action('workbenchState',{},'admin','admin')).pendingReviews.length,0);
+  pass('Deleting a pending task also removes its operations to-do entry');
+  await action('opsSettingsSave',{dailyLimit:1,clueCosts:[0,0,10,20,30],contributionRatio:0.2,ugcReview:true},'admin','admin');
+  await reject('Deleting today own posts does not restore the daily posting quota for farming',()=>action('place',{requestId:'12345678-1234-1234-1234-123456789019',storeId:'tea',title:'Another valid posting',clues,rewardType:'points',rewardValue:50}));
+  await action('accountLogin',{role:'player',username:'fixture-b',password:'fixture-password'},'b');
+  assert.equal((await action('workbenchState',{},'admin','admin')).stats.activeUsersToday,2);
+  pass('Successful player login records its actual restored identity as today active');
+  const api=load('app/api/game/route.ts');
+  const failed=await api.POST(new Request('http://localhost/api/game',{method:'POST',headers:{Cookie:'mall_player=player-author'},body:JSON.stringify({action:'claim',taskId:'quest-tea',answer:'wrong'})}));
+  assert.equal(failed.status,400);assert.equal(get("SELECT first_seen_at FROM player_activity WHERE player_id='author'"),undefined);
+  pass('Failed public mutation is excluded from activity registration');
+  const successful=await api.POST(new Request('http://localhost/api/game',{method:'POST',headers:{Cookie:'mall_player=player-author'},body:JSON.stringify({action:'recordShare',taskId:'quest-tea'})}));
+  assert.equal(successful.status,200);assert(get("SELECT first_seen_at FROM player_activity WHERE player_id='author'"));
+  pass('Successful public business API records player activity while failed requests do not fabricate it');
+  const switched=new Request('http://localhost/api/game',{headers:{Cookie:'mall_player=player-merchant; mall_staff=staff-merchant','X-Mall-Quest-Context':'player'}});
+  await load('lib/game-server.ts').state(switched,'merchant');assert(get("SELECT first_seen_at FROM player_activity WHERE player_id='merchant'"));
+  pass('Switching explicitly to player pages records activity even when a valid merchant cookie remains, without granting extra permissions');
+
+  console.log(JSON.stringify({status:'PASS',cases,isolatedDatabase:':memory:',persistentD1Opened:false,networkRequests:0,serialAccess:false}));
+} finally { close(); }

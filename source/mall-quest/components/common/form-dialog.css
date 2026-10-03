@@ -1,0 +1,70 @@
+dialog.quest-form-dialog {
+  position: fixed;
+  inset: 0;
+  display: none;
+  width: min(640px, calc(100vw - 32px));
+  max-width: calc(100vw - 32px);
+  max-height: calc(100dvh - 32px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+  min-width: 0;
+  min-height: 0;
+  margin: auto;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  box-shadow: 0 24px 80px rgba(15, 36, 27, .24);
+}
+dialog.quest-form-dialog[open] { display: flex; flex-direction: column; }
+dialog.quest-form-dialog::backdrop {
+  background: rgba(17, 34, 26, .42);
+  backdrop-filter: blur(5px);
+  animation: quest-form-backdrop-in 320ms cubic-bezier(.22,1,.36,1) both;
+}
+dialog.quest-form-dialog[data-phase="closing"]::backdrop { animation: quest-form-backdrop-out 260ms cubic-bezier(.4,0,.2,1) both; }
+.quest-form-dialog > .quest-form-dialog-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 44px;
+  gap: 16px;
+  align-items: center;
+  flex: none;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--line);
+}
+.quest-form-dialog-head > h2 { margin: 0; font-size: 21px; line-height: 1.4; overflow-wrap: anywhere; }
+.quest-form-dialog-head > .quest-form-dialog-close {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  min-width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--bg);
+  color: var(--text);
+}
+.quest-form-dialog > .quest-form-dialog-body {
+  flex: 1;
+  min-height: 0;
+  padding: 24px;
+  overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--muted) transparent;
+}
+.quest-form-dialog-body::-webkit-scrollbar { width: 6px; height: 6px; }
+.quest-form-dialog-body::-webkit-scrollbar-track { background: transparent; }
+.quest-form-dialog-body::-webkit-scrollbar-thumb { background: var(--muted); border-radius: 999px; }
+.quest-form-dialog-body > .wb-form > .wb-actions { justify-content: flex-end; }
+@keyframes quest-form-backdrop-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes quest-form-backdrop-out { from { opacity: var(--form-backdrop-start, 1); } to { opacity: 0; } }
+@media (max-width: 640px) {
+  dialog.quest-form-dialog { border-radius: 20px; }
+  .quest-form-dialog > .quest-form-dialog-head { padding: 16px 20px; }
+  .quest-form-dialog > .quest-form-dialog-body { padding: 20px; }
+}
+html[data-quest-reduce-motion="true"] dialog.quest-form-dialog::backdrop { animation: none; }
+@media (prefers-reduced-motion: reduce) { dialog.quest-form-dialog::backdrop { animation: none; } }

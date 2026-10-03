@@ -1,0 +1,235 @@
+@import "../components/common/controls.css";
+/* Only adaptations required by real mall data and existing workflows. Core visual/motion rules live in reference-client.css; shared controls live in components/common/controls.css. */
+:root .client-shell[data-client-theme].reference-client.app-shell {display:block;padding-bottom:130px;overflow-x:visible;}
+:root .client-shell[data-client-theme].reference-client .sidebar,
+:root .client-shell[data-client-theme].reference-client .topbar,
+:root .client-shell[data-client-theme].reference-client .page-footer,
+:root .client-shell[data-client-theme].reference-client .reference-heading-hidden {display:none;}
+:root .client-shell[data-client-theme].reference-client .main-shell {margin:0;min-height:100dvh;width:100%;}
+:root .client-shell[data-client-theme].reference-client .content {max-width:760px;width:100%;margin:auto;padding:26px 18px 0;}
+:root .client-shell[data-client-theme].reference-client .mobile-nav.glass-tabbar {display:grid;}
+:root .client-shell[data-client-theme].reference-client .glass-tabbar button {box-shadow:none;border:0;}
+:root .client-shell[data-client-theme].reference-client .glass-tabbar button.active {background:transparent;}
+:root .client-shell[data-client-theme].reference-client .glass-tabbar .liquid-indicator {pointer-events:none;}
+:root .client-shell[data-client-theme].reference-client .page-heading {margin:0 0 25px;}
+:root .client-shell[data-client-theme].reference-client .page-heading h1 {font-size:26px;letter-spacing:-.7px;color:#193b2a;}
+:root .client-shell[data-client-theme].reference-client[data-client-theme="dark"] .page-heading h1 {color:var(--text);}
+:root .client-shell[data-client-theme].reference-client .page-heading p {color:#758275;font-size:13px;}
+:root .client-shell[data-client-theme].reference-client .page-heading .heading-main {align-items:flex-start;}
+:root .client-shell[data-client-theme].reference-client .heading-main > .heading-copy:only-child {grid-column:1/-1;min-width:0;}
+:root .client-shell[data-client-theme].reference-client .page-heading .eyebrow {margin:4px 0 8px;}
+:root .client-shell[data-client-theme].reference-client .back-button {border-radius:50%;width:var(--ui-back-size);height:var(--ui-back-size);background:#e9eee3;flex-shrink:0;}
+:root .client-shell[data-client-theme].reference-client .back-button svg {transform:none;}
+:root .client-shell[data-client-theme].reference-client .coupon-details.coupon-body {padding:0;flex:unset;}
+:root .client-shell[data-client-theme].reference-client .coupon-details.coupon-body small {color:inherit;}
+:root .client-shell[data-client-theme].reference-client .coupon-card {display:block;box-shadow:none;border-radius:0;}
+:root .client-shell[data-client-theme].reference-client .coupon-card.used,
+:root .client-shell[data-client-theme].reference-client .coupon-card.wallet-expired {opacity:.65;}
+:root .client-shell[data-client-theme].reference-client .reference-wallet-empty {text-align:center;color:#687c69;background:#fff;border-radius:22px;padding:32px 20px;margin:24px 0;}
+:root .client-shell[data-client-theme].reference-client .reference-wallet-empty svg {margin:auto;color:#76906c;}
+:root .client-shell[data-client-theme].reference-client .reference-wallet-empty .primary-button {margin-top:20px;}
+:root .client-shell[data-client-theme].reference-client .reference-profile .profile-role-toggle {max-width:270px;margin:20px auto;}
+:root .client-shell[data-client-theme].reference-client .reference-profile .profile-login {color:#254a32;}
+:root .client-shell[data-client-theme].reference-client .reference-profile .menu-list button {width:100%;}
+:root .client-shell[data-client-theme].reference-client .reference-auth-brand {font-size:18px;letter-spacing:.04em;}
+:root .client-shell[data-client-theme].reference-client .reference-auth-brand small {display:block;line-height:1.5;font-size:11px;letter-spacing:.12em;color:#819374;margin:2px 0 14px;}
+:root .client-shell[data-client-theme].reference-client .reference-workspace-entry {display:flex;justify-content:center;gap:24px;margin:28px 0 0;}
+:root .client-shell[data-client-theme].reference-client .reference-workspace-entry button {display:flex;align-items:center;gap:7px;border:0;color:#587154;background:transparent;font-size:13px;}
+:root .client-shell[data-client-theme].reference-client.auth-shell .player-login-card {background:transparent;border:0;box-shadow:none;padding:0;max-width:none;margin:0;color:#243f2b;border-radius:0;}
+:root .client-shell[data-client-theme].reference-client.auth-shell .player-login-card > .login-symbol,
+:root .client-shell[data-client-theme].reference-client.auth-shell .player-login-card > h2,
+:root .client-shell[data-client-theme].reference-client.auth-shell .player-login-card > p {display:none;}
+:root .client-shell[data-client-theme].reference-client.auth-shell input {height:53px;background:#fff;border:1px solid #e0e5da;border-radius:13px;color:#213e29;padding:13px 15px;}
+:root .client-shell[data-client-theme].reference-client.auth-shell .gold-button {border-radius:14px;min-height:54px;background:#183b2b;color:#fff;box-shadow:none;}
+:root .client-shell[data-client-theme].reference-client.auth-shell .field-label {color:#4c674d;font-size:13px;display:block;margin:17px 0 0;}
+/* Entry labels use real layout space rather than an offset over the role cards. */
+:root .client-shell[data-client-theme].reference-client.auth-shell .auth-lead:has(+ .role-picker) {margin-bottom:14px;}
+:root .client-shell[data-client-theme].reference-client.auth-shell .role-picker {display:grid;gap:14px;margin:0 0 16px;min-width:0;}
+:root .client-shell[data-client-theme].reference-client.auth-shell .role-picker > .field-label {margin:0;line-height:1.6;}
+:root .client-shell[data-client-theme].reference-client.auth-shell .role-picker > .role-options {margin:0;min-width:0;}
+:root .client-shell[data-client-theme].reference-client.auth-shell .field-label > svg {display:none;}
+:root .client-shell[data-client-theme].reference-client.auth-shell .login-code-row {grid-template-columns:minmax(0,1fr) auto;gap:8px;}
+:root .client-shell[data-client-theme].reference-client.auth-shell .login-code-row button {border-radius:12px;color:#466740;background:#e9efdf;border:1px solid #d5dfcd;white-space:nowrap;padding:10px;}
+:root .client-shell[data-client-theme].reference-client.auth-shell .verify-hint {display:block;margin:16px 0;color:#84927e;font-size:11px;}
+:root .client-shell[data-client-theme].reference-client.auth-shell .login-footer {display:flex;justify-content:space-between;margin-top:20px;}
+:root .client-shell[data-client-theme].reference-client.auth-shell .login-footer button {color:#54734d;}
+:root .client-shell[data-client-theme].reference-client.auth-shell .reference-auth-back {position:absolute;top:10px;right:0;display:flex;gap:6px;align-items:center;border:0;color:#637955;background:transparent;font-size:12px;}
+:root .client-shell[data-client-theme].reference-client.auth-shell .login-footer button:last-child {display:none;}
+:root .client-shell[data-client-theme].reference-client .reference-card-modal .modal {padding:0;max-width:none;min-width:0;border:0;}
+:root .client-shell[data-client-theme].reference-client .treasure-detail.modal {width:min(88vw,390px);}
+:root .client-shell[data-client-theme].reference-client .treasure-detail-copy .detail-summary {padding:0;border:0;background:transparent;}
+:root .client-shell[data-client-theme].reference-client .treasure-detail-copy .detail-summary h3 {font-size:23px;margin:14px 0;line-height:1.4;}
+:root .client-shell[data-client-theme].reference-client .treasure-detail-copy .detail-summary p {font-size:12px;line-height:1.7;color:#7b8478;}
+:root .client-shell[data-client-theme].reference-client .treasure-detail-copy .detail-reward {margin:12px 0;background:#eaf1e1;border-radius:14px;padding:12px;font-size:14px;}
+:root .client-shell[data-client-theme].reference-client .treasure-detail-copy .clue-heading {margin:22px 0 12px;flex-wrap:wrap;}
+:root .client-shell[data-client-theme].reference-client .treasure-detail-copy .clue-heading h3 {font-size:14px;}
+:root .client-shell[data-client-theme].reference-client .treasure-detail-copy .clue-heading span {font-size:10px;}
+:root .client-shell[data-client-theme].reference-client .clue-item {background:#f1f4ea;border-color:#e2e8d9;border-radius:14px;}
+:root .client-shell[data-client-theme].reference-client .clue-number {background:#e2ead7;color:#57724e;}
+:root .client-shell[data-client-theme].reference-client .clue-item.open {background:#edf2e5;border-color:#c3d2b4;}
+:root .client-shell[data-client-theme].reference-client .verify-form {background:transparent;border:0;padding:0;}
+:root .client-shell[data-client-theme].reference-client .reference-card-modal .gold-button {background:#183b2b;color:#fff;box-shadow:none;border-radius:13px;}
+:root .client-shell[data-client-theme].reference-client .enlarged-coupon.modal {--reference-card-padding-top:40px;--reference-card-padding-inline:24px;width:min(84vw,360px);max-height:86dvh;aspect-ratio:auto;min-height:min(500px,86dvh);display:block;padding:var(--reference-card-padding-top) var(--reference-card-padding-inline) 24px;overflow-y:auto;}
+:root .client-shell[data-client-theme].reference-client .reference-reward-content {position:relative;z-index:1;text-align:center;}
+:root .client-shell[data-client-theme].reference-client .reference-reward-content .coupon-qr {margin:12px auto 18px;max-width:180px;}
+:root .client-shell[data-client-theme].reference-client .reference-reward-content .coupon-qr svg {width:100%;height:auto;}
+:root .client-shell[data-client-theme].reference-client .reference-reward-content .coupon-code {margin:12px auto;justify-content:center;border:0;background:#e9efe3;border-radius:12px;}
+:root .client-shell[data-client-theme].reference-client .reference-point-symbol {margin:25px auto;color:#b89140;}
+:root .client-shell[data-client-theme].reference-client .reference-point-symbol svg {margin:auto;}
+:root .client-shell[data-client-theme].reference-client .enlarged-coupon .share-actions {position:relative;display:flex;flex-wrap:wrap;gap:8px;margin:20px 0 0;}
+:root .client-shell[data-client-theme].reference-client .enlarged-coupon .share-actions button {flex:1;font-size:11px;padding:10px 8px;justify-content:center;}
+:root .client-shell[data-client-theme].reference-client .feedback-panel {text-align:left;background:#eef3e7;border-color:#dce6d1;border-radius:15px;position:relative;}
+:root .client-shell[data-client-theme].reference-client .feedback-panel h3 {font-size:14px;}
+:root .client-shell[data-client-theme].reference-client .feedback-options {flex-wrap:wrap;}
+:root .client-shell[data-client-theme].reference-client .feedback-options button {color:#5c7054;border-color:#dce4d3;}
+:root .client-shell[data-client-theme].reference-client .feedback-panel input {background:#fff;color:#25402b;border-color:#dbe4d1;}
+:root .client-shell[data-client-theme].reference-client .route-loader {pointer-events:all;background:#f2f5ec40;}
+:root .client-shell[data-client-theme].reference-client .route-loader-card {pointer-events:none;}
+:root .client-shell[data-client-theme].reference-client .surface {box-shadow:none;}
+:root .client-shell[data-client-theme].reference-client .reference-page-bar {display:flex;justify-content:space-between;align-items:center;margin:0 0 25px;}
+:root .client-shell[data-client-theme].reference-client .content:has(> .reference-profile) > .reference-page-bar {margin-bottom:12px;}
+:root .client-shell[data-client-theme].reference-client .reference-page-bar > div {display:flex;gap:8px;}
+:root .client-shell[data-client-theme].reference-client .reference-wordmark {display:inline-block;border:0;border-radius:6px;background:transparent;color:#25462f;font-family:inherit;font-size:14px;font-weight:700;line-height:1.5;letter-spacing:normal;text-align:left;padding:0;}
+:root .client-shell[data-client-theme].reference-client .reference-wordmark small {display:block;font-size:9px;line-height:1.5;letter-spacing:.1em;color:#7c8e70;font-weight:400;margin:0;}
+:root .client-shell[data-client-theme].reference-client .reference-wordmark:focus-visible {outline:2px solid currentColor;outline-offset:5px;}
+:root .client-shell[data-client-theme].reference-client .weekly-ranking {text-align:left;margin-top:24px;padding:20px;border:0;background:#fff;border-radius:22px;}
+:root .client-shell[data-client-theme].reference-client .weekly-ranking .section-heading {display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;}
+:root .client-shell[data-client-theme].reference-client .weekly-ranking h2 {font-size:16px;margin:0 auto 0 0;text-align:left;display:flex;align-items:center;gap:8px;}
+:root .client-shell[data-client-theme].reference-client .weekly-ranking .muted {font-size:11px;line-height:1.7;}
+:root .client-shell[data-client-theme].reference-client .weekly-ranking ol {list-style:none;margin:16px 0;padding:0;}
+:root .client-shell[data-client-theme].reference-client .weekly-ranking li {display:grid;grid-template-columns:24px minmax(0,1fr) auto;align-items:center;text-align:left;}
+:root .client-shell[data-client-theme].reference-client .weekly-ranking .ranking-name {overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px;}
+:root .client-shell[data-client-theme].reference-client .weekly-ranking .ranking-name small {font-size:10px;margin-left:4px;color:#829077;}
+:root .client-shell[data-client-theme].reference-client .weekly-ranking li > span:last-child {font-size:11px;}
+:root .client-shell[data-client-theme].reference-client .reference-home .home-brand {font:inherit;line-height:1.5;letter-spacing:normal;margin:0;}
+:root .client-shell[data-client-theme].reference-client .reference-home .quick-stats {width:100%;margin:-1px 0 0;}
+:root .client-shell[data-client-theme].reference-client .reference-home .map-controls {width:max-content;max-width:calc(100% - 24px);bottom:16px;gap:8px;top:auto;right:auto;padding:0;border:0;background:transparent;}
+:root .client-shell[data-client-theme].reference-client .reference-home .floor-tabs {display:flex;gap:3px;padding:5px;border-radius:13px;background:#ffffffeb;box-shadow:0 7px 20px #223e2520;overflow-x:auto;max-width:calc(100vw - 95px);}
+:root .client-shell[data-client-theme].reference-client .reference-home .floor-tabs button {font-size:12px;border:0;border-radius:9px;padding:8px 11px;background:transparent;color:#667859;white-space:nowrap;}
+:root .client-shell[data-client-theme].reference-client .reference-home .floor-tabs button.active {color:#fff;background:#204a31;}
+:root .client-shell[data-client-theme].reference-client .reference-home .section-heading {flex-wrap:wrap;gap:12px;}
+:root .client-shell[data-client-theme].reference-client .reference-home .search-field {display:flex;align-items:center;gap:6px;width:135px;border:1px solid #dde4d5;border-radius:12px;padding:7px 9px;background:#fff;color:#7d8c70;margin-left:auto;}
+:root .client-shell[data-client-theme].reference-client .reference-home .search-field input {display:block;font-size:11px;min-width:0;width:100%;border:0;outline:0;color:#314b2c;background:transparent;padding:0;}
+:root .client-shell[data-client-theme].reference-client .reference-home .section-heading > button {font-size:11px;}
+:root .client-shell[data-client-theme].reference-client .reference-home .treasure-card {min-width:0;width:100%;}
+:root .client-shell[data-client-theme].reference-client .reference-home .treasure-copy {min-width:0;flex:1;}
+:root .client-shell[data-client-theme].reference-client .reference-home .treasure-copy b,
+:root .client-shell[data-client-theme].reference-client .reference-home .treasure-copy p,
+:root .client-shell[data-client-theme].reference-client .reference-home .treasure-copy small {overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+:root .client-shell[data-client-theme].reference-client .reference-home .treasure-card > svg {flex-shrink:0;}
+:root .client-shell[data-client-theme].reference-client .reference-home .map-card.map-fullscreen {height:100dvh;max-width:none;border-radius:0;}
+:root .client-shell[data-client-theme].reference-client .reference-home .map-fullscreen .map-expand-trigger,
+:root .client-shell[data-client-theme].reference-client .reference-home .map-fullscreen .map-zoom-button {display:none;}
+:root .client-shell[data-client-theme].reference-client .reference-home .map-fullscreen .map-grid {background-size:54px 54px;transform:rotate(-8deg) scale(1.35);}
+:root .client-shell[data-client-theme].reference-client .reference-home .map-fullscreen .map-water {width:42vw;height:120vh;top:-8vh;right:-12vw;}
+:root .client-shell[data-client-theme].reference-client .reference-home .map-fullscreen .road-one {width:115vw;height:34px;top:48%;left:-12vw;}
+:root .client-shell[data-client-theme].reference-client .reference-home .map-fullscreen .road-two {width:85vh;height:26px;top:18%;left:34%;}
+:root .client-shell[data-client-theme].reference-client .reference-home .empty-state {display:flex;flex-direction:column;text-align:center;align-items:center;gap:10px;border-radius:18px;padding:28px;background:#fff;color:#738568;}
+:root .client-shell[data-client-theme].reference-client .reference-home .empty-state button {color:#3d633d;border:0;background:#e7eedf;padding:10px 16px;border-radius:12px;}
+:root .client-shell[data-client-theme].reference-client[data-client-theme="dark"] {background:#18271f;color:#e5eddf;}
+:root .client-shell[data-client-theme].reference-client[data-client-theme="dark"] :is(.quick-stats,.treasure-card,.menu-list,.achievement,.reference-wallet-empty) {background:#253b2c;color:#e8eee2;}
+:root .client-shell[data-client-theme].reference-client[data-client-theme="dark"] :is(.simple-header h2,.app-header h2,.profile-hero h2,.achievement h3,.treasure-copy b,.quick-stats strong,.profile-stats b) {color:#e5eddf;}
+:root .client-shell[data-client-theme].reference-client[data-client-theme="dark"] :is(.treasure-detail,.enlarged-coupon) {background:#203726;color:#e4edde;}
+:root .client-shell[data-client-theme].reference-client[data-client-theme="dark"] :is(.modal-meta,.modal-merchant,.modal-tip) {color:#cfddc5;}
+:root .client-shell[data-client-theme].reference-client[data-client-theme="dark"] .reference-wordmark {color:#e5eddf;}
+:root .client-shell[data-client-theme].reference-client[data-client-theme="dark"] .weekly-ranking {background:#253b2c;color:#e5eddf;}
+:root .client-shell[data-client-theme].reference-client[data-client-theme="dark"].auth-shell {background:radial-gradient(circle at 20% 10%,#2e4435,transparent 36%),radial-gradient(circle at 95% 80%,#51482a80,transparent 34%),#18271f;}
+:root .client-shell[data-client-theme].reference-client[data-client-theme="dark"].auth-shell :is(h1,.auth-lead,.field-label,.eyebrow) {color:#d9e7ce;}
+:root .client-shell[data-client-theme].reference-client[data-client-theme="dark"].auth-shell .role-card {color:#29452b;}
+/* Role cards keep light surfaces in both themes; headings must not inherit the page's dark-theme white text. */
+:root .client-shell[data-client-theme].reference-client.auth-shell .role-card b {color:#183b2b;}
+:root .client-shell[data-client-theme].reference-client.auth-shell .role-card small {color:#4f6253;}
+:root .client-shell[data-client-theme].reference-client[data-client-theme="dark"].auth-shell .role-card:not(.selected) small {color:#243e2c;}
+:root .client-shell[data-client-theme].reference-client[data-client-theme="dark"] .feedback-panel {background:#2b4330;color:#e5eddf;}
+/* Real content must reflow; only decorative/map layers retain local clipping. */
+:root .client-shell[data-client-theme].reference-client :is(.main-shell,.content,.heading-main,.heading-main>div,.page-heading,.reference-page-bar,.app-header,.simple-header,.section-block,.reference-profile,.reference-wallet,.reference-home) {min-width:0;}
+:root .client-shell[data-client-theme].reference-client :is(.page-heading h1,.page-heading p,.page-heading .eyebrow,.profile-hero h2,.profile-hero p,.achievement h3,.achievement p,.store-entry b,.store-entry small,.modal h2,.modal h3,.modal p,.modal code,.clue-item p,.clue-item small) {overflow-wrap:anywhere;}
+:root .client-shell[data-client-theme].reference-client .page-heading .gold-button {min-width:0;max-width:100%;color:#fff;background:#183b2b;white-space:normal;line-height:1.5;}
+:root .client-shell[data-client-theme].reference-client .page-heading .gold-button svg {flex:none;}
+/* Explicit tracks keep the copy out of the icon's narrow column on mobile. */
+:root .client-shell[data-client-theme].reference-client .explorer-progress {display:grid;grid-template-columns:42px minmax(0,1fr);gap:14px;padding:20px 18px;margin-bottom:24px;min-width:0;}
+:root .client-shell[data-client-theme].reference-client .explorer-progress > .journey-icon {display:grid;grid-column:1;grid-row:1;width:42px;height:42px;align-self:start;}
+:root .client-shell[data-client-theme].reference-client .explorer-progress-copy {grid-column:2;grid-row:1;min-width:0;width:100%;}
+:root .client-shell[data-client-theme].reference-client .explorer-progress :is(h2,p,.pill) {overflow-wrap:anywhere;}
+:root .client-shell[data-client-theme].reference-client .explorer-progress h2 {margin:7px 0 5px;}
+:root .client-shell[data-client-theme].reference-client .explorer-progress p {margin:0;}
+:root .client-shell[data-client-theme].reference-client .explorer-quota {grid-column:1/-1;display:flex;flex-direction:row;align-items:baseline;flex-wrap:wrap;gap:8px;width:auto;min-width:0;text-align:left;padding-top:12px;border-top:1px solid #ffffff26;}
+:root .client-shell[data-client-theme].reference-client .explorer-quota :is(strong,small) {min-width:0;overflow-wrap:anywhere;}
+:root .client-shell[data-client-theme].reference-client .stat-grid.three {grid-template-columns:repeat(3,minmax(0,1fr));}
+:root .client-shell[data-client-theme].reference-client .stat-grid.three .stat-card {min-width:0;}
+:root .client-shell[data-client-theme].reference-client .stat-card :is(strong,span) {max-width:100%;overflow-wrap:anywhere;line-height:1.4;}
+:root .client-shell[data-client-theme].reference-client .stat-grid.three .stat-card strong {font-size:clamp(17px,5vw,28px);}
+:root .client-shell[data-client-theme].reference-client .placement-filters {display:flex;max-width:100%;gap:6px;margin:18px 0;overflow-x:auto;padding:4px;}
+:root .client-shell[data-client-theme].reference-client .placement-filters button {flex:none;padding:9px 11px;border-radius:12px;font-size:12px;line-height:1.5;}
+:root .client-shell[data-client-theme].reference-client .placement-row {display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px;padding:20px 17px;min-width:0;}
+:root .client-shell[data-client-theme].reference-client .placement-row>div:first-child {min-width:0;}
+:root .client-shell[data-client-theme].reference-client .placement-row :is(h2,p,.pill,.placement-count strong,.placement-count span) {overflow-wrap:anywhere;}
+:root .client-shell[data-client-theme].reference-client .placement-row h2 {margin:10px 0 5px;}
+:root .client-shell[data-client-theme].reference-client .placement-row p {margin:0;}
+:root .client-shell[data-client-theme].reference-client .placement-row>.outline-button {grid-column:1/-1;width:100%;min-width:0;padding:11px 13px;border:1px solid var(--line,#dfe4dc);white-space:normal;}
+:root .client-shell[data-client-theme].reference-client .placement-row>.danger-button {grid-column:1/-1;justify-self:start;padding:9px 0;}
+:root .client-shell[data-client-theme].reference-client .placement-count {min-width:0;max-width:90px;}
+:root .client-shell[data-client-theme].reference-client .placement-count strong {font-size:clamp(18px,5vw,25px);}
+:root .client-shell[data-client-theme].reference-client .quick-stats {grid-template-columns:repeat(3,minmax(0,1fr));}
+:root .client-shell[data-client-theme].reference-client :is(.quick-stats button,.profile-stats>*,.store-entry>div,.achievement-top>div,.settings-row>div) {min-width:0;}
+:root .client-shell[data-client-theme].reference-client :is(.quick-stats strong,.profile-stats b,.quick-stats span,.profile-stats span) {max-width:100%;overflow-wrap:anywhere;}
+:root .client-shell[data-client-theme].reference-client .achievement-top {gap:12px;}
+:root .client-shell[data-client-theme].reference-client .achievement-top strong {flex:none;}
+:root .client-shell[data-client-theme].reference-client .store-entry>span,
+:root .client-shell[data-client-theme].reference-client .store-entry>svg {flex:none;}
+:root .client-shell[data-client-theme].reference-client .reference-home .treasure-copy b {display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;max-width:100%;white-space:normal;overflow-wrap:anywhere;}
+:root .client-shell[data-client-theme].reference-client .reference-home .treasure-copy p {display:block;max-width:100%;}
+:root .client-shell[data-client-theme].reference-client .reference-home .treasure-copy small {display:block;max-width:100%;white-space:normal;overflow-wrap:anywhere;}
+:root .client-shell[data-client-theme].reference-client .reference-home .treasure-copy small svg {display:inline;vertical-align:middle;}
+/* Card fronts are summaries; their complete text remains in the reward dialog. */
+:root .client-shell[data-client-theme].reference-client .reference-wallet .card-grid {grid-template-columns:repeat(2,minmax(0,1fr));}
+:root .client-shell[data-client-theme].reference-client .reference-wallet .coupon-card {height:auto;min-height:245px;align-self:stretch;}
+:root .client-shell[data-client-theme].reference-client .reference-wallet .coupon-card-inner {height:100%;min-height:245px;}
+:root .client-shell[data-client-theme].reference-client .reference-wallet .collect-card {position:relative;inset:auto;min-height:245px;height:100%;justify-content:flex-start;}
+:root .client-shell[data-client-theme].reference-client .reference-wallet .collect-card .rarity {position:absolute;top:13px;right:13px;}
+:root .client-shell[data-client-theme].reference-client .reference-wallet .coupon-details {min-width:0;max-width:100%;margin-top:104px;}
+:root .client-shell[data-client-theme].reference-client .reference-wallet .coupon-details :is(small,b,em) {display:-webkit-box;-webkit-box-orient:vertical;max-width:100%;white-space:normal;overflow-wrap:anywhere;overflow:hidden;}
+:root .client-shell[data-client-theme].reference-client .reference-wallet .coupon-details small {line-height:1.5;-webkit-line-clamp:1;}
+:root .client-shell[data-client-theme].reference-client .reference-wallet .coupon-details b {line-height:1.45;-webkit-line-clamp:2;}
+:root .client-shell[data-client-theme].reference-client .reference-wallet .coupon-details em {line-height:1.5;-webkit-line-clamp:1;}
+:root .client-shell[data-client-theme].reference-client .reference-wallet .coupon-action {position:relative;bottom:auto;right:auto;margin-top:auto;padding-top:12px;align-self:flex-end;}
+@media(min-width:720px) {
+  :root .client-shell[data-client-theme].reference-client .reference-wallet .card-grid {grid-template-columns:repeat(3,minmax(0,1fr));}
+}
+:root .client-shell[data-client-theme].reference-client .modal :is(input,textarea,select,.verify-input-row,.coupon-code,.share-actions,.feedback-options,.modal-actions) {min-width:0;max-width:100%;}
+:root .client-shell[data-client-theme].reference-client .modal :is(.modal-actions,.share-actions,.feedback-options) {flex-wrap:wrap;}
+:root .client-shell[data-client-theme].reference-client .modal-actions button {min-width:0;white-space:normal;}
+:root .client-shell[data-client-theme].reference-client.auth-shell .role-options {grid-template-columns:repeat(2,minmax(0,1fr));}
+:root .client-shell[data-client-theme].reference-client.auth-shell .role-card {min-width:0;}
+:root .client-shell[data-client-theme].reference-client.auth-shell .role-card>span:nth-child(2) {min-width:0;overflow-wrap:anywhere;}
+@media(max-width:540px) {
+  :root .client-shell[data-client-theme].reference-client .page-heading:not(.reference-heading-hidden) {display:grid;grid-template-columns:minmax(0,1fr);gap:16px;}
+  :root .client-shell[data-client-theme].reference-client .page-heading .heading-main {display:grid;grid-template-columns:42px minmax(0,1fr);gap:14px;}
+  :root .client-shell[data-client-theme].reference-client .page-heading>.gold-button {justify-self:stretch;width:100%;margin:0;}
+}
+@media(max-height:480px) and (orientation:landscape) {
+  :root .client-shell[data-client-theme].reference-client .content {padding-top:18px;}
+  :root .client-shell[data-client-theme].reference-client .glass-tabbar {height:64px;}
+  :root .client-shell[data-client-theme].reference-client .treasure-detail-art {height:clamp(95px,35dvh,150px);}
+  :root .client-shell[data-client-theme].reference-client .enlarged-coupon.modal {--reference-card-padding-top:36px;min-height:0;padding-top:var(--reference-card-padding-top);}
+  :root .client-shell[data-client-theme].reference-client .reference-reward-content .coupon-qr {max-width:140px;}
+  :root .client-shell[data-client-theme].reference-client.auth-shell {padding-top:24px;}
+}
+@media(min-width:720px) {
+  :root .client-shell[data-client-theme].reference-client .content {padding-top:40px;}
+}
+@media(max-width:380px) {
+  :root .client-shell[data-client-theme].reference-client .enlarged-coupon.modal {--reference-card-padding-top:38px;--reference-card-padding-inline:17px;padding:var(--reference-card-padding-top) var(--reference-card-padding-inline) 20px;}
+  :root .client-shell[data-client-theme].reference-client .coupon-details b {font-size:16px;}
+  :root .client-shell[data-client-theme].reference-client .reference-home .section-heading .search-field {order:3;width:100%;}
+}
+/* A narrow phone keeps a six-digit contribution total on one card instead of
+   breaking the number between rows; the first two counters remain paired. */
+@media(max-width:359px) {
+  :root .client-shell[data-client-theme].reference-client .stat-grid.three {grid-template-columns:repeat(2,minmax(0,1fr));}
+  :root .client-shell[data-client-theme].reference-client .stat-grid.three .stat-card:last-child {grid-column:1/-1;}
+}
+@media(prefers-reduced-motion:reduce) {
+  :root .client-shell[data-client-theme].reference-client *, :root .client-shell[data-client-theme].reference-client *::before, :root .client-shell[data-client-theme].reference-client *::after {animation:none!important;transition:none!important;scroll-behavior:auto!important;}
+}
+:root .client-shell[data-client-theme].reference-client[data-reduce-motion] *, :root .client-shell[data-client-theme].reference-client[data-reduce-motion] *::before, :root .client-shell[data-client-theme].reference-client[data-reduce-motion] *::after {animation:none!important;transition:none!important;scroll-behavior:auto!important;}
