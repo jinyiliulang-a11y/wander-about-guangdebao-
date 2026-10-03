@@ -1,4 +1,5 @@
 import type { Page } from "./game-types";
+import { appPath, stripAppPath } from "./application-scope";
 
 export type ProjectEdition = "full" | "client" | "merchant" | "operations";
 
@@ -7,24 +8,24 @@ export type ProjectEdition = "full" | "client" | "merchant" | "operations";
 export const PROJECT_EDITION: ProjectEdition = "full";
 
 export function editionEntryPath(edition: ProjectEdition = PROJECT_EDITION): string {
-  return edition === "merchant" ? "/merchant/login" : edition === "operations" ? "/staff/login" : "/";
+  return appPath(edition === "merchant" ? "/merchant/login" : edition === "operations" ? "/staff/login" : "/");
 }
 
 /** Keep deep-link queries intact while returning only same-origin paths. */
 export function editionRoutePath(path: string, edition: ProjectEdition = PROJECT_EDITION): string {
   // Preserve all historical combined-app route behavior, including aliases.
-  if (edition === "full") return path;
+  if (edition === "full") return appPath(path);
   const entry = editionEntryPath(edition);
   if (!path.startsWith("/") || path.startsWith("//") || path.includes("\\")) return entry;
   let url: URL;
-  try { url = new URL(path, "https://edition.invalid"); } catch { return entry; }
+  try { url = new URL(stripAppPath(path), "https://edition.invalid"); } catch { return entry; }
   const pathname = url.pathname.replace(/\/+$/, "") || "/";
   let decoded = pathname;
   try { decoded = decodeURIComponent(pathname).replace(/\/+$/, "") || "/"; } catch { /* Route parser handles malformed task IDs. */ }
   const allowed = edition === "client" ? pathname === "/" || pathname.startsWith("/client/")
     : edition === "merchant" ? pathname.startsWith("/merchant/") && decoded !== "/merchant/review"
     : pathname.startsWith("/staff/") || pathname.startsWith("/ops/");
-  return allowed ? url.pathname + url.search + url.hash : entry;
+  return allowed ? appPath(url.pathname + url.search + url.hash) : entry;
 }
 
 /** Navigation is an edition boundary, independent of account authorization. */

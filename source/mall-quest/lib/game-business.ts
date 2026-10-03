@@ -126,9 +126,11 @@ async function scopeStore(req: Request, requested?: unknown) {
 async function admin(req: Request) { if ((await staff(req)).role!=='admin') throw new GameError("此操作仅限运营",403); }
 const summary = (p: Row): OperationsUser => ({ id:String(p.id),nickname:String(p.nickname),phoneMasked:phoneMasked(p.phone),authenticated:!!p.phone||!!p.registered_account,
   points:Number(p.points_balance),level:Math.floor(Number(p.earned||0)/100)+1,banned:!!p.banned,claimCount:Number(p.claim_count||0),createdAt:Number(p.created_at) });
-const userStatusPermissions = (id: string, pid: string): OperationsUserPermissions => {
-  const protectedIdentity = id===pid || id==='mall-curator';
-  return {canChangeStatus:!protectedIdentity,statusReason:protectedIdentity?'不能停用当前运营身份或系统发现官':null};
+const userStatusPermissions = async (id: string, pid: string): Promise<OperationsUserPermissions> => {
+  if(id===pid || id==='mall-curator')
+    return {canChangeStatus:false,statusReason:'不能停用当前运营身份或系统发现官'};
+  const preservedAdmin = await db().prepare("SELECT id FROM accounts WHERE role='admin' AND username='admin' AND player_id=?").bind(id).first();
+  return {canChangeStatus:!preservedAdmin,statusReason:preservedAdmin?'不能停用保留的超级管理员账号':null};
 };
 const userDetailPage = (value: unknown, name: string) => value===undefined ? 1 : numeric(value,1,Number.MAX_SAFE_INTEGER,name);
 const userDetailPagination = (requested: number, total: number): OperationsUserPagination => {
@@ -517,15 +519,16 @@ async function workbenchAction(req:Request,input:Row,pid:string,now:number):Prom
         ledger:ledger.map(r=>({id:String(r.id),delta:Number(r.delta),kind:String(r.kind),reason:String(r.reason),createdAt:Number(r.created_at)})),pagination,
         activity:{earnedPoints:Number(p.earned),couponRewards:Number(p.coupon_rewards),pointsRewards:Number(p.points_rewards),redeemedCoupons:Number(p.redeemed_coupons),
           placements:Number(p.placement_count),publishedPlacements:Number(p.published_placements),ledgerEntries:Number(p.ledger_count),lastActiveDay:p.last_active_day==null?null:String(p.last_active_day)},
-        permissions:userStatusPermissions(id,actorId)} satisfies OperationsUserDetail;
+        permissions:await userStatusPermissions(id,actorId)} satisfies OperationsUserDetail;
     }
     case 'opsUserStatus': {
       await admin(req);
       const id=text(input.playerId,1,100,'用户标识');
       if(typeof input.banned!=='boolean')throw new GameError('停用状态格式不正确');
-      const permission=userStatusPermissions(id,String((await staff(req)).player_id));
+      const permission=await userStatusPermissions(id,String((await staff(req)).player_id));
       if(!permission.canChangeStatus)throw new GameError(permission.statusReason!);
-      const result=await db().prepare(`UPDATE players SET banned=? WHERE id=? AND ${staffAuthorizationSQL(undefined,true)}`)
+      const result=await db().prepare(`UPDATE players SET banned=? WHERE id=? AND ${staffAuthorizationSQL(undefined,true)}
+        AND NOT EXISTS(SELECT 1 FROM accounts preserved_admin WHERE preserved_admin.role='admin' AND preserved_admin.username='admin' AND preserved_admin.player_id=players.id)`)
         .bind(input.banned?1:0,id,...staffAuth).run();
       if(!result.meta.changes)throw new GameError('用户不存在',404);
       return {message:input.banned?'用户已停用，后续游戏与工作台写操作被拒绝':'用户已恢复'};

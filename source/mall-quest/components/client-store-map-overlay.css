@@ -1,0 +1,47 @@
+/* The home map fills its own canvas, rather than inheriting editor map sizing.
+   Keep status text scrollable and reserve the floor strip and location control. */
+:root .client-shell[data-client-theme].reference-client .reference-home .client-store-map {
+  position: relative; width: 100%; height: 100%; min-height: 240px;
+  overflow: hidden; isolation: isolate; pointer-events: auto;
+  background: var(--client-soft, #e8efe9);
+}
+:root .client-shell[data-client-theme].reference-client .reference-home .client-store-map > .geofence-map-wrap {
+  position: absolute; inset: 0; width: 100%; height: 100%; min-height: 0;
+}
+:root .client-shell[data-client-theme].reference-client .reference-home .client-store-map .geofence-map {
+  width: 100%; height: 100%; min-height: 0;
+}
+:root .client-shell[data-client-theme].reference-client .reference-home .client-store-map-status {
+  position: absolute; z-index: 4; top: 12px; left: 12px;
+  box-sizing: border-box; width: max-content; max-width: min(340px, calc(100% - 24px));
+  max-height: max(48px, calc(50% - 80px)); overflow-y: auto;
+  overscroll-behavior: contain; overflow-wrap: anywhere;
+  display: grid; gap: 6px; padding: 9px 12px;
+  border: 1px solid var(--line, #d8e5dc); border-radius: 13px;
+  background: var(--surface, #fafdFA); color: var(--text, #294b3b);
+  box-shadow: 0 6px 18px rgb(27 61 42 / 8%); font-size: 12px; line-height: 1.5;
+}
+:root .client-shell[data-client-theme].reference-client .reference-home .client-store-map-status button {
+  display: inline-flex; align-items: center; gap: 5px; justify-self: start;
+  margin: 0; padding: 2px 0; border: 0; background: transparent;
+  color: inherit; font: inherit; font-weight: 650; cursor: pointer;
+}
+:root .client-shell[data-client-theme].reference-client .reference-home .client-store-map-locate {
+  position: absolute; z-index: 5; right: 14px; bottom: 82px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  width: auto; height: auto; min-height: 44px; padding: 9px 12px;
+  border: 1px solid var(--line, #d8e5dc); border-radius: 14px;
+  background: var(--surface, #fafdFA); color: var(--text, #214d36);
+  box-shadow: 0 6px 18px rgb(27 61 42 / 12%); font: inherit;
+  font-size: 12px; font-weight: 650; cursor: pointer;
+}
+:root .client-shell[data-client-theme].reference-client .reference-home .client-store-map-locate > svg { flex: none; }
+:root .client-shell[data-client-theme].reference-client .reference-home .map-fullscreen .client-store-map-status {
+  top: 88px; max-height: max(24px, calc(50% - 168px));
+}
+:root .client-shell[data-client-theme].reference-client .reference-home .map-fullscreen .client-store-map-locate { bottom: 172px; }
+@media (max-height: 420px) {
+  :root .client-shell[data-client-theme].reference-client .reference-home .map-fullscreen .client-store-map-status {
+    top: 64px; max-height: max(16px, calc(50% - 168px));
+  }
+}

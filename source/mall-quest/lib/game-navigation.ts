@@ -1,14 +1,15 @@
 import type { Page, Role } from "./game-types";
 import { PROJECT_EDITION, editionRoutePath, type ProjectEdition } from "./project-edition";
+import { appPath, stripAppPath } from "./application-scope";
 
 export function pushGamePath(path: string, role: Role) {
   const current = window.history.state?.mallQuestDepth;
   const depth = Number.isSafeInteger(current) && current >= 0 ? current : 0;
-  window.history.pushState({ mallQuestRole: role, mallQuestDepth: depth + 1, mallQuestPreviousPath: window.location.pathname }, "", path);
+  window.history.pushState({ mallQuestRole: role, mallQuestDepth: depth + 1, mallQuestPreviousPath: window.location.pathname }, "", appPath(path));
 }
 
 export function pagePath(page: Page): string {
-  return {
+  return appPath({
     entry: "/",
     login: "/client/login",
     map: "/client/map",
@@ -23,11 +24,11 @@ export function pagePath(page: Page): string {
     geofence: "/client/geofence",
     merchant: "/merchant/dashboard",
     staff: "/staff/stats",
-  }[page];
+  }[page]);
 }
 
 export function routeView(path: string, preferredRole: Role = "hunter", edition: ProjectEdition = PROJECT_EDITION) {
-  const scoped = editionRoutePath(path, edition);
+  const scoped = stripAppPath(editionRoutePath(path, edition));
   const routePath = edition === "full" ? scoped : scoped.split(/[?#]/, 1)[0];
   const original = routePath.replace(/\/$/, "") || "/";
   const clean =
@@ -54,7 +55,7 @@ export function routeView(path: string, preferredRole: Role = "hunter", edition:
       merchant: 1,
       staff: 1,
     }) as Page[]
-  ).find((page) => pagePath(page) === clean);
+  ).find((page) => stripAppPath(pagePath(page)) === clean);
   const page: Page =
     (playerLogin ? "login" : matched) ||
     (/^\/client\/(?:coin|nfc)\//.test(clean)

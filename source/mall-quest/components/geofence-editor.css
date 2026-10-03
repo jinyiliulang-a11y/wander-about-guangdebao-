@@ -1,0 +1,10 @@
+
+.geofence-editor .geofence-shape-picker{display:flex;gap:16px;flex-wrap:wrap;border:0;padding:8px 0 12px;margin:0}
+.geofence-editor .geofence-shape-picker legend{font-weight:700;margin-bottom:8px}
+.geofence-editor .geofence-shape-picker label{display:flex;gap:8px;align-items:center}
+.geofence-editor .geofence-polygon-tools{padding:12px 0}
+.geofence-editor .geofence-polygon-tools p{margin:0 0 8px}
+.geofence-editor .geofence-polygon-tools details{margin-top:12px}
+.geofence-editor .geofence-vertex-list{max-height:220px;overflow:auto;padding:8px 0;list-style:none}
+.geofence-editor .geofence-vertex-list li{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:6px 0}
+.geofence-editor .geofence-vertex-list button{border:1px solid var(--line,#d5ded6);border-radius:10px;padding:8px 12px;background:transparent;color:inherit;min-height:40px}

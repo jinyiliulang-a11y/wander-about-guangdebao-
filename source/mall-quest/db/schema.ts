@@ -284,6 +284,8 @@ export const storeGeofences = sqliteTable("store_geofences", {
   storeId: text("store_id").primaryKey().notNull().references(() => stores.id),
   enabled: integer("enabled", { mode: "boolean" }).notNull().default(false),
   latitude: real("latitude"), longitude: real("longitude"), radiusMeters: real("radius_meters"),
+  shapeType: text("shape_type", { enum: ["circle", "polygon"] }).notNull().default("circle"),
+  polygonJson: text("polygon_json"),
   revision: integer("revision").notNull().default(1), updatedAt: integer("updated_at").notNull(),
 }, t => [
   check("geofence_enabled_boolean", sql`${t.enabled} IN (0,1)`),
@@ -293,6 +295,11 @@ export const storeGeofences = sqliteTable("store_geofences", {
   check("geofence_longitude_range", sql`${t.longitude} IS NULL OR (${t.longitude}>=-180 AND ${t.longitude}<=180)`),
   check("geofence_radius_range", sql`${t.radiusMeters} IS NULL OR (${t.radiusMeters}>=20 AND ${t.radiusMeters}<=5000)`),
   check("geofence_enabled_center", sql`${t.enabled}=0 OR (${t.latitude} IS NOT NULL AND ${t.longitude} IS NOT NULL AND ${t.radiusMeters} IS NOT NULL)`),
+  check("geofence_shape_type", sql`${t.shapeType} IN ('circle','polygon')`),
+  check("geofence_polygon_shape", sql`(${t.shapeType}='circle' AND ${t.polygonJson} IS NULL)
+   OR (${t.shapeType}='polygon' AND ${t.polygonJson} IS NOT NULL AND CASE
+    WHEN length(${t.polygonJson})<=16384 AND json_valid(${t.polygonJson})
+    THEN json_type(${t.polygonJson})='array' AND json_array_length(${t.polygonJson}) BETWEEN 3 AND 64 ELSE 0 END)`),
 ]);
 export const couponTemplates=sqliteTable("coupon_templates",{
   id:text("id").primaryKey(),storeId:text("store_id").notNull().references(()=>stores.id),title:text("title").notNull(),type:text("type").notNull(),

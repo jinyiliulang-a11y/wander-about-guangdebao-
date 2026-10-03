@@ -20,7 +20,7 @@ function fixture(edition) {
   const browser = { history, location: { pathname: "/client/map" } };
   function load(relative) {
     if (cache.has(relative)) return cache.get(relative);
-    assert.ok(["lib/project-edition.ts", "lib/game-navigation.ts"].includes(relative));
+    assert.ok(["lib/project-edition.ts", "lib/game-navigation.ts", "lib/application-scope.ts"].includes(relative));
     let source = readFileSync(path.join(root, relative), "utf8");
     if (relative === "lib/project-edition.ts") {
       const literal = /^export const PROJECT_EDITION: ProjectEdition = "(full|client|merchant|operations)";$/m;
@@ -32,7 +32,7 @@ function fixture(edition) {
     cache.set(relative, loadedModule.exports);
     vm.runInThisContext(`(function(exports,require,module,URL,window){${compiled}\n})`, { filename: relative })(
       loadedModule.exports,
-      specifier => { assert.equal(specifier, "./project-edition"); return load("lib/project-edition.ts"); },
+      specifier => { assert.ok(["./project-edition", "./application-scope"].includes(specifier)); return load(`lib/${specifier.slice(2)}.ts`); },
       loadedModule, URL, browser,
     );
     return loadedModule.exports;

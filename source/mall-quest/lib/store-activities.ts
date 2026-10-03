@@ -1,7 +1,8 @@
 import { cookie, db, hash, staff } from "./game-server";
 import { GameError } from "./game-error";
 import { staffAuthorizationSQL } from "./account-authorization";
-import { validCoordinates, validRadius } from "./geofence";
+import { validFenceGeometry } from "./geofence";
+import { validatePolygonVertices } from "./polygon-geofence";
 import type { StoreGeofence } from "./geofence";
 import {
   STORE_ACTIVITY_DESCRIPTION_LIMIT, STORE_ACTIVITY_PAGE_SIZE, STORE_ACTIVITY_REVIEW_NOTE_LIMIT,
@@ -15,12 +16,14 @@ const EVENT = "mall-48h";
 type Row = Record<string, unknown>;
 type Scope = { manage: boolean; storeId?: string; tokenHash?: string };
 const CLOCK = "CAST((julianday('now')-2440587.5)*86400000 AS INTEGER)";
-const FENCE_FIELDS = "g.enabled,g.latitude,g.longitude,g.radius_meters,g.revision AS fence_revision,g.updated_at AS fence_updated_at";
+const FENCE_FIELDS = "g.enabled,g.latitude,g.longitude,g.radius_meters,g.revision AS fence_revision,g.updated_at AS fence_updated_at,g.shape_type,g.polygon_json";
 const STORE_FROM = "FROM stores s LEFT JOIN store_geofences g ON g.store_id=s.id";
 const ACTIVITY_FROM = `FROM store_activities a JOIN stores s ON s.id=a.store_id AND s.event_id=a.event_id
   LEFT JOIN store_geofences g ON g.store_id=s.id`;
-const FENCE_VALID = `g.enabled=1 AND g.revision>=1 AND g.latitude BETWEEN -90 AND 90
-  AND g.longitude BETWEEN -180 AND 180 AND g.radius_meters BETWEEN 20 AND 5000`;
+const FENCE_VALID = `g.enabled=1 AND g.revision>=1 AND g.latitude BETWEEN -90 AND 90 AND g.longitude BETWEEN -180 AND 180 AND g.radius_meters BETWEEN 20 AND 5000
+ AND ((g.shape_type='circle' AND g.polygon_json IS NULL) OR (g.shape_type='polygon' AND g.polygon_json IS NOT NULL AND CASE
+ WHEN length(g.polygon_json)<=16384 AND json_valid(g.polygon_json)
+ THEN json_type(g.polygon_json)='array' AND json_array_length(g.polygon_json) BETWEEN 3 AND 64 ELSE 0 END))`;
 // This is evaluated inside every management query/write, including after the initial staff read.
 const AUTH = staffAuthorizationSQL("s.id");
 const ADMIN_AUTH = staffAuthorizationSQL(undefined, true);
@@ -59,19 +62,28 @@ function date(value: unknown): number {
     throw new GameError("活动时间不正确，请重新选择开始和结束时间");
   return value;
 }
+function activityPolygon(value: unknown) {
+  if (typeof value !== "string" || value.length > 16384) return null;
+  try { return validatePolygonVertices(JSON.parse(value)); } catch { return null; }
+}
 function fence(row: Row): StoreGeofence {
-  return { storeId: String(row.store_id), storeName: String(row.store_name), enabled: row.enabled === 1,
+  const shapeType = row.shape_type == null ? "circle" : row.shape_type;
+  if (shapeType !== "circle" && shapeType !== "polygon") unavailable();
+  return {
+    storeId: String(row.store_id), storeName: String(row.store_name), enabled: row.enabled === 1,
     latitude: row.latitude == null ? null : Number(row.latitude), longitude: row.longitude == null ? null : Number(row.longitude),
     radiusMeters: row.radius_meters == null ? null : Number(row.radius_meters),
     revision: row.fence_revision == null ? 0 : Number(row.fence_revision),
-    updatedAt: row.fence_updated_at == null ? null : Number(row.fence_updated_at), coordinateSystem: "WGS84" };
+    updatedAt: row.fence_updated_at == null ? null : Number(row.fence_updated_at),
+    coordinateSystem: "WGS84", shapeType, polygonVertices: shapeType === "polygon" ? activityPolygon(row.polygon_json) : null,
+  };
 }
 function configured(value: StoreGeofence) {
-  return value.enabled && Number.isSafeInteger(value.revision) && value.revision >= 1 &&
-    validCoordinates(value.latitude, value.longitude) && validRadius(value.radiusMeters);
+  return value.enabled && Number.isSafeInteger(value.revision) && value.revision >= 1 && value.coordinateSystem === "WGS84" && validFenceGeometry(value);
 }
 function dto(row: Row, manage: boolean, now = Date.now()): StoreActivity {
   const currentFence = fence(row);
+  if (!manage && !configured(currentFence)) unavailable();
   return { id: String(row.id), eventId: String(row.event_id), storeId: String(row.store_id), storeName: String(row.store_name),
     title: String(row.title), description: String(row.description), startAt: Number(row.start_at), endAt: Number(row.end_at),
     status: row.status as StoreActivityStatus,
@@ -105,7 +117,9 @@ async function context(access: Scope): Promise<{ ugcReview: boolean; fences: Sto
   const filter = where(access, Date.now(), false);
   const configs = await rows(`SELECT s.id AS store_id,s.name AS store_name,${FENCE_FIELDS} ${STORE_FROM} WHERE ${filter.sql} ORDER BY s.id`, filter.values);
   const settings = await rows("SELECT ugc_review FROM game_settings WHERE id='main'");
-  return { ugcReview: settings[0]?.ugc_review !== 0, fences: configs.map(fence) };
+  const fences = configs.map(fence);
+  if (!access.manage && fences.some(value => !configured(value))) unavailable();
+  return { ugcReview: settings[0]?.ugc_review !== 0, fences };
 }
 async function find(access: Scope, key: { id?: string; requestId?: string }): Promise<Row | undefined> {
   const filter = where(access, Date.now());

@@ -1,4 +1,5 @@
 import type { GameState, StaffState } from "./game-types";
+import { appPath } from "./application-scope";
 
 export type GameApiErrorKind = "offline" | "timeout" | "network" | "http" | "invalid-response" | "invalid-request";
 export type ApiRequestOptions = { timeoutMs?: number; retries?: 0 | 1; readOnly?: boolean };
@@ -132,12 +133,15 @@ async function attempt<T>(path: string, init: RequestInit, options: ApiRequestOp
 export async function apiRequest<T>(path: string, init: RequestInit = {}, options: ApiRequestOptions = {}): Promise<T> {
   const method = (init.method || "GET").toUpperCase();
   if (!path.trim()) throw new GameApiError("请求地址无效，本次请求尚未发送", { kind: "invalid-request", method });
+  let scopedPath: string;
+  try { scopedPath = appPath(path); }
+  catch { throw new GameApiError("请求地址无效，本次请求尚未发送", { kind: "invalid-request", method }); }
   const canRetry = method === "GET" && options.readOnly === true && options.retries === 1;
-  try { return await attempt<T>(path, init, options); }
+  try { return await attempt<T>(scopedPath, init, options); }
   catch (error) {
     if (!canRetry || !isGameApiError(error) || !error.retryable || error.kind === "invalid-response" || init.signal?.aborted) throw error;
     await new Promise(resolve => setTimeout(resolve, 350));
-    return attempt<T>(path, init, options);
+    return attempt<T>(scopedPath, init, options);
   }
 }
 

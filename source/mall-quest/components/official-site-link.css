@@ -1,0 +1,31 @@
+.official-site-link,
+:root .client-shell[data-client-theme].reference-client .reference-home .official-site-link {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: 6px; flex: none; min-height: 36px; padding: 7px 11px;
+  border: 1px solid currentColor; border-radius: 999px;
+  color: inherit; background: transparent; text-decoration: none;
+  font-size: 12px; font-weight: 600; line-height: 1.3; white-space: nowrap;
+  animation: official-link-enter 220ms cubic-bezier(.22,1,.36,1) both;
+  transition: background-color 160ms ease, color 160ms ease;
+}
+@keyframes official-link-enter { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+@keyframes official-page-exit { to { opacity: 0; transform: translateY(-4px); } }
+main.official-page-leaving { animation: official-page-exit 160ms ease-in both; }
+[data-reduce-motion="true"] .official-site-link,
+html[data-quest-reduce-motion="true"] .official-site-link { animation: none; }
+@media(prefers-reduced-motion:reduce) { .official-site-link,main.official-page-leaving { animation: none; } }
+.official-site-link:focus-visible,
+:root .client-shell[data-client-theme].reference-client .reference-home .official-site-link:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+.official-site-link[aria-disabled="true"],
+:root .client-shell[data-client-theme].reference-client .reference-home .official-site-link[aria-disabled="true"] { opacity: .55; cursor: wait; }
+.official-site-link span,
+:root .client-shell[data-client-theme].reference-client .reference-home .official-site-link span { font: inherit; color: inherit; }
+.official-site-return-row,
+:root .client-shell[data-client-theme].reference-client .reference-home .official-site-return-row { display: flex; margin: 0 0 14px; }
+.quest-theme-auth-actions { flex-wrap: wrap; gap: 8px; }
+.quest-theme-page-header { flex-wrap: wrap; gap: 10px; }
+.quest-theme-page-header .quest-theme-header-actions { flex-wrap: wrap; margin-left: auto; }
+@media (max-width: 480px) {
+  .official-site-link,
+  :root .client-shell[data-client-theme].reference-client .reference-home .official-site-link { min-height: 44px; }
+}

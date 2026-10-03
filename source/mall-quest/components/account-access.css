@@ -13,6 +13,8 @@
 :root :is(.client-shell[data-client-theme].reference-client.auth-shell,.reference-workspace-login) .account-access fieldset { border:0; padding:0; }
 :root :is(.client-shell[data-client-theme].reference-client.auth-shell,.reference-workspace-login) .account-access .field-label { display:grid; gap:9px; min-width:0; margin:0; color:var(--text,#17251c); font-size:14px; font-weight:600; line-height:1.6; }
 :root :is(.client-shell[data-client-theme].reference-client.auth-shell,.reference-workspace-login) .account-access :is(input,textarea,select).ui-input { display:block; box-sizing:border-box; min-width:0; width:100%; max-width:100%; min-height:48px; margin:0; padding:13px 15px; border:1px solid var(--line,#dfe5db); border-radius:14px; background:var(--surface,#fff); color:var(--text,#17251c); font:inherit; font-size:16px; font-weight:400; line-height:1.5; box-shadow:none; }
+/* Reserve both icon gutters after the shared auth input rule. */
+:root :is(.client-shell[data-client-theme].reference-client.auth-shell,.reference-workspace-login) .account-access .amap-poi-search .amap-poi-input-wrap input.ui-input.amap-poi-input { --ui-field-padding-inline:43px; padding-inline:43px; }
 :root :is(.client-shell[data-client-theme].reference-client.auth-shell,.reference-workspace-login) .account-access textarea.ui-input { resize:vertical; }
 :root :is(.client-shell[data-client-theme].reference-client.auth-shell,.reference-workspace-login) .account-access .ui-input::placeholder { color:var(--muted,#68756b); opacity:.8; }
 :root :is(.client-shell[data-client-theme].reference-client.auth-shell,.reference-workspace-login) .account-access :is(input,textarea,select,button):focus-visible { outline:2px solid var(--client-soft-ink,var(--green,#315c44)); outline-offset:2px; }
@@ -53,3 +55,19 @@
   :root :is(.client-shell[data-client-theme].reference-client.auth-shell,.reference-workspace-login) .account-access .account-registration-steps li { flex-direction:column; align-items:flex-start; gap:5px; }
 }
 
+
+
+/* Registration review result stays beside the query button. */
+.account-access .account-review-query{display:grid;gap:12px;margin-top:18px}
+.account-access .account-review-query .account-status-button{justify-self:start;margin-top:0}
+.account-access .account-review-result{display:grid;gap:10px;min-width:0;margin-top:12px;padding:16px;border:1px solid var(--line,#dfe5db);border-radius:14px;background:var(--surface,#fff);color:var(--text,#17251c);overflow-wrap:anywhere}
+.account-access .account-review-result h3{display:flex;align-items:center;gap:9px;margin:0;font-size:16px;line-height:1.6}
+.account-access .account-review-result p{margin:0;font-size:14px;line-height:1.8}
+.account-access .account-review-result .outline-button{justify-self:start}
+.account-access .account-review-result[data-status="approved"]{border-color:#4a9867}
+.account-access .account-review-result[data-status="pending"]{border-color:#ad862d}
+.account-access .account-review-result:is([data-status="error"],[data-status="rejected"]){border-color:var(--danger,#ac4345)}
+.account-access .account-review-spinner{display:inline-block;flex:none;width:16px;height:16px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:account-review-spin .75s linear infinite}
+@keyframes account-review-spin{to{transform:rotate(360deg)}}
+[data-reduce-motion="true"] .account-review-spinner{animation:none}
+@media(prefers-reduced-motion:reduce){.account-review-spinner{animation:none}}

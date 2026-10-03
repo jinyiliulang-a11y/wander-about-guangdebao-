@@ -83,6 +83,7 @@ import {
   WeeklyRanking,
 } from "./experience-pages";
 import { pagePath, routeView, pushGamePath } from "@/lib/game-navigation";
+import { APP_BASE_PATH, appPath, stripAppPath } from "@/lib/application-scope";
 import { PROJECT_EDITION, editionEntryPath, editionNavigation, editionRoutePath, editionScope } from "@/lib/project-edition";
 import { loadGame, loadStaff, request, isUncertainResult, GameApiError } from "@/lib/game-api";
 import "./fast-navigation.css";
@@ -234,9 +235,9 @@ function Modal({
   );
 }
 function preferredRole(): Role {
-  if (window.location.pathname === "/client/explorer/login") return "explorer";
-  if (window.location.pathname === "/client/hunter/login") return "hunter";
-  if (window.location.pathname === "/client/login") {
+  if (stripAppPath(window.location.pathname) === "/client/explorer/login") return "explorer";
+  if (stripAppPath(window.location.pathname) === "/client/hunter/login") return "hunter";
+  if (stripAppPath(window.location.pathname) === "/client/login") {
     const requested = new URLSearchParams(window.location.search).get("role");
     if (requested === "hunter" || requested === "explorer") return requested;
     return "hunter";
@@ -481,7 +482,7 @@ export default function TreasureApp() {
     normalizeEditionLocation();
     const seq = ++gameRequestSeq.current;
     let next: GameState;
-    try { next = await loadGame(editionScope() === "workspace" || /^\/(merchant|staff|ops)(\/|$)/.test(window.location.pathname) ? "workspace" : "player"); }
+    try { next = await loadGame(editionScope() === "workspace" || /^\/(merchant|staff|ops)(\/|$)/.test(stripAppPath(window.location.pathname)) ? "workspace" : "player"); }
     catch (e) { if (seq !== gameRequestSeq.current && latestGame.current) return latestGame.current; throw e; }
     if (seq !== gameRequestSeq.current) return latestGame.current || next;
     if (latestGame.current && latestGame.current.player.id !== next.player.id) {
@@ -497,7 +498,7 @@ export default function TreasureApp() {
     const currentDetail = detailRef.current;
     const supportsClient = editionScope() !== "workspace";
     const linkedId = supportsClient ? routeView(window.location.pathname, preferredRole()).taskId || new URLSearchParams(window.location.search).get("quest") : null;
-    if (supportsClient && (linkedId || /^\/client\/(coin|task|nfc)\//.test(window.location.pathname))) {
+    if (supportsClient && (linkedId || /^\/client\/(coin|task|nfc)\//.test(stripAppPath(window.location.pathname)))) {
       const entry = coinEntryFromUrl();
       setCoinEntryToken(entry.token); setCoinEntryError(entry.error);
       const updated = next.tasks.find(t => t.id === linkedId) || null;
@@ -508,7 +509,7 @@ export default function TreasureApp() {
         const params = new URLSearchParams(window.location.search);
         params.delete("quest");
         const query = params.toString();
-        if (window.location.search) window.history.replaceState({ ...window.history.state, mallQuestRole: "hunter" }, "", `/client/${window.location.pathname.startsWith("/client/nfc/") ? "nfc" : "coin"}/${encodeURIComponent(updated.id)}${query ? `?${query}` : ""}`);
+        if (window.location.search) window.history.replaceState({ ...window.history.state, mallQuestRole: "hunter" }, "", appPath(`/client/${stripAppPath(window.location.pathname).startsWith("/client/nfc/") ? "nfc" : "coin"}/${encodeURIComponent(updated.id)}${query ? `?${query}` : ""}`));
       } else {
         window.history.replaceState({ ...window.history.state, mallQuestRole: "hunter" }, "", pagePath("map"));
         setError("这条任务不存在、尚未发布或已下架，请选择其他宝藏。");
@@ -583,7 +584,7 @@ export default function TreasureApp() {
       detailRef.current = task;
       setOpenClues([0, 1]);
       setAnswer("");
-      if (game && !task && /^\/client\/(coin|task|nfc)\//.test(window.location.pathname)) {
+      if (game && !task && /^\/client\/(coin|task|nfc)\//.test(stripAppPath(window.location.pathname))) {
         window.history.replaceState({ ...window.history.state, mallQuestRole: "hunter" }, "", pagePath("map"));
         setError("这条任务不存在、尚未发布或已下架，请选择其他宝藏。");
       }
@@ -607,10 +608,10 @@ export default function TreasureApp() {
     return () => { cancelled = true; invalidate(); };
   }, [page, isWorkspace, hasStaff, game?.staff?.role, game?.staff?.storeId, refreshWorkspace]);
   const closeDetail = useCallback(() => {
-      if (/^\/client\/(coin|task|nfc)\//.test(window.location.pathname) && window.history.state?.mallQuestPreviousPath === pagePath("map") && window.history.state?.mallQuestDepth > 0) { window.history.back(); return; }
+      if (/^\/client\/(coin|task|nfc)\//.test(stripAppPath(window.location.pathname)) && window.history.state?.mallQuestPreviousPath === pagePath("map") && window.history.state?.mallQuestDepth > 0) { window.history.back(); return; }
       setDetail(null);
       detailRef.current = null;
-      if (/^\/client\/(coin|task|nfc)\//.test(window.location.pathname))
+      if (/^\/client\/(coin|task|nfc)\//.test(stripAppPath(window.location.pathname)))
         if (window.history.state?.mallQuestPreviousPath === pagePath("map") && window.history.state?.mallQuestDepth > 0) window.history.back();
         else window.history.replaceState(
           { ...window.history.state, mallQuestRole: "hunter" },
@@ -774,9 +775,9 @@ export default function TreasureApp() {
     const commit = () => {
       setStaffTab(tab); setError(""); setScanOpen(openScanner);
       if (openScanner) setRedeemCode("");
-      const path = page === "staff"
+      const path = appPath(page === "staff"
         ? `/staff/${tab === "overview" ? "stats" : tab === "system" ? "settings" : tab}`
-        : `/merchant/${tab === "overview" ? "dashboard" : tab === "redeem" ? "verify" : tab === "info" ? "profile" : tab === "devices" ? "coins" : tab}`;
+        : `/merchant/${tab === "overview" ? "dashboard" : tab === "redeem" ? "verify" : tab === "info" ? "profile" : tab === "devices" ? "coins" : tab}`);
       if (window.location.pathname !== path) pushGamePath(path, role);
       window.scrollTo({ top: 0 });
     };
@@ -795,7 +796,7 @@ export default function TreasureApp() {
   const openReward = (coupon: Coupon, origin?: HTMLElement) => {
     setRewardOrigin(cardOrigin(origin));
     setDetail(null); detailRef.current = null;
-    if (/^\/client\/(coin|task|nfc)\//.test(window.location.pathname))
+    if (/^\/client\/(coin|task|nfc)\//.test(stripAppPath(window.location.pathname)))
       window.history.replaceState({ ...window.history.state, mallQuestRole: "hunter" }, "", pagePath("map"));
     setReward(coupon); setShareOpen(false); setFeedbackComment(""); setFeedbackValue(3);
   };
@@ -828,7 +829,7 @@ export default function TreasureApp() {
     try {
       sessionStorage.setItem("mall-quest-role", nextRole);
     } catch {}
-    const path = login && (next === "merchant" || next === "staff") ? `/${next === "staff" ? "staff" : "merchant"}/login` : next === "login" && nextRole === "explorer" ? "/client/explorer/login" : pagePath(next);
+    const path = appPath(login && (next === "merchant" || next === "staff") ? `/${next === "staff" ? "staff" : "merchant"}/login` : next === "login" && nextRole === "explorer" ? "/client/explorer/login" : pagePath(next));
     if (window.location.pathname !== path || window.location.search)
       pushGamePath(path, nextRole);
     else
@@ -1492,7 +1493,7 @@ export default function TreasureApp() {
               {page === "help" && <HelpCenter onDemo={() => setHelp(true)} />}
               {page === "settings" && <ExperienceSettings preferences={preferences} onChange={next => { if (next.theme !== preferences.theme) switchTheme(next.theme); else setPreferences(next); }} ready={preferencesReady} />}
               {page === "geofence" && <GeofencePanel stores={game.stores} treasures={game.tasks} onOpenTask={openTask} onRefreshTasks={() => { refresh().catch(e => setError(e.message)); }} />}
-              {page === "profile" && <><ReferenceProfile game={game} role={role} badges={getAchievements(game).filter(item => item.unlocked).length} visitedStoreCount={visitedStoreCount} onNavigate={navigate} onHelp={() => navigate("help")} onSettings={() => navigate("settings")} onLogin={() => navigate("login", role)} onLogout={async () => { if (!busy && await act("playerLogout", {})) navigate("entry"); }} onSwitchRole={(next) => navigate("profile", next)} onInvite={() => setInviteLink(`${window.location.origin}/client/map`)} onContribution={() => navigate("placements", "explorer")} busy={busy} />
+              {page === "profile" && <><ReferenceProfile game={game} role={role} badges={getAchievements(game).filter(item => item.unlocked).length} visitedStoreCount={visitedStoreCount} onNavigate={navigate} onHelp={() => navigate("help")} onSettings={() => navigate("settings")} onLogin={() => navigate("login", role)} onLogout={async () => { if (!busy && await act("playerLogout", {})) navigate("entry"); }} onSwitchRole={(next) => navigate("profile", next)} onInvite={() => setInviteLink(`${window.location.origin}${appPath("/client/map")}`)} onContribution={() => navigate("placements", "explorer")} busy={busy} />
               <WeeklyRanking game={game} />
               {!!game.ownFeedback?.length && <section className="surface my-feedback"><h2>我的留言</h2>{game.ownFeedback.map(item => <article key={item.id}><div><strong>{item.taskTitle}</strong><p>{item.comment || `线索清晰度 ${item.clarity} / 5`}</p></div><button className="text-button danger-button" disabled={busy} aria-label={`删除留言 ${item.taskTitle}`} onClick={() => setDeleteItem({ kind: "feedback", id: item.id, title: item.taskTitle })}><Trash2 size={16} /> 删除</button></article>)}</section>}
               </>}
@@ -1842,7 +1843,7 @@ export default function TreasureApp() {
           {pendingOperation?.action === "claim" && pendingNotice()}
           {!detail.claimed && <GeofencePanel key={detail.id} stores={game?.stores || []} storeId={detail.storeId} compact locationOverride={coinPosition?.taskId === detail.id ? coinPosition.location : null} />}
           {!detail.claimed && detail.requiresNfcClaim && coinEntryError && <p className="inline-error" role="alert">{coinEntryError}</p>}
-          {detail.requiresNfcClaim && !coinEntryError && game && <NfcCouponFlow game={game} task={detail} tagEntry={typeof window !== "undefined" && window.location.pathname.startsWith("/client/nfc/")} entryToken={coinEntryToken} onAction={nfcAction} onOpenReward={openReward} onNewReward={coupon => celebration.celebrate(coupon.id)} onRefresh={async () => { await refresh(); }} />}
+          {detail.requiresNfcClaim && !coinEntryError && game && <NfcCouponFlow game={game} task={detail} tagEntry={typeof window !== "undefined" && stripAppPath(window.location.pathname).startsWith("/client/nfc/")} entryToken={coinEntryToken} onAction={nfcAction} onOpenReward={openReward} onNewReward={coupon => celebration.celebrate(coupon.id)} onRefresh={async () => { await refresh(); }} />}
           {!detail.claimed && !detail.requiresNfcClaim && <section className="coin-checkin notice" aria-live="polite">
             <div><strong><ShieldCheck size={18} /> {coinConfirmed && !coinEntryExpired ? "金币已确认" : "第一步 · 确认这枚金币"}</strong>
             <p>{coinConfirmed && !coinEntryExpired ? "继续回答观察问题，领取你的个人奖励券。" : "跟着线索到达门店，定位确认范围后，回答观察问题领奖。"}</p>
@@ -2038,7 +2039,7 @@ export default function TreasureApp() {
           {error && <p className="inline-error">{error}</p>}
         </ReferenceCardModal>
       )}
-      {reward && !reward.demo && shareOpen && <Modal title="分享这次发现" onClose={closeShare} sheet><DiscoverySharePanel coupon={reward} origin={window.location.origin} onCopy={copy} notify={notify} onGenerated={() => workAction("recordShare", { taskId: reward.taskId })} /></Modal>}
+      {reward && !reward.demo && shareOpen && <Modal title="分享这次发现" onClose={closeShare} sheet><DiscoverySharePanel coupon={reward} origin={window.location.origin + APP_BASE_PATH} onCopy={copy} notify={notify} onGenerated={() => workAction("recordShare", { taskId: reward.taskId })} /></Modal>}
       {inviteLink && page === "profile" && <Modal title="邀请好友一起探索" onClose={closeInvite}><InvitationContent link={inviteLink} onCopy={copy} /></Modal>}
       {reviewHistory && page === "staff" && game?.staff?.role === "admin" && (
         <Modal title="审核历史" onClose={closeHistory}>

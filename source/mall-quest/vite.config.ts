@@ -4,6 +4,7 @@ import hostingConfig from "./.openai/hosting.json";
 import { readExecutionProfile } from "./scripts/execution-profile.mjs";
 import { sites } from "./build/sites-vite-plugin";
 import { connectorPreview } from "./build/connector-preview-plugin.mjs";
+import { APP_BASE_PATH } from "./lib/application-scope";
 
 const SITE_CREATOR_PLACEHOLDER_DATABASE_ID =
   "00000000-0000-4000-8000-000000000000";
@@ -52,6 +53,7 @@ export default defineConfig(async ({ command }) => {
   const { cloudflare } = await import("@cloudflare/vite-plugin");
 
   return {
+    base: APP_BASE_PATH ? APP_BASE_PATH + "/" : "/",
     server: {
       ...(process.env.MALL_LAN === "true" ? { host: "0.0.0.0" } : {}),
       ...(managedLinux

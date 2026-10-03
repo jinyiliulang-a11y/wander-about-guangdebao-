@@ -7,6 +7,7 @@ import type { Role, Store, Task } from "@/lib/game-types";
 import { ClientWordmark } from "./client-wordmark";
 import { ThemeToggle } from "./theme-toggle";
 import { StoreImage } from "./store-image";
+import { ClientStoreMap } from "./client-store-map";
 import "./store-image-surfaces.css";
 import "./reference-home-motion.css";
 import "./map-controls-motion.css";
@@ -94,7 +95,6 @@ function artworkFrame(width: number, height: number): MapArtworkFrame {
 const artworkTransform = (frame: MapArtworkFrame) => `translate(${frame.x}px, ${frame.y}px) scale(${frame.scale})`;
 const mapBounds = (rect: DOMRect | DOMRectReadOnly): Keyframe => ({ left: `${rect.left}px`, top: `${rect.top}px`, width: `${rect.width}px`, height: `${rect.height}px` });
 const reducedMotion = () => document.documentElement.dataset.questReduceMotion === "true" || window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-const safeCoordinate = (value: number, fallback: number) => Number.isFinite(value) ? Math.max(4, Math.min(90, value)) : fallback;
 const focusable = (element: HTMLElement) => [...element.querySelectorAll<HTMLElement>("button:not(:disabled),a[href],input:not(:disabled),select:not(:disabled),textarea:not(:disabled),[tabindex='0']")].filter(node => node.getClientRects().length > 0);
 
 /** Reference TreasureHome composition, backed exclusively by actual game state. */
@@ -129,8 +129,7 @@ export function ReferenceHome({
   const storeMap = new Map(stores.map(store => [store.id, store]));
   const query = search.trim().normalize("NFKC").toLocaleLowerCase();
   const results = visible.filter(task => [task.title, task.reward, task.storeName || storeMap.get(task.storeId)?.name || "", task.area].join(" ").normalize("NFKC").toLocaleLowerCase().includes(query));
-  const pins = new Map<string, Task[]>();
-  for (const task of visible) pins.set(task.storeId, [...(pins.get(task.storeId) || []), task]);
+
 
   const showFloorTreasures = () => {
     const section = floorTreasures.current;
@@ -279,7 +278,6 @@ export function ReferenceHome({
     const closing = mapState === "closing";
     const fromBounds = closing ? card.getBoundingClientRect() : originRect.current;
     const fromRadius = closing ? window.getComputedStyle(card).borderRadius : originRadius.current;
-    const fromArtwork = closing ? window.getComputedStyle(layer).transform : "none";
     const chromeElements = [...card.querySelectorAll<HTMLElement>(".map-fullscreen-title,.map-close,.map-controls,.map-zoom-button")];
     const chromeFrames = new Map(chromeElements.map(element => {
       const style = window.getComputedStyle(element);
@@ -326,10 +324,7 @@ export function ReferenceHome({
       { ...mapBounds(fromBounds), borderRadius: fromRadius, opacity: 1 },
       { ...mapBounds(toBounds), borderRadius: toRadius, opacity: 1 },
     ], timing);
-    const picture = layer.animate([
-      { transform: fromArtwork },
-      { transform: closing ? "none" : window.getComputedStyle(layer).transform },
-    ], timing);
+
     const chrome = chromeElements.map(element => {
       const controls = element.matches(".map-controls"), zoom = element.matches(".map-zoom-button"), title = element.matches(".map-fullscreen-title");
       // The compact-only expand button retains its layout slot in fullscreen.
@@ -360,7 +355,7 @@ export function ReferenceHome({
         fill: "both",
       });
     });
-    animations.current = [main, picture, ...chrome];
+    animations.current = [main, ...chrome];
     main.finished.then(() => {
       if (closing && phase.current === "closing") finishClose();
       else if (!closing && phase.current === "expanded") cancelAnimations();
@@ -405,23 +400,12 @@ export function ReferenceHome({
       className={`map-card map-morph ${active ? "map-fullscreen" : ""} ${mapState === "closing" ? "map-collapsing" : ""}`}
       role={active ? "dialog" : "region"}
       aria-modal={active ? true : undefined}
-      aria-label={`${floor}探索示意地图`}
+      aria-label={`${floor}门店寻宝地图`}
       tabIndex={active ? -1 : undefined}
     >
-      <div ref={artworkLayer} className="map-artwork" style={active ? { width: artwork.width, height: artwork.height, transform: artworkTransform(artwork) } : undefined}>
-      <div className="map-grid" />
-      <div className="map-road road-one" />
-      <div className="map-road road-two" />
-      <div className="map-water" />
-      <span className="map-label label-one">商场中庭</span>
-      <span className="map-label label-two">{floor} · 楼层示意</span>
-      {[...pins.entries()].map(([storeId, group], index) => {
-        const task = group.find(item => !item.claimed && !item.own && item.remaining > 0) || group[0];
-        return <button key={storeId} aria-label={`查看${storeMap.get(storeId)?.name || task.storeName || task.title}，${group.length}个公开任务`} className={`map-pin ${["pin-one", "pin-two", "pin-three"][index % 3]}`} style={{ left: `${safeCoordinate(task.x, 21)}%`, top: `${safeCoordinate(task.y, 31)}%` }} onClick={event => onTask(task, event.currentTarget)} type="button"><span>{group.length}</span></button>;
-      })}
-      <div className="you-are-here" aria-hidden="true" title="示意点，非实时定位"><span /></div>
-      </div>
-      <button className="map-expand-trigger" onClick={expandMap} aria-label="全屏展开地图" aria-expanded={active} type="button" />
+      <div ref={artworkLayer} className="map-artwork real-geographic-artwork" style={active ? { width: artwork.width, height: artwork.height } : undefined}>
+          <ClientStoreMap stores={stores} tasks={tasks} floor={floor} onTask={onTask} />
+        </div>
       <div className="map-controls">
         <div className="floor-tabs" aria-label="选择商场楼层">
           {floors.map(value => <button className={floor === value ? "active" : ""} key={value} aria-pressed={floor === value} onClick={() => onFloor(value)} type="button">{value}</button>)}
@@ -429,7 +413,7 @@ export function ReferenceHome({
         <button className="map-zoom-button" onClick={expandMap} aria-label="全屏展开地图" aria-hidden={active || undefined} tabIndex={active ? -1 : undefined} disabled={active} type="button"><Icon name="expand" size={19} /></button>
       </div>
       {active && <>
-        <div className="map-fullscreen-title"><p>探索地图 · {floor}</p><span>点击宝藏标记查看线索 · 非实时定位</span></div>
+        <div className="map-fullscreen-title"><p>探索地图 · {floor}</p><span>点击门店标记查看线索 · 门店到店范围</span></div>
         <button ref={closeButton} className="map-close" onClick={() => closeMap()} aria-label="收起地图" type="button"><Icon name="close" size={21} /></button>
       </>}
     </section>

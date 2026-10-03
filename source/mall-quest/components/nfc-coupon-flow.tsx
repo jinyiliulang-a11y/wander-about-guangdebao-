@@ -1,4 +1,5 @@
 "use client";
+import { isAppPath, stripAppPath } from "@/lib/application-scope";
 
 import { useEffect, useRef, useState } from "react";
 import { Nfc, RefreshCw, Ticket, X } from "lucide-react";
@@ -32,7 +33,8 @@ function matchingNfcRecord(reading: NdefReading, task: Task): NfcSource | null {
     try {
       const url = new URL(new TextDecoder().decode(record.data));
       if (url.origin !== window.location.origin || url.username || url.password || url.hash) continue;
-      const route = /^\/client\/(?:nfc|coin)\/([^/]+)\/?$/.exec(url.pathname);
+      if (!isAppPath(url.pathname)) continue;
+      const route = /^\/client\/(?:nfc|coin)\/([^/]+)\/?$/.exec(stripAppPath(url.pathname));
       if (!route) continue;
       const id = decodeURIComponent(route[1]);
       if (id === task.id || id === "quest-" + task.storeId) return source(url);

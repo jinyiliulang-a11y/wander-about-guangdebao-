@@ -1,5 +1,7 @@
 import { env } from "cloudflare:workers";
 import { cookie, db, hash, session, sessionCookie, staff } from "./game-server";
+import { HARDWARE_DEMO_INSTANCE } from "./application-scope";
+import { sessionCookieName, sessionCookiePath, sessionCookieSecure } from "./session-scope";
 import { GameError } from "./game-error";
 import { validCoordinates, validRadius } from "./geofence";
 import { recordPlayerActivity } from "./game-business";
@@ -9,7 +11,7 @@ type Row = Record<string, unknown>;
 const EVENT = "mall-48h", ITERATIONS = 100000, MAX_DATE = 253402271999999;
 const ROLE_SET = new Set(["player", "merchant", "admin"]);
 const statusMessage = (status: AccountStatus) => status === "approved" ? "账号已通过，可以使用邮箱和密码登录" : status === "pending" ? "注册申请已提交，等待运营审核" : "注册申请未通过，请查看审核说明";
-const clearCookie = (req: Request, name: string) => `${name}=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0${new URL(req.url).protocol === "https:" ? "; Secure" : ""}`;
+const clearCookie = (req: Request, name: string) => `${sessionCookieName(name)}=; Path=${sessionCookiePath()}; HttpOnly; SameSite=Lax; Max-Age=0${sessionCookieSecure(req) ? "; Secure" : ""}`;
 function text(value: unknown, min: number, max: number, label: string) {
   const result = typeof value === "string" ? value.trim() : "";
   if ([...result].length < min || [...result].length > max) throw new GameError(`${label}请填写${min}至${max}字`);
@@ -303,7 +305,8 @@ export async function registeredPlayer(req: Request) {
 }
 export function recordingShortcutAllowed(req: Request): boolean {
   const hostname = new URL(req.url).hostname;
-  return (env as unknown as Record<string, unknown>).RECORDING_SHORTCUT_LOGIN === "true" && (hostname === "localhost" || hostname === "127.0.0.1");
+  return (env as unknown as Record<string, unknown>).RECORDING_SHORTCUT_LOGIN === "true" &&
+    (HARDWARE_DEMO_INSTANCE || hostname === "localhost" || hostname === "127.0.0.1");
 }
 const RECORDING_MARKER = "recording-shortcut-v1";
 async function recordingIdentity(req: Request, accountRole: "player" | "merchant"): Promise<Row> {

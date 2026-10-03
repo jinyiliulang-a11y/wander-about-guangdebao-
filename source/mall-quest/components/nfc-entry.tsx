@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Copy } from "lucide-react";
 import type { StaffState, Store } from "@/lib/game-types";
 import { ChoiceField } from "./common/WorkbenchFields";
+import { appPath } from "@/lib/application-scope";
 
 export type NfcEntryDevice = { id: string; storeId: string; enabled: boolean; boundTaskId: string | null };
 export function NfcEntry({ store, data, devices }: { store: Store; data: StaffState; devices?: NfcEntryDevice[] }) {
@@ -35,7 +36,7 @@ export function NfcEntry({ store, data, devices }: { store: Store; data: StaffSt
   const boundDevices = task ? devices?.filter(item => item.storeId === store.id && item.enabled && item.boundTaskId === task.id) : undefined;
   const deviceId = boundDevices?.length === 1 ? boundDevices[0].id : boundDevices?.find(item => item.id === selectedDevice)?.id;
   const deviceReady = !task?.requiresNfcClaim || !!deviceId;
-  const link = origin && task && deviceReady ? `${origin}/client/${task.requiresNfcClaim ? "nfc" : "coin"}/${encodeURIComponent(task.id)}${task.requiresNfcClaim && deviceId ? `?device=${encodeURIComponent(deviceId)}` : ""}` : "";
+  const link = origin && task && deviceReady ? `${origin}${appPath(`/client/${task.requiresNfcClaim ? "nfc" : "coin"}/${encodeURIComponent(task.id)}${task.requiresNfcClaim && deviceId ? `?device=${encodeURIComponent(deviceId)}` : ""}`)}` : "";
 
   async function copyLink() {
     if (!link) return;

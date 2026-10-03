@@ -15,20 +15,12 @@ body{margin:0;background:#faf7f2;color:#0a1230;overflow-x:hidden}
 .reveal{opacity:1;transform:none;transition:opacity 600ms cubic-bezier(.22,1,.36,1),transform 600ms cubic-bezier(.22,1,.36,1)}
 .reveal.reveal-pending{opacity:0;transform:translateY(22px)}
 .reveal.reveal-pending:focus-within{opacity:1;transform:none;transition:none}
+.reveal.reveal-instant{opacity:1;transform:none;transition:none!important}
 .reveal-delay-1{transition-delay:50ms}.reveal-delay-2{transition-delay:100ms}.reveal-delay-3{transition-delay:150ms}.reveal-delay-4{transition-delay:200ms}.reveal-delay-5{transition-delay:250ms}
 .route-enter{animation:route-enter 180ms ease-out both}
 .role-panel{animation:role-enter 220ms ease-out both}
-.hero-visual.is-visible{animation:hero-enter 760ms cubic-bezier(.22,1,.36,1) both}
-.hero-visual.is-visible img{animation:photo-enter 900ms cubic-bezier(.22,1,.36,1) both}
-.flow-visual .flow-route{stroke-dasharray:1;stroke-dashoffset:0}
-.flow-visual.is-visible .flow-route{animation:flow-draw 1100ms cubic-bezier(.22,1,.36,1) both}
-.flow-visual.is-visible .flow-node{animation:flow-node-enter 500ms ease both}
 @keyframes route-enter{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 @keyframes role-enter{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-@keyframes hero-enter{from{opacity:0;transform:translateY(18px) scale(.985)}to{opacity:1;transform:none}}
-@keyframes photo-enter{from{transform:translateY(14px) scale(1.025)}to{transform:none}}
-@keyframes flow-draw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
-@keyframes flow-node-enter{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 @media(hover:hover) and (prefers-reduced-motion:no-preference){.product-cta{transition:transform 180ms ease,background-color 180ms ease}.product-cta:hover{transform:translateY(-2px)}}
 .text-stroke,.text-stroke-navy{-webkit-text-stroke:1.5px #0a1230;color:transparent}
 .text-stroke-forest{-webkit-text-stroke:1.5px #4a7c5e;color:transparent}
@@ -38,3 +30,130 @@ body{margin:0;background:#faf7f2;color:#0a1230;overflow-x:hidden}
 .grid-bg-dark{background-image:linear-gradient(to right,rgba(74,124,94,.08) 1px,transparent 1px),linear-gradient(to bottom,rgba(74,124,94,.08) 1px,transparent 1px);background-size:60px 60px}
 .animate-float,.animate-spin,.animate-bounce,.animate-pulse,.animate-pulse-slow,.animate-marquee{animation:none}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}.reveal,.route-enter,.hero-visual{opacity:1!important;transform:none!important}.flow-visual .flow-route{stroke-dashoffset:0!important}}
+
+/* Home motion: one entrance per element, native scroll transforms on desktop. */
+.route-enter:has(.home-page){animation:none}
+.home-page .reveal{transition-duration:760ms;transition-timing-function:cubic-bezier(.22,1,.36,1)}
+.home-page .reveal.reveal-pending{transform:translateY(28px)}
+.home-page .reveal-delay-1{transition-delay:90ms}
+.home-page .reveal-delay-2{transition-delay:170ms}
+.home-page .reveal-delay-3{transition-delay:250ms}
+.home-page .reveal-delay-4{transition-delay:310ms}
+.home-page .reveal-delay-5{transition-delay:370ms}
+.home-hero-light{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 76% 42%,rgba(122,176,148,.14),transparent 52%)}
+.home-product-visual{position:relative;animation:home-product-appear 900ms 100ms cubic-bezier(.22,1,.36,1) both}
+.home-product-stage{isolation:isolate;background:linear-gradient(145deg,rgba(21,38,90,.58),rgba(10,18,48,.38));box-shadow:inset 0 1px 0 rgba(255,255,255,.045)}
+.home-phone{position:relative;box-shadow:0 18px 38px rgba(0,0,0,.24);transform-origin:center 70%}
+.home-phone-map{transform:rotate(-3deg)}
+.home-phone-wallet{transform:rotate(3deg)}
+.home-flow-track{height:2px;overflow:hidden;border-radius:2px;background:rgba(58,99,75,.1)}
+.home-flow-trace{display:block;width:100%;height:100%;background:linear-gradient(90deg,#b9d6c2,#5d9676);transform-origin:left center}
+@keyframes home-product-appear{from{opacity:0}to{opacity:1}}
+@keyframes home-map-scroll{from{transform:translateY(0) rotate(-3deg)}to{transform:translateY(-54px) rotate(-5deg)}}
+@keyframes home-wallet-scroll{from{transform:translateY(0) rotate(3deg)}to{transform:translateY(-88px) rotate(1deg)}}
+@keyframes home-flow-progress{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@supports (animation-timeline:view()){
+ @media (min-width:1024px) and (prefers-reduced-motion:no-preference){
+  .home-hero{view-timeline-name:--home-hero;view-timeline-axis:block}
+  .home-flow-section{view-timeline-name:--home-flow;view-timeline-axis:block}
+  .home-phone-map{animation:home-map-scroll linear both;animation-timeline:--home-hero;animation-range:exit 0% exit 100%;will-change:transform}
+  .home-phone-wallet{animation:home-wallet-scroll linear both;animation-timeline:--home-hero;animation-range:exit 0% exit 100%;will-change:transform}
+  .home-flow-trace{animation:home-flow-progress linear both;animation-timeline:--home-flow;animation-range:entry 10% cover 65%}
+ }
+}
+@media(max-width:1023px){
+ .home-page .reveal{transition-duration:580ms}
+ .home-page .reveal.reveal-pending{transform:translateY(16px)}
+ .home-page .reveal-delay-1{transition-delay:45ms}
+ .home-page .reveal-delay-2{transition-delay:90ms}
+ .home-page .reveal-delay-3{transition-delay:135ms}
+ .home-page .reveal-delay-4{transition-delay:180ms}
+ .home-page .reveal-delay-5{transition-delay:225ms}
+ .home-product-visual{animation-duration:650ms;animation-delay:90ms}
+}
+@media(prefers-reduced-motion:reduce){
+ .home-page .reveal.reveal-pending{opacity:1!important;transform:none!important}
+ .home-product-visual{opacity:1!important}
+ .home-phone{transform:none!important;will-change:auto}
+ .home-flow-trace{transform:none!important}
+}
+
+/* official-drawer-fix-v1 */
+dialog.team-bio-drawer {
+  position: fixed; inset: 0; margin: 0; padding: 0; border: 0;
+  width: 100%; max-width: none; height: 100vh; height: 100dvh;
+  max-height: none; background: transparent; color: #0a1230;
+  /* The modal must not scroll to focus a button inside its moving panel. */
+  overflow: hidden; overflow: clip;
+}
+dialog.team-bio-drawer[open] {
+  display: flex; justify-content: flex-end; align-items: stretch;
+}
+dialog.team-bio-drawer::backdrop {
+  background: rgb(6 10 28 / 55%);
+  animation: team-drawer-backdrop-enter 300ms ease-out both;
+}
+dialog.team-bio-drawer.is-closing::backdrop {
+  animation: team-drawer-backdrop-exit 320ms ease-in both;
+}
+.team-bio-panel {
+  width: min(460px, 100%); height: 100%; min-height: 0;
+  display: flex; flex-direction: column; background: #faf7f2;
+  box-shadow: -20px 0 70px rgb(0 0 0 / 15%);
+  will-change: transform;
+  animation: team-drawer-right 420ms cubic-bezier(.25,.1,.25,1) both;
+}
+dialog.team-bio-drawer.is-closing .team-bio-panel {
+  animation: team-drawer-right-exit 320ms cubic-bezier(.25,.1,.25,1) both;
+}
+.team-bio-header {
+  flex: none; display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 22px; padding-top: max(14px, env(safe-area-inset-top));
+  border-bottom: 1px solid rgb(10 18 48 / 8%); background: #faf7f2;
+}
+.team-bio-header button {
+  width: 44px; height: 44px; display: grid; place-items: center;
+  border-radius: 50%; background: #e5eee4; color: #244831;
+}
+.team-bio-content {
+  flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain;
+  padding: 24px; padding-bottom: max(32px, env(safe-area-inset-bottom));
+  animation: none; transform: none; opacity: 1;
+}
+.team-bio-photo {
+  display: block; width: 100%; aspect-ratio: 4/3;
+  object-fit: cover; object-position: top; border-radius: 20px;
+}
+@keyframes team-drawer-right {
+  from { transform: translateX(100%); } to { transform: translateX(0); }
+}
+@keyframes team-drawer-bottom {
+  from { transform: translateY(100%); } to { transform: translateY(0); }
+}
+@keyframes team-drawer-right-exit {
+  from { transform: var(--drawer-exit-transform, translateX(0)); }
+  to { transform: translateX(100%); }
+}
+@keyframes team-drawer-bottom-exit {
+  from { transform: var(--drawer-exit-transform, translateY(0)); }
+  to { transform: translateY(100%); }
+}
+@keyframes team-drawer-backdrop-enter { from { opacity: 0; } to { opacity: 1; } }
+@keyframes team-drawer-backdrop-exit { from { opacity: var(--drawer-backdrop-exit-opacity, 1); } to { opacity: 0; } }
+@media (max-width: 767px) {
+  dialog.team-bio-drawer[open] { align-items: flex-end; }
+  .team-bio-panel {
+    width: 100%; height: 88vh; height: 88dvh;
+    border-radius: 24px 24px 0 0; overflow: hidden;
+    animation-name: team-drawer-bottom;
+  }
+  dialog.team-bio-drawer.is-closing .team-bio-panel { animation-name: team-drawer-bottom-exit; }
+  .team-bio-header { padding-top: 12px; }
+  .team-bio-content { padding: 20px; padding-bottom: max(28px, env(safe-area-inset-bottom)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  dialog.team-bio-drawer::backdrop,
+  .team-bio-panel,
+  .team-bio-content { animation: none !important; }
+  .team-bio-panel { will-change: auto; }
+}

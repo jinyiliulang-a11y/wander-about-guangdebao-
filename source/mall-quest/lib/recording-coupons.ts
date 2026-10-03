@@ -5,7 +5,7 @@ import { GameError } from "./game-error";
 import type { Coupon, CouponPreview, RecordingCouponResult, RecordingCouponStatus } from "./game-types";
 
 type Row=Record<string,unknown>;
-const EVENT="mall-48h",STORE="tea",LIFETIME=7*86400000;
+const EVENT="mall-48h";
 const CLOCK="CAST((julianday('now')-2440587.5)*86400000 AS INTEGER)";
 const UUID=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 const CODE=/^GTB-D-[0-9A-F]{20}$/;
@@ -27,30 +27,9 @@ export async function recordingCouponStatus(req:Request,input:Row):Promise<Recor
   gate(req);const pid=await registeredPlayer(req),requestId=identifier(input.requestId),row=await exact(req,pid,requestId);gate(req);
   return row?{found:true,requestId,coupon:recordingCoupon(row)}:{found:false,requestId};
 }
-export async function recordingCouponGrant(req:Request,input:Row):Promise<RecordingCouponResult>{
-  gate(req);const pid=await registeredPlayer(req),requestId=identifier(input.requestId);
-  if(input.storeId!==undefined&&input.storeId!==STORE)throw new GameError("展示券仅用于茶间集演示门店",403);
-  const prior=await exact(req,pid,requestId);gate(req);
-  if(prior)return {requestId,coupon:recordingCoupon(prior),newlyIssued:false,message:"此展示券请求已保存"};
-  if(await db().prepare("SELECT request_id FROM recording_coupon_requests WHERE request_id=?").bind(requestId).first())throw new GameError("展示券请求标识已被其他身份使用",409);
-  const auth=await authorizationValues(req);
-  const statements=[db().prepare(`INSERT INTO recording_coupons(id,player_id,event_id,store_id,coupon_code,store_name_snapshot,reward_snapshot,conditions_snapshot,artwork,issued_at,valid_end)
-    SELECT ?,?,s.event_id,s.id,?,s.name,'演示体验券 · 免费加料','仅用于录制和功能展示；不可实际消费，不计金币、积分或正常库存。',s.artwork,${CLOCK},${CLOCK}+?
-    FROM stores s WHERE s.id=? AND s.event_id=? AND s.status='active' AND ?=1 AND ${playerAuthorizationSQL("?")}
-    AND NOT EXISTS(SELECT 1 FROM recording_coupon_requests WHERE request_id=?)
-    AND NOT EXISTS(SELECT 1 FROM recording_coupons c WHERE c.player_id=? AND c.event_id=? AND c.redeemed_at IS NULL AND c.valid_end>${CLOCK})
-    ON CONFLICT DO NOTHING`).bind(requestId,pid,"GTB-D-"+crypto.randomUUID().replaceAll("-","").slice(0,20).toUpperCase(),LIFETIME,STORE,EVENT,
-      recordingShortcutAllowed(req)?1:0,...auth,pid,requestId,pid,EVENT),
-    db().prepare(`INSERT INTO recording_coupon_requests(request_id,player_id,coupon_id,created_at)
-      SELECT ?,?,c.id,${CLOCK} FROM recording_coupons c JOIN stores s ON s.id=c.store_id
-      WHERE c.player_id=? AND c.event_id=? AND s.id=? AND s.event_id=c.event_id AND s.status='active' AND ?=1
-        AND c.redeemed_at IS NULL AND c.valid_end>${CLOCK} AND ${playerAuthorizationSQL("c.player_id")}
-      ORDER BY c.issued_at DESC,c.id LIMIT 1 ON CONFLICT DO NOTHING`)
-      .bind(requestId,pid,pid,EVENT,STORE,recordingShortcutAllowed(req)?1:0,...auth)];
-  gate(req);const results=await db().batch(statements);gate(req);
-  const saved=await exact(req,pid,requestId);
-  if(!saved){await registeredPlayer(req);throw new GameError("演示门店、账号或展示券权限已变化，请刷新核对",409);}
-  return {requestId,coupon:recordingCoupon(saved),newlyIssued:!!results[0].meta.changes,message:results[0].meta.changes?"展示券已加入卡包，可由演示门店核销":"已有可使用的展示券，已返回同一张券"};
+export async function recordingCouponGrant(req:Request,_input:Row):Promise<RecordingCouponResult>{
+  gate(req);await registeredPlayer(req);gate(req);
+  throw new GameError("演示领取已改为设备联动：请碰金币 NFC 保存待领申请，再由商家扫描金币设备码、确认收到金币后发放奖励。",410);
 }
 export async function recordingCouponsForPlayer(req:Request,pid:string):Promise<Coupon[]>{
   if(!recordingShortcutAllowed(req))return [];

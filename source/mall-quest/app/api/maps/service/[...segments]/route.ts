@@ -12,7 +12,12 @@ export async function GET(req: Request) {
   target.searchParams.set("key", config.AMAP_WEB_KEY);
   target.searchParams.set("jscode", config.AMAP_SECURITY_JS_CODE);
   try {
-    const response = await fetch(target, { method: "GET", redirect: "error", signal: AbortSignal.timeout(8000) });
+    // workerd supports only follow/manual. Reject redirects without following them.
+    const response = await fetch(target, { method: "GET", redirect: "manual", signal: AbortSignal.timeout(8000) });
+    if (response.status >= 300 && response.status < 400) {
+      await response.body?.cancel();
+      return new Response("Map unavailable", { status: 503 });
+    }
     return new Response(response.body, { status: response.status, headers: {
       "Content-Type": response.headers.get("Content-Type") || "application/json", "Cache-Control": "no-store", "X-Content-Type-Options": "nosniff",
     } });

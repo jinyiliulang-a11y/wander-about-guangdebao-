@@ -6,6 +6,7 @@ import { readBrowserLocation } from "@/lib/browser-location";
 import { validCoordinates, validRadius, type StoreGeofence } from "@/lib/geofence";
 import type { AccountRole, AccountRegistrationResult, AccountStatusResult } from "@/lib/account-types";
 import { AmapGeofenceMap } from "./amap-geofence-map";
+import { AmapPoiSearch } from "./amap-poi-search";
 import { EmailCodeField, emailProofError, emptyEmailProof, normalizeEmail, validEmailAddress, type EmailProof } from "./email-login-access";
 import { clearRegistration, pendingRegistration, registrationRetryable, rememberRegistration, type MerchantDraft } from "./account-registration-memory";
 import "./account-access.css";
@@ -35,6 +36,8 @@ export function AccountAccess({ accountRole, busy, onAction, onDone, onBack, exp
   const [error, setError] = useState(recovery ? "已恢复原注册申请，请先核对结果；本页不会自动重复提交。" : ""), [notice, setNotice] = useState(""), [positionNotice, setPositionNotice] = useState("");
   const [submitting, setSubmitting] = useState(false), [locating, setLocating] = useState(false), [unconfirmed, setUnconfirmed] = useState<Unconfirmed | null>(() => recovery ? { payload: recovery.payload, retryable: recovery.retryable } : null);
   const [recordingBlocked, setRecordingBlocked] = useState(false);
+  const [checkingStatus, setCheckingStatus] = useState(false), [statusQueryActive, setStatusQueryActive] = useState(false), [reviewStatus, setReviewStatus] = useState<"pending" | "approved" | "rejected" | null>(null);
+  const reviewResultRef = useRef<HTMLDivElement>(null);
   const [emailProof, setEmailProof] = useState<EmailProof>(() => ({ email: recovery?.snapshot.email || "", code: recovery?.snapshot.emailCode || "", challengeId: recovery?.snapshot.emailChallengeId || "", expiresAt: recovery?.snapshot.emailExpiresAt || 0 })), [emailBusy, setEmailBusy] = useState(false);
   const registration = useRef<{ signature: string; payload: Record<string, unknown> } | null>(null);
   const working = busy || submitting || locating || emailBusy, locked = working || !!unconfirmed;
@@ -105,7 +108,7 @@ export function AccountAccess({ accountRole, busy, onAction, onDone, onBack, exp
   }
   function switchMode(next: "login" | "register") {
     if (locked) return;
-    setMode(next); setStep(0); setError(""); setNotice(""); setPassword(""); setConfirmPassword(""); setShowPassword(false); setEmailProof(emptyEmailProof()); registration.current = null;
+    setMode(next); setStep(0); setError(""); setNotice(""); setStatusQueryActive(false); setReviewStatus(null); setPassword(""); setConfirmPassword(""); setShowPassword(false); setEmailProof(emptyEmailProof()); registration.current = null;
   }
   function completeRegistration(result: AccountRegistrationResult, requestId: unknown) {
     clearRegistration(accountRole, requestId);
@@ -114,6 +117,7 @@ export function AccountAccess({ accountRole, busy, onAction, onDone, onBack, exp
   }
   async function sendRegistration(payload: Record<string, unknown>) {
     if (requestLock.current || busy) return;
+    setStatusQueryActive(false); setReviewStatus(null);
     if (!rememberRegistration(accountRole, payload, { username: typeof payload.username === "string" ? payload.username : normalizeEmail(emailProof.email), password, confirmPassword, nickname, phone, merchant, step, email: emailProof.email, emailCode: emailProof.code, emailChallengeId: emailProof.challengeId, emailExpiresAt: emailProof.expiresAt })) { const original = pendingRegistration(accountRole); if (original) setUnconfirmed({ payload: original.payload, retryable: original.retryable }); setError("还有一份注册结果待核对，请先核对原申请。"); return; }
     requestLock.current = true;
     setSubmitting(true); setError("");
@@ -128,21 +132,33 @@ export function AccountAccess({ accountRole, busy, onAction, onDone, onBack, exp
   async function checkStatus() {
     if (working || requestLock.current) return;
     const payload = unconfirmed?.payload, validation = payload ? "" : accountError(false);
-    if (validation) { setError(validation); return; }
-    requestLock.current = true; setSubmitting(true); setError("");
+    setStatusQueryActive(true); setReviewStatus(null); setNotice(""); setError("");
+    if (validation) {
+      const validIdentifier = validEmailAddress(normalizedLogin(username)) || /^[a-z0-9._-]{3,32}$/.test(normalizedLogin(username));
+      setError(validIdentifier && !password.trim() ? "请输入注册时设置的密码，再查询审核状态。" : validation);
+      requestAnimationFrame(() => {
+        const identifier = normalizedLogin(username), valid = validEmailAddress(identifier) || /^[a-z0-9._-]{3,32}$/.test(identifier);
+        const field = formRef.current?.querySelector<HTMLInputElement>(valid ? 'input[name="password"]' : '[aria-label="邮箱 / 账号"]');
+        field?.focus({ preventScroll: true }); field?.scrollIntoView({ block: "nearest", behavior: "auto" });
+      });
+      return;
+    }
+    requestLock.current = true; setSubmitting(true); setCheckingStatus(true); setError("");
     try {
       const result = await onAction("accountApplicationStatus", { role: accountRole, username: payload?.username || normalizedLogin(username), password: payload?.password || password }) as AccountStatusResult | null;
       if (!alive.current) return;
       if (!result?.application || typeof result.application.username !== "string" || !result.application.username || (payload && result.application.username !== payload.username) || result.application.role !== accountRole || !["pending", "approved", "rejected"].includes(result.application.status)) { setError("暂时未能核对申请，请稍后重试。"); return; }
       const application = result.application;
+      if (!payload || application.requestId === payload.requestId) setReviewStatus(application.status);
       if (payload && application.requestId === payload.requestId) completeRegistration({ registered: true, status: application.status, username: application.username, message: `${statusMessage(application.status)}${application.reviewNote ? ` 审核说明：${application.reviewNote}` : ""}` }, payload.requestId);
       else if (payload) { registrationRetryable(accountRole, payload.requestId, false); setUnconfirmed({ payload, retryable: false }); setError("查到的是该账号的另一份申请，不能确认本次注册。已核对账号存在，请返回登录查询该账号状态。"); }
       else setNotice(`${result.message || statusMessage(application.status)}${application.reviewNote ? ` 审核说明：${application.reviewNote}` : ""}`);
     } catch (cause) { if (alive.current) setError(`${(cause as Error).message || "暂时未能核对申请。"}${payload ? " 查询失败不代表注册未保存，请稍后核对或重试原提交。" : ""}`); }
-    finally { requestLock.current = false; if (alive.current) setSubmitting(false); }
+    finally { requestLock.current = false; if (alive.current) { setSubmitting(false); setCheckingStatus(false); requestAnimationFrame(() => { if (alive.current) reviewResultRef.current?.scrollIntoView({ block: "nearest", behavior: "auto" }); }); } }
   }
   async function recordingLogin() {
     if (!recordingShortcutAllowed || locked || recordingBlocked || requestLock.current) return;
+    setStatusQueryActive(false); setReviewStatus(null);
     requestLock.current = true; setSubmitting(true); setError(""); setNotice("");
     try {
       const result = await onAction("recordingLogin", { role: accountRole, ...(accountRole === "merchant" ? { storeId: "tea" } : {}) }) as { authenticated?: boolean; role?: AccountRole } | null;
@@ -154,6 +170,7 @@ export function AccountAccess({ accountRole, busy, onAction, onDone, onBack, exp
   }
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault(); if (locked || requestLock.current) return;
+    setStatusQueryActive(false);
     if (mode === "register" && accountRole === "merchant" && step < 2) { advance(); return; }
     const validation = accountError(mode === "register") || (mode === "register" && accountRole === "merchant" ? merchantError(true) : "");
     if (validation) { setError(validation); if (mode === "register" && accountRole === "merchant" && step > 0 && emailProofError(emailProof)) setStep(0); return; }
@@ -171,25 +188,34 @@ export function AccountAccess({ accountRole, busy, onAction, onDone, onBack, exp
     if (!registration.current || registration.current.signature !== signature) registration.current = { signature, payload: { ...body, requestId: newRequestId() } };
     await sendRegistration(registration.current.payload);
   }
-  const input = (label: string, value: string, change: (value: string) => void, options: { required?: boolean; max?: number; placeholder?: string; type?: string; autoComplete?: string } = {}) => <label className="field-label">{label}<input className="ui-input" aria-label={label} type={options.type || "text"} required={options.required} maxLength={options.max} autoComplete={options.autoComplete} value={value} onChange={event => change(event.target.value)} placeholder={options.placeholder} /></label>;
+  const input = (label: string, value: string, change: (value: string) => void, options: { required?: boolean; max?: number; placeholder?: string; type?: string; autoComplete?: string } = {}) => <label className="field-label">{label}<input className="ui-input" aria-label={label} type={options.type || "text"} required={options.required} maxLength={options.max} autoComplete={options.autoComplete} value={value} onChange={event => { change(event.target.value); setStatusQueryActive(false); }} placeholder={options.placeholder} /></label>;
   const merchantInput = (field: keyof MerchantDraft, label: string, max: number, placeholder?: string, required = true) => input(label, merchant[field], value => setMerchantField(field, value), { required, max, placeholder });
   const symbol = accountRole === "merchant" ? <Store size={30} /> : accountRole === "admin" ? <ShieldCheck size={30} /> : <Compass size={30} />;
   const title = mode === "register" ? `注册${roleName(accountRole)}账号` : accountRole === "merchant" ? "登录商家工作台" : accountRole === "admin" ? "登录运营后台" : explorer ? "登录，留下你的发现" : "登录，继续你的探索";
+  const reviewPanel = statusQueryActive && <div ref={reviewResultRef} className="account-review-result" data-status={checkingStatus ? "checking" : error ? "error" : reviewStatus || "checking"} role={error ? "alert" : "status"} aria-atomic="true">
+    <h3>{checkingStatus ? <><span className="account-review-spinner" aria-hidden="true" />正在查询审核状态…</> : error ? "查询未完成" : reviewStatus === "approved" ? "审核已通过" : reviewStatus === "pending" ? "等待审核" : reviewStatus === "rejected" ? "审核未通过" : "查询结果"}</h3>
+    <p>{checkingStatus ? "正在获取这份申请的最新审核结果。" : error || notice || "暂未确认申请状态，请稍后重试。"}</p>
+    {!checkingStatus && !error && reviewStatus === "approved" && <button type="button" className="outline-button" disabled={working} onClick={() => { setMode("login"); setStep(0); requestAnimationFrame(() => { const field = formRef.current?.querySelector<HTMLInputElement>('input[name="password"]'); field?.focus({ preventScroll: true }); field?.scrollIntoView({ block: "nearest", behavior: "auto" }); }); }}>前往登录</button>}
+  </div>;
   return <section className="player-login-card panel account-access" aria-label={`${roleName(accountRole)}账号入口`} aria-busy={working}>
     <div className="login-symbol">{symbol}</div><div className="account-access-intro"><h2>{title}</h2><p>{accountRole === "player" ? "寻宝者与探索者共用一个玩家账号，登录后保存卡包、积分与投放记录。" : accountRole === "merchant" ? "商家账号需单独注册，不能用玩家或运营账号登录。注册时提交门店位置和优惠券，审核通过后管理本店。" : "运营账号需单独注册，不能用玩家或商家账号登录。注册申请由已有运营审核，通过后登录工作台。"}</p></div>
     <div className="account-access-tabs" role="group" aria-label="登录或注册"><button type="button" aria-pressed={mode === "login"} disabled={locked} onClick={() => switchMode("login")}>登录</button><button type="button" aria-pressed={mode === "register"} disabled={locked} onClick={() => switchMode("register")}>注册账号</button></div>
-    {notice && <div className="account-access-feedback" role="status"><CheckCircle2 size={18} /><p>{notice}</p></div>}{error && <p className="account-access-error" role="alert">{error}</p>}
-    {unconfirmed && <div className="account-access-pending"><strong>先核对注册结果</strong><p>原资料已锁定，请暂时留在此页面。查询失败不代表注册失败；重试只会提交同一申请编号和原资料。</p><div className="account-access-actions"><button type="button" className="outline-button" disabled={working} onClick={() => void checkStatus()}>核对申请状态</button><button type="button" className="outline-button" disabled={working || !unconfirmed.retryable} onClick={() => void sendRegistration(unconfirmed.payload)}>重试原提交</button>{!unconfirmed.retryable && <button type="button" className="text-button" disabled={working} onClick={() => { setUnconfirmed(null); registration.current = null; setMode("login"); setStep(0); setNotice("已查到该用户名的另一份申请；本次注册没有确认。请登录已有账号，或查询其审核状态。"); setError(""); }}>查看已存在的账号</button>}</div></div>}
+    {!statusQueryActive && notice && <div className="account-access-feedback" role="status"><CheckCircle2 size={18} /><p>{notice}</p></div>}{!statusQueryActive && error && <p className="account-access-error" role="alert">{error}</p>}
+    {unconfirmed && <div className="account-access-pending"><strong>先核对注册结果</strong><p>原资料已锁定，请暂时留在此页面。查询失败不代表注册失败；重试只会提交同一申请编号和原资料。</p><div className="account-access-actions"><button type="button" className="outline-button" disabled={working} onClick={() => void checkStatus()}>{checkingStatus ? "正在查询…" : "核对申请状态"}</button><button type="button" className="outline-button" disabled={working || !unconfirmed.retryable} onClick={() => void sendRegistration(unconfirmed.payload)}>重试原提交</button>{!unconfirmed.retryable && <button type="button" className="text-button" disabled={working} onClick={() => { setUnconfirmed(null); registration.current = null; setMode("login"); setStep(0); setStatusQueryActive(false); setReviewStatus(null); setNotice("已查到该用户名的另一份申请；本次注册没有确认。请登录已有账号，或查询其审核状态。"); setError(""); }}>查看已存在的账号</button>}</div>{reviewPanel}</div>}
     {mode === "register" && accountRole === "merchant" && <ol className="account-registration-steps" aria-label="商家注册步骤">{["账号资料", "门店位置", "优惠券"].map((label, index) => <li key={label} aria-current={step === index ? "step" : undefined}><span>{index + 1}</span>{label}</li>)}</ol>}
     <form ref={formRef} id={`${id}-form`} className="account-access-form" noValidate aria-label={mode === "register" ? `${roleName(accountRole)}注册表单` : `${roleName(accountRole)}登录表单`} onSubmit={submit}><fieldset disabled={locked}>
       {(mode === "login" || accountRole !== "merchant" || step === 0) && <div className="account-fields">
         {mode === "login" ? input("邮箱 / 账号", username, setUsername, { required: true, max: 254, autoComplete: "username", placeholder: "注册邮箱或已有账号" }) : <EmailCodeField key={`${accountRole}:register`} role={accountRole} purpose="register" value={emailProof} onChange={setEmailProof} onAction={onAction} busy={busy || submitting || locating || !!unconfirmed} onPendingChange={setEmailBusy} />}
-        <label className="field-label">密码<div className="account-password-row"><input className="ui-input" aria-label="密码" name="password" type={showPassword ? "text" : "password"} autoComplete={mode === "register" ? "new-password" : "current-password"} minLength={3} maxLength={128} required value={password} onChange={event => setPassword(event.target.value)} placeholder="请输入密码" /><button type="button" className="outline-button account-password-toggle" aria-label={showPassword ? "隐藏密码" : "显示密码"} aria-pressed={showPassword} onClick={() => setShowPassword(value => !value)}>{showPassword ? <EyeOff size={18} /> : <Eye size={18} />}</button></div></label>
+        <label className="field-label">密码<div className="account-password-row"><input className="ui-input" aria-label="密码" name="password" type={showPassword ? "text" : "password"} autoComplete={mode === "register" ? "new-password" : "current-password"} minLength={3} maxLength={128} required value={password} onChange={event => { setPassword(event.target.value); setStatusQueryActive(false); }} placeholder="请输入密码" /><button type="button" className="outline-button account-password-toggle" aria-label={showPassword ? "隐藏密码" : "显示密码"} aria-pressed={showPassword} onClick={() => setShowPassword(value => !value)}>{showPassword ? <EyeOff size={18} /> : <Eye size={18} />}</button></div></label>
         {mode === "register" && <><p className="account-field-hint">邮箱就是你的登录账号；设置一个至少 3 个字符的密码。</p>{input("确认密码", confirmPassword, setConfirmPassword, { required: true, max: 128, type: showPassword ? "text" : "password", autoComplete: "new-password", placeholder: "再输入一次密码" })}{input("昵称（可选）", nickname, setNickname, { max: 24, autoComplete: "nickname", placeholder: "其他人看到的称呼" })}<p className="account-field-hint">留空时使用邮箱 @ 前面的部分作为昵称。</p>{input("联系手机号（可选）", phone, setPhone, { max: 11, type: "tel", autoComplete: "tel", placeholder: "仅用于联系" })}</>}
       </div>}
       {mode === "register" && accountRole === "merchant" && step === 1 && <div className="account-fields">
         <div className="account-section-intro"><h3><MapPin size={18} />门店位置</h3><p>填写实际地址，并在地图上选中门店。也可到店定位或手填真实经纬度。</p></div>
-        {merchantInput("name", "门店名称", 60, "填写实际营业名称")}
+        <AmapPoiSearch locked={locked} required query={merchant.name} onQueryChange={name => setMerchantField("name", name)} onSelect={poi => {
+          if (locked) return; locationSequence.current++;
+          setMerchant(draft => ({ ...draft, name: poi.name, address: poi.address, latitude: poi.latitude.toFixed(7), longitude: poi.longitude.toFixed(7) }));
+          setPositionNotice("门店名称、地址和坐标已回填，请核对实际营业位置、楼层与范围。"); setError("");
+        }} />
         <label className="field-label">真实街道地址<textarea className="ui-input" aria-label="真实街道地址" required maxLength={200} rows={2} value={merchant.address} onChange={event => setMerchantField("address", event.target.value)} placeholder="城市、街道、门牌号及商场名称" /></label>
         <div className="account-field-pair">{merchantInput("floor", "楼层", 12, "例如 F1")}{merchantInput("area", "区域 / 铺位", 80, "例如 中庭东侧 101")}</div>
         <div className="account-field-pair">{merchantInput("category", "门店类别", 40, "例如 茶饮、手作")}{merchantInput("phone", "门店电话（可选）", 24, "手机或固定电话", false)}</div>
@@ -208,8 +234,8 @@ export function AccountAccess({ accountRole, busy, onAction, onDone, onBack, exp
         <label className="field-label">有效期<select className="ui-input" aria-label="优惠券有效期" value={merchant.validity} onChange={event => setMerchantField("validity", event.target.value as MerchantDraft["validity"])}><option value="always">长期有效</option><option value="dates">指定开始和结束时间</option></select></label>
         {merchant.validity === "dates" && <div className="account-field-pair"><label className="field-label">开始时间（北京时间）<input className="ui-input" aria-label="优惠券开始时间" type="datetime-local" step={60} required value={merchant.start} onChange={event => setMerchantField("start", event.target.value)} /></label><label className="field-label">结束时间（北京时间）<input className="ui-input" aria-label="优惠券结束时间" type="datetime-local" step={60} required value={merchant.end} onChange={event => setMerchantField("end", event.target.value)} /></label></div>}
       </div>}
-    </fieldset>{mode === "register" && accountRole !== "player" && <p className="account-field-hint">注册申请审核通过前，账号无法登录工作台。可在登录页查询审核状态。</p>}<div className="account-access-actions">{mode === "register" && accountRole === "merchant" && step > 0 && <button type="button" className="outline-button" disabled={locked} onClick={() => { setStep(value => value - 1); setError(""); }}>上一步</button>}{mode === "register" && accountRole === "merchant" && step < 2 ? <button type="button" className="gold-button" disabled={locked} onClick={event => { event.preventDefault(); advance(); }}>下一步</button> : <button type="submit" className="gold-button" disabled={locked}>{submitting ? "正在提交…" : mode === "register" ? <><UserPlus size={18} />{accountRole === "player" ? "注册账号" : "提交注册申请"}</> : accountRole === "player" ? "登录并继续" : "登录工作台"}</button>}</div></form>
-    {mode === "login" && accountRole !== "player" && !unconfirmed && <button type="button" className="text-button account-status-button" disabled={working} onClick={() => void checkStatus()}>查询注册审核状态</button>}
+    </fieldset>{mode === "register" && accountRole !== "player" && <p className="account-field-hint">注册申请审核通过前，账号无法登录工作台。可在登录页查询审核状态。</p>}<div className="account-access-actions">{mode === "register" && accountRole === "merchant" && step > 0 && <button type="button" className="outline-button" disabled={locked} onClick={() => { setStep(value => value - 1); setError(""); }}>上一步</button>}{mode === "register" && accountRole === "merchant" && step < 2 ? <button type="button" className="gold-button" disabled={locked} onClick={event => { event.preventDefault(); advance(); }}>下一步</button> : <button type="submit" className="gold-button" disabled={locked}>{submitting ? (checkingStatus ? "正在查询…" : "正在提交…") : mode === "register" ? <><UserPlus size={18} />{accountRole === "player" ? "注册账号" : "提交注册申请"}</> : accountRole === "player" ? "登录并继续" : "登录工作台"}</button>}</div></form>
+    {mode === "login" && accountRole !== "player" && !unconfirmed && <div className="account-review-query"><button type="button" className="text-button account-status-button" disabled={working} onClick={() => void checkStatus()}>{checkingStatus ? "正在查询…" : "查询注册审核状态"}</button>{reviewPanel}</div>}
     {mode === "login" && recordingShortcutAllowed && !unconfirmed && <div className="account-recording-shortcut"><p className="account-field-hint">录制演示入口；自己的账号请使用上方账号密码登录。</p><button type="button" className="outline-button" disabled={working || recordingBlocked} onClick={() => void recordingLogin()}>快捷演示登录</button></div>}
     {onBack && <div className="account-access-footer"><button type="button" className="text-button" disabled={locked} onClick={onBack}>返回角色入口</button></div>}
   </section>;

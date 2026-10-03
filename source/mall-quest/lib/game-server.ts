@@ -4,6 +4,8 @@ import { verifyHardwareEntryToken } from "./hardware-server";
 import { GeofenceError, requireStoreGeofence } from "./geofence-server";
 import { GameError } from "./game-error";
 import { accountAction, registeredPlayer, recordingShortcutAllowed } from "./account-auth";
+import { HARDWARE_DEMO_INSTANCE } from "./application-scope";
+import { sessionCookieName, sessionCookiePath, sessionCookieSecure } from "./session-scope";
 import { authorizationValues, playerAuthorizationSQL, staffAuthorizationSQL } from "./account-authorization";
 import { nfcClaim, nfcClaimStatus } from "./nfc-claim-server";
 import { nfcDraftAction } from "./nfc-draft-server";
@@ -40,8 +42,8 @@ export const cookie = (req: Request, name: string) =>
     .get("cookie")
     ?.split(";")
     .map((x) => x.trim())
-    .find((x) => x.startsWith(name + "="))
-    ?.slice(name.length + 1);
+    .find((x) => x.startsWith(sessionCookieName(name) + "="))
+    ?.slice(sessionCookieName(name).length + 1);
 export async function session(req: Request, staff = false) {
   const token = cookie(req, staff ? "mall_staff" : "mall_player");
   if (!token) return null;
@@ -63,7 +65,7 @@ export async function session(req: Request, staff = false) {
     }>();
 }
 export function sessionCookie(req: Request, token: string, staff = false) {
-  return `${staff ? "mall_staff" : "mall_player"}=${token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${staff ? 43200 : 2592000}${new URL(req.url).protocol === "https:" ? "; Secure" : ""}`;
+  return `${sessionCookieName(staff ? "mall_staff" : "mall_player")}=${token}; Path=${sessionCookiePath()}; HttpOnly; SameSite=Lax; Max-Age=${staff ? 43200 : 2592000}${sessionCookieSecure(req) ? "; Secure" : ""}`;
 }
 export async function player(req: Request) {
   const current = await session(req);
@@ -157,7 +159,7 @@ export async function seed() {
       )
       .bind("mall-curator", "商场发现官", Date.now()),
   ];
-  for (const s of SEEDS) {
+  for (const s of HARDWARE_DEMO_INSTANCE ? SEEDS.filter(item => item.id === "tea") : SEEDS) {
     statements.push(
       d
         .prepare(
@@ -337,9 +339,9 @@ export async function state(req: Request, pid: string): Promise<GameState> {
     staff: ss ? { role: ss.role, storeId: ss.store_id } : null,
     recordingShortcutAllowed: recordingShortcutAllowed(req),
   }, playerSession?.account_id ?? null);
-  enriched.recordingCouponAllowed=recordingShortcutAllowed(req)&&!!playerSession?.account_id&&playerSession.account_role==="player"&&playerSession.player_id===pid;
-  if(enriched.recordingCouponAllowed)enriched.coupons=[...enriched.coupons,...await recordingCouponsForPlayer(req,pid)]
-    .sort((a,b)=>b.issuedAt-a.issuedAt||a.id.localeCompare(b.id));
+  // Demonstrations now use the physical device and the normal pending/issue flow.
+  // Existing recording rows remain stored; no shortcut allocates a new coupon.
+  enriched.recordingCouponAllowed=false;
   await recordStateActivity(req,pid);
   return enriched;
 }
