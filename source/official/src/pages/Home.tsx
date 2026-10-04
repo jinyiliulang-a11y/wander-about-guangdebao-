@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { ArrowRight, Compass, MapPin, Radio, ScanLine, Ticket, PenLine, Store, ShieldCheck } from "lucide-react";
 import { PRODUCT_URL } from "@/data/contacts";
+import ProductVideo from "@/components/home/ProductVideo";
 
 const steps = [
   { icon: MapPin, title: "地图找线索", detail: "选择宝藏，跟着线索探索门店。" },
@@ -61,7 +62,7 @@ export default function Home() {
       </section>
 
       <section id="demo" className="bg-cream-100 py-16 lg:py-24">
-        <div className="container"><div className="reveal overflow-hidden rounded-[2rem] bg-navy-950 text-cream-100"><div className="grid items-center gap-9 p-8 sm:p-12 lg:grid-cols-2"><div><p className="text-sm tracking-widest text-forest-300">从屏幕，走进门店</p><h2 className="mt-4 font-display text-3xl font-bold sm:text-4xl">下一场探索，<br />从这里开始。</h2><p className="mt-5 leading-relaxed text-cream-100/60">{videoUrl ? "看看地图、金币与奖励怎样串起完整体验。" : "先在线体验逛道宝。产品演示视频稍后更新。"}</p><a href={PRODUCT_URL} className="product-cta mt-7 inline-flex items-center gap-2 rounded-full bg-forest-300 px-7 py-3 font-semibold text-navy-950 hover:bg-forest-200">体验产品 <ArrowRight className="h-4 w-4" /></a></div>{videoUrl ? <video controls playsInline preload="metadata" poster={import.meta.env.VITE_PRODUCT_VIDEO_POSTER || undefined} className="aspect-video w-full rounded-2xl bg-black" aria-label="逛道宝产品演示视频"><source src={videoUrl} type="video/mp4" />浏览器无法播放视频，请在线体验产品。</video> : <div className="rounded-2xl border border-forest-300/20 bg-forest-400/10 p-8"><Compass className="h-10 w-10 text-forest-300" /><p className="mt-6 font-display text-2xl font-bold">探索身边，发现更多。</p><p className="mt-4 text-sm leading-relaxed text-cream-100/60">寻宝者寻找奖励，探索者创作线索。每一次发现，都可以成为下一次探索的起点。</p></div>}</div></div></div>
+        <div className="container"><div className="reveal overflow-hidden rounded-[2rem] bg-navy-950 text-cream-100"><div className="grid items-center gap-8 px-5 py-8 sm:p-12 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-10"><div><p className="text-sm tracking-widest text-forest-300">从屏幕，走进门店</p><h2 className="mt-4 font-display text-3xl font-bold sm:text-4xl">下一场探索，<br />从这里开始。</h2><p className="mt-5 leading-relaxed text-cream-100/60">{videoUrl ? "看看地图、金币与奖励怎样串起完整体验。" : "先在线体验逛道宝。产品演示视频稍后更新。"}</p><a href={PRODUCT_URL} className="product-cta mt-7 inline-flex items-center gap-2 rounded-full bg-forest-300 px-7 py-3 font-semibold text-navy-950 hover:bg-forest-200">体验产品 <ArrowRight className="h-4 w-4" /></a></div>{videoUrl ? <ProductVideo src={videoUrl} poster={import.meta.env.VITE_PRODUCT_VIDEO_POSTER?.trim() || undefined} /> : <div className="rounded-2xl border border-forest-300/20 bg-forest-400/10 p-8"><Compass className="h-10 w-10 text-forest-300" /><p className="mt-6 font-display text-2xl font-bold">探索身边，发现更多。</p><p className="mt-4 text-sm leading-relaxed text-cream-100/60">寻宝者寻找奖励，探索者创作线索。每一次发现，都可以成为下一次探索的起点。</p></div>}</div></div></div>
       </section>
     </div>
   );

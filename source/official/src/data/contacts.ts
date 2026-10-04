@@ -1,4 +1,4 @@
-export const PRODUCT_URL = import.meta.env.VITE_PRODUCT_URL?.trim() || "https://your-server.example.com/";
+export const PRODUCT_URL = import.meta.env.VITE_PRODUCT_URL?.trim() || "https://123.60.8.174/";
 
 export const teamContacts = [
   {

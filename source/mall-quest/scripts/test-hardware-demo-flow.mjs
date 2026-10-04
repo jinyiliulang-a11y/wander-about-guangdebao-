@@ -40,14 +40,14 @@ try {
   pass('Real recordingLogin establishes independent authenticated player and tea merchant sessions');
 
   const baseline = rewards();
-  await deny('Direct demonstration coupon grant is retired for a valid recording player', () => call(player, 'recordingCouponGrant', { requestId: randomUUID() }), 410);
+  await deny('The public build denies self-grants even for a valid recording player', () => call(player, 'recordingCouponGrant', { requestId: randomUUID() }), 403);
   assert.deepEqual(rewards(), baseline);
   assert.equal(count('recording_coupons'), 0);
   assert.equal(count('recording_coupon_requests'), 0);
   delete environment.RECORDING_SHORTCUT_LOGIN;
-  await deny('Retired grant retains the disabled recording gate', () => call(player, 'recordingCouponGrant', { requestId: randomUUID() }), 403);
+  await deny('Self-grant retains the disabled recording gate', () => call(player, 'recordingCouponGrant', { requestId: randomUUID() }), 403);
   environment.RECORDING_SHORTCUT_LOGIN = 'true';
-  await deny('Retired grant still requires a registered player', () => load('lib/recording-coupons.ts').recordingCouponGrant(anonymous(), { requestId: randomUUID() }), 401);
+  await deny('The public build denies anonymous self-grants before checking an account', () => load('lib/recording-coupons.ts').recordingCouponGrant(anonymous(), { requestId: randomUUID() }), 403);
 
   const sync = () => load('lib/hardware-server.ts').hardwareStoreSync(hardwareRequest(), { deviceId: 'coin-tea-01' });
   assert.equal((await sync()).claimCount, 0);
@@ -136,7 +136,7 @@ try {
   assert.equal(legacyStatus.coupon.id, legacyId);
   assert.equal(legacyStatus.coupon.demo, true);
   const legacyRows = all('SELECT * FROM recording_coupons');
-  await deny('Retired grant also refuses an old recording request while its status stays recoverable', () => call(player, 'recordingCouponGrant', { requestId: legacyId }), 410);
+  await deny('The public build refuses self-grant recovery while old recording status stays readable', () => call(player, 'recordingCouponGrant', { requestId: legacyId }), 403);
   assert.deepEqual(all('SELECT * FROM recording_coupons'), legacyRows);
   assert.equal((await call(player, 'recordingCouponStatus', { requestId: legacyId })).found, true);
   assert.equal(get('PRAGMA integrity_check').integrity_check, 'ok');

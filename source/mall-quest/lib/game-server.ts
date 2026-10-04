@@ -339,9 +339,12 @@ export async function state(req: Request, pid: string): Promise<GameState> {
     staff: ss ? { role: ss.role, storeId: ss.store_id } : null,
     recordingShortcutAllowed: recordingShortcutAllowed(req),
   }, playerSession?.account_id ?? null);
-  // Demonstrations now use the physical device and the normal pending/issue flow.
-  // Existing recording rows remain stored; no shortcut allocates a new coupon.
-  enriched.recordingCouponAllowed=false;
+  // UI-only coupons are available only in the separately built demo instance.
+  // Device-backed rewards keep their existing pending/merchant issue flow.
+  enriched.recordingCouponAllowed=HARDWARE_DEMO_INSTANCE&&recordingShortcutAllowed(req)&&!!playerSession?.account_id&&
+    playerSession.account_role==="player"&&playerSession.player_id===pid&&!!enriched.player.accountAuthenticated;
+  if(enriched.recordingCouponAllowed)enriched.coupons=[...enriched.coupons,...await recordingCouponsForPlayer(req,pid)]
+    .sort((a,b)=>b.issuedAt-a.issuedAt||a.id.localeCompare(b.id));
   await recordStateActivity(req,pid);
   return enriched;
 }

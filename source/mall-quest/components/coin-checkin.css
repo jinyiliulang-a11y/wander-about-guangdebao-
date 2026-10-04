@@ -43,6 +43,43 @@
   overflow-wrap: anywhere;
 }
 
+:root .client-shell[data-client-theme].reference-client .treasure-detail-copy .coin-checkin .coin-checkin-feedback {
+  min-width: 0;
+  max-width: 100%;
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid var(--client-accent-line, var(--line));
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.75;
+  overflow-wrap: anywhere;
+}
+
+:root .client-shell[data-client-theme].reference-client .treasure-detail-copy .coin-checkin .coin-checkin-feedback:empty {
+  display: none;
+}
+
+:root .client-shell[data-client-theme].reference-client .treasure-detail-copy .coin-checkin .coin-checkin-feedback[data-state="error"] {
+  border-color: color-mix(in srgb, var(--ui-danger-ink, #ab4345) 35%, var(--surface));
+  color: var(--ui-danger-ink, #ab4345);
+}
+
+:root .client-shell[data-client-theme].reference-client .treasure-detail-copy .coin-checkin .coin-checkin-spinner {
+  animation: coin-checkin-spin 1s linear infinite;
+}
+
+@keyframes coin-checkin-spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root .client-shell[data-client-theme].reference-client .treasure-detail-copy .coin-checkin .coin-checkin-spinner {
+    animation: none;
+  }
+}
+
 :root .client-shell[data-client-theme].reference-client .treasure-detail-copy :is(.coin-checkin small, .verify-hint) {
   display: block;
   margin: 0;

@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { CheckCircle2, LocateFixed, RefreshCw, Ticket, Trash2 } from "lucide-react";
 import { readBrowserLocation } from "@/lib/browser-location";
+import { HARDWARE_DEMO_INSTANCE } from "@/lib/application-scope";
 import type { Coupon, GameState } from "@/lib/game-types";
 import type { NfcDraft, NfcClaimStatus } from "@/lib/game-types";
 import { draftActorKey, draftRequestId, useDraftMutation, validDraft, validDraftCoupon } from "./nfc-draft-client";
@@ -65,7 +66,7 @@ export function NfcDraftDetail({ game, draft, onAction, onChange, onOpenReward }
     <span className="pill">{issued ? "已发放" : draft.state === "deleted" ? "已删除" : "待商家确认"}</span>
     <h3>{draft.reward}</h3><p>{draft.storeName} · {draft.taskTitle}</p><p className="muted">{draft.conditions}</p>
     <dl><div><dt>领取编号</dt><dd>{draft.id.slice(-8).toUpperCase()}</dd></div><div><dt>金币设备</dt><dd>{draft.deviceId}</dd></div></dl>
-    {draft.state === "pending" && <div className="nfc-draft-notice"><strong>请让商家扫描金币设备码，选择你的待领记录</strong><p>商家核对玩家、接收金币并确认发券后，正式奖励才进入卡包。关闭窗口会保留这条草稿。</p><p>{draft.canConfirm && remaining > 0 ? `本次到店许可剩余约 ${remaining} 秒，请及时交给商家确认。` : "到店许可需要更新。请在门店范围内点击重新定位，再请商家发券。"}</p></div>}
+    {draft.state === "pending" && <div className="nfc-draft-notice"><strong>请让商家扫描金币设备码，选择你的待领记录</strong><p>商家核对玩家、接收金币并确认发券后，奖励才进入卡包。关闭窗口会保留这条草稿。</p><p>{draft.canConfirm && remaining > 0 ? `本次${HARDWARE_DEMO_INSTANCE ? "演示定位" : "到店"}许可剩余约 ${remaining} 秒，请及时交给商家确认。` : HARDWARE_DEMO_INSTANCE ? "定位许可需要更新，点击重新定位后再请商家发券；演示不限制门店范围。" : "到店许可需要更新。请在门店范围内点击重新定位，再请商家发券。"}</p></div>}
     {issued && <p className="nfc-draft-notice"><CheckCircle2 size={18} />{draft.rewardType === "points" ? "积分奖励已入账，无需优惠券核销。" : "正式券已进入卡包，稍后消费时再出示个人券二维码核销。"}</p>}
     {draft.state === "deleted" && <p className="nfc-draft-notice">领取草稿已删除，没有发放奖励。</p>}
     {(error || operation.error) && <p className="inline-error" role="alert">{error || operation.error}</p>}

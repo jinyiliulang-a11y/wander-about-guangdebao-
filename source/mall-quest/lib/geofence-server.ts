@@ -4,6 +4,8 @@ import {staffAuthorizationSQL} from "./account-authorization";
 import {checkGeofence,distanceMeters,geofenceMessage,GEOFENCE_MIN_RADIUS,validCoordinates,validFenceGeometry,validRadius} from "./geofence";
 import type {GeoLocation,GeofenceCheck,GeofenceReason,GeofenceState,StoreGeofence} from "./geofence";
 import {validatePolygonVertices} from "./polygon-geofence";
+import {HARDWARE_DEMO_INSTANCE} from "./application-scope";
+import {demoLocationCheck} from "./hardware-demo-policy";
 const EVENT="mall-48h";type Row=Record<string,unknown>;
 export class GeofenceError extends GameError{
  constructor(public reason:GeofenceReason,status=409){super(geofenceMessage(reason),status);}
@@ -77,7 +79,7 @@ export async function saveGeofence(req:Request,input:Row):Promise<{fence:StoreGe
 }
 export type VerifiedGeofence={fence:StoreGeofence;location:GeoLocation;check:GeofenceCheck};
 export async function requireStoreGeofence(storeId:string,location:unknown,now=Date.now()):Promise<VerifiedGeofence>{
- const {fences}=await readGeofences(storeId),fence=fences[0],check=checkGeofence(fence,location,now);
+ const {fences}=await readGeofences(storeId),fence=fences[0],check=HARDWARE_DEMO_INSTANCE?demoLocationCheck(location,now):checkGeofence(fence,location,now);
  if(!check.inside)throw new GeofenceError(check.reason,check.reason==="location-required"||check.reason==="invalid-location"?400:409);
  return {fence,location:location as GeoLocation,check};
 }

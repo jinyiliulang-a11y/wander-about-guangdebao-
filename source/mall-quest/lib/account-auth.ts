@@ -349,8 +349,8 @@ async function recordingIdentity(req: Request, accountRole: "player" | "merchant
   return saved;
 }
 export async function recordingLogin(req: Request, input: Row): Promise<AccountLoginResult> {
-  // Both checks are re-run on every action. Neither owner headers nor old demo
-  // access codes can enable this temporary localhost-only recording shortcut.
+  // Both checks are re-run on every action. The public build remains localhost-only;
+  // a separate gateway-protected release may enable its own isolated demo identities.
   if (!recordingShortcutAllowed(req)) throw new GameError("当前地址未启用演示快捷登录，请使用账号密码", 403);
   const accountRole = role(input.role);
   if ((accountRole === "merchant" && input.storeId !== undefined && input.storeId !== "tea") || (accountRole !== "merchant" && input.storeId !== undefined))

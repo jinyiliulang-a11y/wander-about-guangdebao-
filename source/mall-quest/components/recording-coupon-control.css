@@ -99,3 +99,25 @@
 :root .client-shell[data-client-theme].reference-client .recording-coupon-actions > button > svg {
   flex: 0 0 auto;
 }
+
+:root .client-shell[data-client-theme].reference-client .recording-coupon-control[aria-label] .recording-coupon-status {
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+}
+
+:root .client-shell[data-client-theme].reference-client .recording-coupon-device-steps {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+  margin: 0;
+  padding-left: 1.4em;
+  font-size: 14px;
+  line-height: 1.75;
+  overflow-wrap: anywhere;
+}
+
+:root .client-shell[data-client-theme].reference-client .recording-coupon-device-steps code {
+  overflow-wrap: anywhere;
+}

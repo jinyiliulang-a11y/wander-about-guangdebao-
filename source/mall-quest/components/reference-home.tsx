@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 import type { MouseEvent, ReactNode } from "react";
 import { acquireOverlayScroll } from "@/lib/overlay-scroll";
+import { stripAppPath } from "@/lib/application-scope";
 import type { Role, Store, Task } from "@/lib/game-types";
 import { ClientWordmark } from "./client-wordmark";
 import { ThemeToggle } from "./theme-toggle";
@@ -207,7 +208,7 @@ export function ReferenceHome({
       if (window.history.state?.mallReferenceMap === historyMarker) return;
       // Navigating between a task and its underlying expanded map must not
       // collapse the map or race the parent's task focus/scroll cleanup.
-      if (/^\/client\/(coin|task)\//.test(window.location.pathname)) return;
+      if (/^\/client\/(coin|task)\//.test(stripAppPath(window.location.pathname))) return;
       closeMap(true);
     };
     const motion = window.matchMedia("(prefers-reduced-motion: reduce)");

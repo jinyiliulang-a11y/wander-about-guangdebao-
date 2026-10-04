@@ -120,6 +120,7 @@ type PendingOperation = { action: "place" | "claim" | "redeem"; payload: Record<
   storeId?: string; requestId?: string; checked: boolean };
 type CouponLookup = CouponPreview & { code: string; storeId: string };
 type CoinConfirmation = { key: string; expiresAt?: number };
+type CoinCheckInFeedback = { key: string; phase: "locating" | "checking" | "success" | "error"; message: string };
 function coinEntryFromUrl() {
   const entries = new URLSearchParams(window.location.search).getAll("entry");
   if (!entries.length) return { token: undefined, error: "" };
@@ -298,6 +299,7 @@ export default function TreasureApp() {
     [coinEntryError, setCoinEntryError] = useState(""),
     [coinConfirmation, setCoinConfirmation] = useState<CoinConfirmation | null>(null),
     [coinCheckInBusy, setCoinCheckInBusy] = useState(false),
+    [coinCheckInFeedback, setCoinCheckInFeedback] = useState<CoinCheckInFeedback | null>(null),
     [workbench, setWorkbench] = useState<WorkbenchData | null>(null),
     [workRange, setWorkRange] = useState<7 | 30 | 90>(7),
     [workSearch, setWorkSearch] = useState(""),
@@ -427,7 +429,7 @@ export default function TreasureApp() {
     const invalidate = () => { coinCheckInSeq.current++; };
     coinCheckInPending.current = false;
     let cancelled = false;
-    queueMicrotask(() => { if (!cancelled) { setCoinConfirmation(null); setCoinCheckInBusy(false); setCoinPosition(null); } });
+    queueMicrotask(() => { if (!cancelled) { setCoinConfirmation(null); setCoinCheckInBusy(false); setCoinPosition(null); setCoinCheckInFeedback(null); } });
     return () => { cancelled = true; invalidate(); };
   }, [coinConfirmationKey]);
   const detailId = detail?.id;
@@ -1032,6 +1034,8 @@ export default function TreasureApp() {
   const redeemUpcoming = !!redeemPreview && (redeemPreview.status === "upcoming" || (!!redeemPreview.validStart && redeemPreview.validStart > currentTime));
   const cannotRedeem = couponLookupBusy || !matchingLookup?.canRedeem || !merchantAuthorized || !redeemPreview || redeemPreview.storeId !== game?.staff?.storeId || couponStatus(redeemPreview) !== "unused" || redeemUpcoming;
   const coinConfirmed = coinConfirmation?.key === coinConfirmationKey && !coinEntryError;
+  const currentCoinFeedback = coinCheckInFeedback?.key === coinConfirmationKey ? coinCheckInFeedback : null;
+  const confirmingCoinTask = currentCoinFeedback?.phase === "locating" || currentCoinFeedback?.phase === "checking";
   const coinEntryExpired = !!coinConfirmation?.expiresAt && coinConfirmation.expiresAt <= currentTime;
   const fixedBack = page === "create" ? { to: pagePath("placements"), label: "返回我的投放" }
     : ["footprint", "achievements", "help", "settings", "geofence"].includes(page) ? { to: pagePath("profile"), label: "返回我的" }
@@ -1844,31 +1848,41 @@ export default function TreasureApp() {
           {!detail.claimed && <GeofencePanel key={detail.id} stores={game?.stores || []} storeId={detail.storeId} compact locationOverride={coinPosition?.taskId === detail.id ? coinPosition.location : null} />}
           {!detail.claimed && detail.requiresNfcClaim && coinEntryError && <p className="inline-error" role="alert">{coinEntryError}</p>}
           {detail.requiresNfcClaim && !coinEntryError && game && <NfcCouponFlow game={game} task={detail} tagEntry={typeof window !== "undefined" && stripAppPath(window.location.pathname).startsWith("/client/nfc/")} entryToken={coinEntryToken} onAction={nfcAction} onOpenReward={openReward} onNewReward={coupon => celebration.celebrate(coupon.id)} onRefresh={async () => { await refresh(); }} />}
-          {!detail.claimed && !detail.requiresNfcClaim && <section className="coin-checkin notice" aria-live="polite">
+          {!detail.claimed && !detail.requiresNfcClaim && <section className="coin-checkin notice">
             <div><strong><ShieldCheck size={18} /> {coinConfirmed && !coinEntryExpired ? "金币已确认" : "第一步 · 确认这枚金币"}</strong>
             <p>{coinConfirmed && !coinEntryExpired ? "继续回答观察问题，领取你的个人奖励券。" : "跟着线索到达门店，定位确认范围后，回答观察问题领奖。"}</p>
             {coinConfirmation?.expiresAt && <small>{coinEntryExpired ? "入口已到期，请重新扫描金币屏幕上的二维码。" : `动态入口剩余 ${Math.max(0, Math.ceil((coinConfirmation.expiresAt - currentTime) / 1000))} 秒`}</small>}
             {coinEntryError && <p className="inline-error" role="alert">{coinEntryError}</p>}
-            <button type="button" className="outline-button full" disabled={busy || coinCheckInBusy || !!coinEntryError || coinEntryExpired || coinConfirmed} onClick={async () => {
+            <button type="button" className="outline-button full" aria-describedby="coin-checkin-feedback" aria-busy={confirmingCoinTask} disabled={busy || coinCheckInBusy || !!coinEntryError || coinEntryExpired || coinConfirmed} onClick={async () => {
               if (coinCheckInPending.current || actionBusy.current) return;
               coinCheckInPending.current = true; setCoinCheckInBusy(true); setError("");
               const seq = ++coinCheckInSeq.current;
               const key = coinConfirmationKey;
               const taskId = detail.id;
+              setCoinCheckInFeedback({ key, phase: "locating", message: "正在获取当前位置，请允许浏览器定位…" });
               try {
                 const location = await readBrowserLocation();
                 if (seq !== coinCheckInSeq.current || detailRef.current?.id !== taskId) return;
                 setCoinPosition({ taskId, location });
+                setCoinCheckInFeedback({ key, phase: "checking", message: "已取得位置，正在核对金币任务与定位信息…" });
                 const result = await request<{ taskId: string; storeId: string; storeName: string; method: "link" | "dynamic"; expiresAt?: number }>("coinCheckIn", { taskId, location, ...(coinEntryToken !== undefined ? { entryToken: coinEntryToken } : {}) });
                 if (seq !== coinCheckInSeq.current || detailRef.current?.id !== taskId) return;
                 if (result.taskId !== taskId || result.storeId !== detail.storeId) throw new Error("金币任务已变化，请重新打开入口。");
                 setCoinConfirmation({ key, expiresAt: result.expiresAt }); setCurrentTime(Date.now());
+                setCoinCheckInFeedback({ key, phase: "success", message: detail.own
+                  ? "金币任务已确认。这是你创作的作品，当前账号不能领取这份奖励，请邀请朋友寻找。"
+                  : `${result.storeName} · ${result.method === "dynamic" ? "动态入口已确认" : "金币任务已确认"}。当前仅完成第一步，尚未领取奖励。请继续回答下方观察问题，再点击领奖按钮。` });
               } catch (e) {
-                if (seq === coinCheckInSeq.current) setError((e as Error).message);
+                if (seq === coinCheckInSeq.current && detailRef.current?.id === taskId) {
+                  const message = e instanceof Error && e.message ? e.message : "暂时无法确认金币，请重试。";
+                  setError(message);
+                  setCoinCheckInFeedback({ key, phase: "error", message: `确认未完成：${message}` });
+                }
               } finally {
                 if (seq === coinCheckInSeq.current) { coinCheckInPending.current = false; setCoinCheckInBusy(false); }
               }
-            }}><CheckCircle2 size={18} />{coinCheckInBusy ? "正在确认…" : coinConfirmed ? "已确认金币" : "确认金币"}</button>
+            }}>{confirmingCoinTask ? <RefreshCw size={18} className="coin-checkin-spinner" aria-hidden="true" /> : <CheckCircle2 size={18} aria-hidden="true" />}{confirmingCoinTask ? "正在确认…" : coinConfirmed ? "已确认金币" : "确认金币"}</button>
+            <div id="coin-checkin-feedback" className="coin-checkin-feedback" data-state={currentCoinFeedback?.phase || "idle"} role={currentCoinFeedback?.phase === "error" ? "alert" : "status"} aria-live={currentCoinFeedback?.phase === "error" ? "assertive" : "polite"} aria-atomic="true">{currentCoinFeedback?.message || ""}</div>
             <small>这是网页寻宝任务；硬件金币碰 NFC 建立待领记录，交给商家确认后发券。</small></div>
           </section>}
           {detail.claimed ? <button className="gold-button full" disabled={busy} onClick={() => {

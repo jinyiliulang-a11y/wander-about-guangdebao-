@@ -38,7 +38,7 @@ function instance(basePath, demo) {
   }
   return { scope: load('lib/application-scope.ts'), cookies: load('lib/session-scope.ts'), server: load('lib/game-server.ts'), account: load('lib/account-auth.ts'), environment };
 }
-const request = (url = 'https://your-server.example.com/', cookie = '') => new Request(url, { headers: cookie ? { Cookie: cookie } : {} });
+const request = (url = 'https://123.60.8.174/', cookie = '') => new Request(url, { headers: cookie ? { Cookie: cookie } : {} });
 const attrs = value => Object.fromEntries(value.split(';').map(part => { const [key, ...rest] = part.trim().split('='); return [key, rest.length ? rest.join('=') : true]; }));
 
 const normal = instance('', false), isolated = instance('/hardware-demo', true);
@@ -71,7 +71,7 @@ assert.equal(isolated.cookies.sessionCookieName('unrelated'), 'unrelated');
 assert.equal(isolated.cookies.sessionCookiePath(), '/hardware-demo');
 pass('Demo build prefixes only its player/staff sessions and confines cookie Path');
 
-for (const staff of [false, true]) for (const url of ['http://127.0.0.1/hardware-demo/', 'https://your-server.example.com/hardware-demo/']) {
+for (const staff of [false, true]) for (const url of ['http://127.0.0.1/hardware-demo/', 'https://123.60.8.174/hardware-demo/']) {
   const value = attrs(isolated.server.sessionCookie(request(url), 'test-only', staff));
   assert.equal(value[staff ? 'hardware_demo_mall_staff' : 'hardware_demo_mall_player'], 'test-only');
   assert.equal(value.Path, '/hardware-demo');
@@ -113,8 +113,8 @@ pass('Public staff logout remains on the root cookie namespace');
 
 assert.equal(normal.account.recordingShortcutAllowed(request()), false);
 assert.equal(normal.account.recordingShortcutAllowed(request('http://localhost/')), true);
-assert.equal(isolated.account.recordingShortcutAllowed(request('https://your-server.example.com/hardware-demo/')), true);
-assert.equal(normal.account.recordingShortcutAllowed(request('https://your-server.example.com/?HARDWARE_DEMO_INSTANCE=true')), false);
+assert.equal(isolated.account.recordingShortcutAllowed(request('https://123.60.8.174/hardware-demo/')), true);
+assert.equal(normal.account.recordingShortcutAllowed(request('https://123.60.8.174/?HARDWARE_DEMO_INSTANCE=true')), false);
 for (const flag of ['false', '1', true, undefined]) {
   isolated.environment.RECORDING_SHORTCUT_LOGIN = flag;
   assert.equal(isolated.account.recordingShortcutAllowed(request()), false);

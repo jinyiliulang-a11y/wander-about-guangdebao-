@@ -416,7 +416,7 @@ try {
     assert.equal((await server().state(recordingGuest, 'a')).recordingShortcutAllowed, true);
     assert.equal(get('SELECT COUNT(*) AS n FROM accounts').n, beforeRecordingState);
     pass('Local recording flag is explicit and GET reports it without auto-creating demo accounts');
-    const publicRecordingReq = new Request('http://your-server.example.com/api/game', { headers: { Cookie: recordingGuest.headers.get('Cookie'), 'oai-authenticated-user-id': 'owner' } });
+    const publicRecordingReq = new Request('http://123.60.8.174/api/game', { headers: { Cookie: recordingGuest.headers.get('Cookie'), 'oai-authenticated-user-id': 'owner' } });
     assert.equal((await server().state(publicRecordingReq, 'a')).recordingShortcutAllowed, false);
     await rejected('Enabled recording flag cannot open public-IP shortcut', () => call('recordingLogin', { role: 'admin' }, publicRecordingReq), 403);
     environment.RECORDING_SHORTCUT_LOGIN = '1';

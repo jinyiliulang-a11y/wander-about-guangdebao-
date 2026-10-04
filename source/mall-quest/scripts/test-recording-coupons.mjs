@@ -1,4 +1,5 @@
-// Compatibility entry point for existing runbooks and tools.
-// Direct recording grants are retired. This runs the 18 device-linked demo cases;
-// it does not claim that the former direct-grant policy or historical suite passes.
-import './test-hardware-demo-flow.mjs';
+// Compatibility entry point: current isolated UI-coupon policy plus the
+// independent device-linked pending, merchant issue and redemption regression.
+// Both suites use disposable SQLite; neither connects to a live service/device.
+await import('./test-recording-coupon-self-grant.mjs');
+await import('./test-hardware-demo-flow.mjs');

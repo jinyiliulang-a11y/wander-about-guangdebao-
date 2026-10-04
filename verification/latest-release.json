@@ -1,0 +1,65 @@
+{
+  "status": "SOURCE_PUBLICATION_CHECKS_PASS",
+  "checkedAt": "2026-10-04T19:08:17.256146+08:00",
+  "repository": "jinyiliulang-a11y/wander-about-guangdebao-",
+  "versions": {
+    "product": "2.3.54",
+    "official": "1.0.4"
+  },
+  "product": {
+    "typecheckExitCode": 0,
+    "buildExitCode": 0,
+    "executionProfile": "portable",
+    "scope": "Full sanitized source snapshot checked and built in isolated staging; no private environment/database copied. Current installed lockfile dependencies reused via a local junction excluded from publication.",
+    "finalTypecheckExitCode": 0,
+    "finalBuildExitCode": 0,
+    "finalProductSourceFrozenBeforeCheck": true,
+    "finalTypecheckLog": "product-final-check.log (private local verification receipt)",
+    "finalBuildLog": "product-final-build.log (private local verification receipt)"
+  },
+  "official": {
+    "typecheckExitCode": 0,
+    "buildExitCode": 0,
+    "localBrowserChecks": {
+      "passed": 12,
+      "total": 12
+    },
+    "publicBrowserChecks": {
+      "passed": 12,
+      "total": 12
+    },
+    "tlsVerified": true,
+    "publicHTTPChecks": 6,
+    "deployedStaticFileCount": 19,
+    "encodedVideoPacketsCompared": 915,
+    "everyEncodedVideoPacketIdentical": true
+  },
+  "publication": {
+    "privateCredentialsIncluded": false,
+    "databaseIncluded": false,
+    "sourceFolders": [
+      "source/mall-quest",
+      "source/official"
+    ],
+    "staticDeployment": "deploy/official",
+    "excluded": [
+      "private env",
+      "databases",
+      "dependencies",
+      "logs",
+      "build caches",
+      "runtime state",
+      "private handover records"
+    ],
+    "historicalPasswordDocumentOccurrencesRedacted": 5,
+    "unchangedTextUsesActualGitParentBlob": true,
+    "discardedEncodingOnlyChanges": 383,
+    "publicationRewritesRuntimeCodeSemantics": false
+  },
+  "limits": [
+    "Mobile browser viewport tests do not certify physical devices or native fullscreen/casting.",
+    "This publication does not revalidate private map configuration, SMTP delivery or physical NFC/GPS/camera.",
+    "Product source v2.3.54 does not imply both production and demo servers run the complete same version."
+  ],
+  "serverWritesInThisPublication": 0
+}

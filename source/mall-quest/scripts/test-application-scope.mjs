@@ -11,7 +11,7 @@ const pass = label => { cases++; console.log(`PASS ${cases}: ${label}`); };
 
 function fixture(base, edition = "full") {
   const cache = new Map(), requests = [];
-  const browser = { location: { pathname: (base || "") + "/client/map", origin: "https://your-server.example.com" },
+  const browser = { location: { pathname: (base || "") + "/client/map", origin: "https://123.60.8.174" },
     history: { state: null, pushes: [], pushState(state, title, url) { this.state = state; this.pushes.push({ state, url }); browser.location.pathname = new URL(url, browser.location.origin).pathname; } },
     dispatchEvent() {} };
   function load(relative) {
@@ -40,7 +40,14 @@ function fixture(base, edition = "full") {
   assert.ok(helpers.includes("function matchingNfcRecord"));
   const compiledNfc = ts.transpileModule(helpers, { compilerOptions: { target: ts.ScriptTarget.ES2022 } }).outputText;
   const matchTag = new Function("isAppPath", "stripAppPath", "window", "TextDecoder", compiledNfc + "\nreturn matchingNfcRecord;")(scope.isAppPath, scope.stripAppPath, browser, TextDecoder);
-  return { scope, config, navigation, api, browser, requests, matchTag };
+  const homeSource = readFileSync(path.join(root, "components/reference-home.tsx"), "utf8");
+  assert.ok(homeSource.startsWith('"use client";'));
+  const popSource = homeSource.slice(homeSource.indexOf("const onPop = () =>"), homeSource.indexOf('const motion = window.matchMedia'));
+  assert.ok(popSource.includes("closeMap(true)"));
+  const compiledPop = ts.transpileModule(popSource, { compilerOptions: { target: ts.ScriptTarget.ES2022 } }).outputText;
+  const closeCalls = [];
+  const homePop = new Function("stripAppPath", "window", "historyMarker", "closeMap", compiledPop + "\nreturn onPop;")(scope.stripAppPath, browser, "own-map", value => closeCalls.push(value));
+  return { scope, config, navigation, api, browser, requests, matchTag, homePop, closeCalls };
 }
 function record(url) { const bytes = new TextEncoder().encode(url); return { message: { records: [{ recordType: "url", data: new DataView(bytes.buffer) }] } }; }
 
@@ -76,6 +83,15 @@ for (const base of ["", "/demo"]) {
   assert.equal(browser.history.pushes[1].url, base + "/client/profile");
   pass(`${label}: actual history navigation retains instance, depth and previous path`);
 
+  browser.history.state = null;
+  for (const taskPath of ["/client/coin/quest-tea", "/client/task/quest-tea"]) { browser.location.pathname = base + taskPath; f.homePop(); }
+  assert.equal(f.closeCalls.length, 0);
+  browser.location.pathname = base + "/client/wallet"; f.homePop();
+  assert.deepEqual(f.closeCalls, [true]);
+  browser.history.state = { mallReferenceMap: "own-map" }; f.homePop();
+  assert.deepEqual(f.closeCalls, [true]);
+  pass(`${label}: actual expanded-map popstate handler preserves task overlays and closes foreign views`);
+
   await api.apiRequest("/api/game?scope=workspace", { cache: "no-store", headers: { "X-Test": "kept" } });
   await api.request("accountApplicationStatus", { role: "merchant" });
   await api.apiRequest(base + "/api/game");
@@ -85,12 +101,12 @@ for (const base of ["", "/demo"]) {
   pass(`${label}: real API transport scopes GET/POST exactly once and preserves payload/headers`);
 
   const task = { id: "quest-tea", storeId: "tea" };
-  assert.deepEqual(f.matchTag(record(`https://your-server.example.com${base}/client/nfc/quest-tea?device=coin-tea-01`), task), { deviceId: "coin-tea-01" });
+  assert.deepEqual(f.matchTag(record(`https://123.60.8.174${base}/client/nfc/quest-tea?device=coin-tea-01`), task), { deviceId: "coin-tea-01" });
   assert.equal(f.matchTag(record(`https://foreign.invalid${base}/client/nfc/quest-tea?device=coin-tea-01`), task), null);
-  assert.equal(f.matchTag(record(`https://your-server.example.com${base}/client/nfc/other-task?device=coin-tea-01`), task), null);
-  assert.equal(f.matchTag(record(`https://your-server.example.com${base}/client/nfc/quest-tea?device=one&device=two`), task), null);
+  assert.equal(f.matchTag(record(`https://123.60.8.174${base}/client/nfc/other-task?device=coin-tea-01`), task), null);
+  assert.equal(f.matchTag(record(`https://123.60.8.174${base}/client/nfc/quest-tea?device=one&device=two`), task), null);
   if (base) {
-    assert.equal(f.matchTag(record("https://your-server.example.com/client/nfc/quest-tea?device=coin-tea-01"), task), null);
+    assert.equal(f.matchTag(record("https://123.60.8.174/client/nfc/quest-tea?device=coin-tea-01"), task), null);
     for (const bad of ["https://foreign.invalid/api/game", "//foreign.invalid/api/game", "/\\foreign.invalid/api/game"]) {
       const before = requests.length;
       await assert.rejects(api.apiRequest(bad), error => error.kind === "invalid-request" && !error.requestSent);

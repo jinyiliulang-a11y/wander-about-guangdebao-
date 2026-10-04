@@ -7,6 +7,8 @@ import { validGeoLocation } from "./geofence";
 import { verifyHardwareEntryToken } from "./hardware-server";
 import { HARDWARE_DEVICE_ID } from "./hardware-code";
 import { deviceDisplayName } from "./device-display";
+import { HARDWARE_DEMO_INSTANCE } from "./application-scope";
+import { NFC_LOCATION_PERMIT_MS, NFC_RANGE_SQL } from "./hardware-demo-policy";
 import type { NfcClaimResult, NfcClaimStatus } from "./game-types";
 import { FIXED_DEVICE_CODE_PREFIX } from "./nfc-draft-types";
 import type { NfcDraft, NfcDraftPage, NfcDraftResult, NfcDraftOperationStatus, MerchantPendingClaims, MerchantIssueClaimResult } from "./nfc-draft-types";
@@ -17,16 +19,18 @@ type Merchant = { playerId: string; accountId: string; storeId: string; auth: [s
 const EVENT = "mall-48h";
 const CLOCK = "CAST((julianday('now')-2440587.5)*86400000 AS INTEGER)";
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
-const BASE = `t.nfc_claim=1 AND t.status='published' AND t.deleted_at IS NULL AND ap.banned=0
+// Group related guards so D1's expression-depth limit does not flatten one long AND tree.
+// This preserves every authorization/stock condition and the single-statement claim CAS.
+const BASE = `(t.nfc_claim=1 AND t.status='published' AND t.deleted_at IS NULL AND ap.banned=0
   AND s.event_id='${EVENT}' AND s.point_mode='hardware' AND s.status='active'
   AND (t.expires_at IS NULL OR t.expires_at>${CLOCK})
   AND (t.reward_type='points' OR t.reward_coupon_id IS NULL OR
     (ct.store_id=s.id AND ct.status='active' AND ct.deleted_at IS NULL
-      AND (ct.valid_start IS NULL OR ct.valid_start<=${CLOCK}) AND (ct.valid_end IS NULL OR ct.valid_end>${CLOCK})))`;
-const STOCK = `(SELECT COUNT(*) FROM claims c WHERE c.store_id=s.id AND c.event_id=s.event_id)<s.stock_total
-  AND (t.reward_type='points' OR ct.id IS NULL OR (SELECT COUNT(*) FROM claims WHERE template_id=ct.id)<ct.total_count)`;
-const DEVICE = `h.enabled=1 AND h.store_id=s.id AND h.bound_task_id=t.id
-  AND (h.id<>'coin-tea-01' OR (s.id='tea' AND t.id='quest-tea'))`;
+      AND (ct.valid_start IS NULL OR ct.valid_start<=${CLOCK}) AND (ct.valid_end IS NULL OR ct.valid_end>${CLOCK}))))`;
+const STOCK = `((SELECT COUNT(*) FROM claims c WHERE c.store_id=s.id AND c.event_id=s.event_id)<s.stock_total
+  AND (t.reward_type='points' OR ct.id IS NULL OR (SELECT COUNT(*) FROM claims WHERE template_id=ct.id)<ct.total_count))`;
+const DEVICE = `(h.enabled=1 AND h.store_id=s.id AND h.bound_task_id=t.id
+  AND (h.id<>'coin-tea-01' OR (s.id='tea' AND t.id='quest-tea')))`;
 const REWARD = `CASE WHEN t.reward_type='points' THEN t.reward_value || ' 探索积分' ELSE COALESCE(ct.title,s.reward_title) END`;
 const CONDITIONS = `CASE WHEN ct.id IS NULL THEN s.conditions ELSE '消费门槛 ¥' || ct.min_amount || '；按券内容使用；仅演示，不可实际消费。' END`;
 const JOINS = `JOIN stores s ON s.id=t.store_id JOIN players ap ON ap.id=t.author_id
@@ -38,15 +42,15 @@ const SUBJECT = `EXISTS(SELECT 1 FROM sessions ps JOIN accounts pa ON pa.id=ps.a
   WHERE ps.token_hash=d.player_session_hash AND ps.role='player' AND ps.expires_at>${CLOCK}
     AND ps.player_id=d.player_id AND ps.account_id=d.player_account_id AND pa.player_id=d.player_id
     AND pa.role='player' AND pa.status='approved' AND pp.banned=0)`;
-const MATCH = `d.task_title_snapshot=t.title AND d.store_name_snapshot=s.name AND d.reward_type=t.reward_type AND d.reward_value=t.reward_value
+const MATCH = `(d.task_title_snapshot=t.title AND d.store_name_snapshot=s.name AND d.reward_type=t.reward_type AND d.reward_value=t.reward_value
   AND d.template_id IS t.reward_coupon_id AND d.reward_snapshot=${REWARD} AND d.conditions_snapshot=${CONDITIONS}
   AND d.coupon_type=COALESCE(ct.type,'gift') AND d.coupon_value=COALESCE(ct.value,0) AND d.coupon_min_amount=COALESCE(ct.min_amount,0)
-  AND d.valid_start IS ct.valid_start AND d.valid_end IS ct.valid_end`;
-const READY = `d.state='pending' AND d.permit_until>${CLOCK} AND d.location_timestamp>=${CLOCK}-30000
-  AND d.location_timestamp<=${CLOCK}+5000 AND g.enabled=1 AND g.revision=d.fence_revision
+  AND d.valid_start IS ct.valid_start AND d.valid_end IS ct.valid_end)`;
+const READY = `(d.state='pending' AND d.permit_until>${CLOCK} AND d.location_timestamp>=${CLOCK}-${NFC_LOCATION_PERMIT_MS}
+  AND d.location_timestamp<=${CLOCK}+5000 AND ${NFC_RANGE_SQL} AND g.revision=d.fence_revision
   AND h.id=d.device_id AND h.token_hash=d.device_token_hash AND t.author_id<>d.player_id
   AND ${BASE} AND ${STOCK} AND ${DEVICE} AND ${SUBJECT} AND ${MATCH}
-  AND NOT EXISTS(SELECT 1 FROM claims WHERE player_id=d.player_id AND event_id=d.event_id AND store_id=d.store_id)`;
+  AND NOT EXISTS(SELECT 1 FROM claims WHERE player_id=d.player_id AND event_id=d.event_id AND store_id=d.store_id))`;
 const DRAFT_SELECT = `SELECT d.*,p.nickname AS player_nickname,CASE WHEN ${READY} THEN 1 ELSE 0 END AS can_confirm
   FROM nfc_claim_drafts d JOIN players p ON p.id=d.player_id
   LEFT JOIN tasks t ON t.id=d.task_id LEFT JOIN stores s ON s.id=d.store_id LEFT JOIN players ap ON ap.id=t.author_id
@@ -79,8 +83,8 @@ async function playerIdentity(req: Request): Promise<Identity> {
   return { playerId, accountId: String(row.account_id), tokenHash: auth[0], auth };
 }
 function merchantGuard() {
-  return `${staffAuthorizationSQL("s.id")} AND EXISTS(SELECT 1 FROM sessions ms WHERE ms.token_hash=? AND ms.role='merchant'
-    AND ms.account_id=? AND ms.player_id=? AND ms.store_id=s.id)`;
+  return `(${staffAuthorizationSQL("s.id")} AND EXISTS(SELECT 1 FROM sessions ms WHERE ms.token_hash=? AND ms.role='merchant'
+    AND ms.account_id=? AND ms.player_id=? AND ms.store_id=s.id))`;
 }
 function merchantValues(scope: Merchant) { return [...scope.auth, scope.auth[0], scope.accountId, scope.playerId]; }
 async function merchantIdentity(req: Request): Promise<Merchant> {
@@ -181,11 +185,11 @@ export async function nfcClaim(req: Request, input: Row): Promise<NfcClaimResult
       device_id,device_token_hash,created_at,updated_at,permit_until,location_timestamp,fence_revision,
       task_title_snapshot,store_name_snapshot,reward_type,reward_value,template_id,reward_snapshot,conditions_snapshot,
       coupon_type,coupon_value,coupon_min_amount,valid_start,valid_end,last_request_id,last_request_hash,last_purpose,last_actor_account_id)
-      SELECT ?,?,?,?,?,s.event_id,s.id,t.id,h.id,h.token_hash,${CLOCK},${CLOCK},?+30000,?,g.revision,
+      SELECT ?,?,?,?,?,s.event_id,s.id,t.id,h.id,h.token_hash,${CLOCK},${CLOCK},?+${NFC_LOCATION_PERMIT_MS},?,g.revision,
         t.title,s.name,t.reward_type,t.reward_value,t.reward_coupon_id,${REWARD},${CONDITIONS},COALESCE(ct.type,'gift'),COALESCE(ct.value,0),COALESCE(ct.min_amount,0),ct.valid_start,ct.valid_end,?,?,'create',?
       FROM tasks t ${JOINS} JOIN store_geofences g ON g.store_id=s.id
       WHERE t.id=? AND h.id=? AND h.token_hash=? AND t.author_id<>? AND ${BASE} AND ${STOCK} AND ${DEVICE}
-        AND g.enabled=1 AND g.revision=? AND ?>=${CLOCK}-30000 AND ?<=${CLOCK}+5000
+        AND ${NFC_RANGE_SQL} AND g.revision=? AND ?>=${CLOCK}-${NFC_LOCATION_PERMIT_MS} AND ?<=${CLOCK}+5000
         AND ${playerAuthorizationSQL("?")} ${entry ? `AND ?>${CLOCK}` : ""}
         ${entry || explicitDevice ? "" : `AND (SELECT COUNT(*) FROM hardware_devices other WHERE other.bound_task_id=t.id AND other.store_id=s.id AND other.enabled=1)=1`}
         AND NOT EXISTS(SELECT 1 FROM claims WHERE player_id=? AND event_id=s.event_id AND store_id=s.id)
@@ -253,7 +257,7 @@ async function changeDraft(req: Request, input: Row, purpose: "revalidate" | "de
     const task = available(await candidate(before.taskId, before.deviceId), identity.playerId);
     const verified = await requireStoreGeofence(before.storeId, location);
     await throttle(identity, before.storeId);
-    result = await db().prepare(`UPDATE nfc_claim_drafts AS d SET revision=revision+1,updated_at=${CLOCK},permit_until=?+30000,
+    result = await db().prepare(`UPDATE nfc_claim_drafts AS d SET revision=revision+1,updated_at=${CLOCK},permit_until=?+${NFC_LOCATION_PERMIT_MS},
       location_timestamp=?,fence_revision=?,device_token_hash=?,player_account_id=?,player_session_hash=?,
       task_title_snapshot=?,store_name_snapshot=?,reward_type=?,reward_value=?,template_id=?,reward_snapshot=?,conditions_snapshot=?,
       coupon_type=?,coupon_value=?,coupon_min_amount=?,valid_start=?,valid_end=?,
@@ -262,8 +266,8 @@ async function changeDraft(req: Request, input: Row, purpose: "revalidate" | "de
         AND NOT EXISTS(SELECT 1 FROM nfc_draft_operations WHERE request_id=?)
         AND EXISTS(SELECT 1 FROM tasks t ${JOINS} JOIN store_geofences g ON g.store_id=s.id
           WHERE t.id=d.task_id AND s.id=d.store_id AND h.id=d.device_id AND h.token_hash=? AND t.author_id<>d.player_id
-            AND ${BASE} AND ${STOCK} AND ${DEVICE} AND g.enabled=1 AND g.revision=?
-            AND ?>=${CLOCK}-30000 AND ?<=${CLOCK}+5000)
+            AND ${BASE} AND ${STOCK} AND ${DEVICE} AND ${NFC_RANGE_SQL} AND g.revision=?
+            AND ?>=${CLOCK}-${NFC_LOCATION_PERMIT_MS} AND ?<=${CLOCK}+5000)
         AND NOT EXISTS(SELECT 1 FROM claims WHERE player_id=d.player_id AND event_id=d.event_id AND store_id=d.store_id)`)
       .bind(position.timestamp, position.timestamp, verified.fence.revision, String(task.device_token_hash), identity.accountId, identity.tokenHash,
         ...snapshotValues(task), id, digest, identity.accountId, draftId, identity.playerId, expected, ...identity.auth, id,
@@ -271,7 +275,7 @@ async function changeDraft(req: Request, input: Row, purpose: "revalidate" | "de
   }
   const operation = await priorOperation(id, identity.accountId, purpose, digest), draft = operation ? await playerDraft(identity, draftId) : null;
   if (!draft) throw new GameError("申请版本、范围或身份已变化，本次操作未完成，请刷新核对", 409);
-  return { requestId: id, draft, message: result.meta.changes ? purpose === "delete" ? "待领取草稿已删除" : "范围已重新确认，请让商家在30秒内确认领取" : "原操作已完成" };
+  return { requestId: id, draft, message: result.meta.changes ? purpose === "delete" ? "待领取草稿已删除" : HARDWARE_DEMO_INSTANCE ? "定位已记录，请让商家在10分钟内确认收回设备并领取" : "范围已重新确认，请让商家在30秒内确认领取" : "原操作已完成" };
 }
 export const nfcDraftRevalidate = (req: Request, input: Row) => changeDraft(req, input, "revalidate");
 export const nfcDraftDelete = (req: Request, input: Row) => changeDraft(req, input, "delete");
